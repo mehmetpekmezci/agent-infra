@@ -11,13 +11,13 @@ Infra modules and installation scripts for ai agents
 
 Core Infrastructure
 
-    Ubuntu 24.04 LTS
+    ASSUMED TO BE INSTALLED : Ubuntu 24.04 LTS
 
     Docker Engine
 
     Docker Compose
 
-    NVIDIA Container Toolkit
+    NVIDIA Container Toolkit ( CUDA DRIVERS ARE FOUND IN THE DOCKER IMAGES, NOT INSTALLED ON THE HOST MACHINE)
 
 AI
 
