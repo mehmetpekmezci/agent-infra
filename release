@@ -1,0 +1,8 @@
+#!/bin/bash
+
+export AGENT_INFRA_DIR=`cd \`dirname $( readlink -f $BASH_SOURCE ) \` && pwd`
+
+export AGENT_INFRA_MODELS_DIR=$AGENT_INFRA_DIR/models
+
+
+
