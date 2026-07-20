@@ -1,6 +1,12 @@
 # agent-infra
 Infra modules and installation scripts for ai agents
 
+## REQUIREMENTS:
+1.  A computer with a NVIDIA GPU that is supported by VLLM 
+    https://docs.vllm.ai/en/stable/getting_started/installation/gpu/#requirements
+    https://www.digitalocean.com/community/conceptual-articles/vllm-gpu-sizing-configuration-guide
+2.  Ubuntu 24.04
+
 ## HOW TO INSTALL
 1. Clone this repository
 2. source the release file 
@@ -10,8 +16,6 @@ Infra modules and installation scripts for ai agents
 ## WHAT WILL IT INSTALL 
 
 Core Infrastructure
-
-    ASSUMED TO BE INSTALLED : Ubuntu 24.04 LTS
 
     Docker Engine
 
