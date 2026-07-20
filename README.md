@@ -3,8 +3,11 @@ Infra modules and installation scripts for ai agents
 
 ## REQUIREMENTS:
 1.  A computer with a NVIDIA GPU that is supported by VLLM 
+
     https://docs.vllm.ai/en/stable/getting_started/installation/gpu/#requirements
+
     https://www.digitalocean.com/community/conceptual-articles/vllm-gpu-sizing-configuration-guide
+
 2.  Ubuntu 24.04
 
 ## HOW TO INSTALL
