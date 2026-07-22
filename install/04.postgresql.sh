@@ -1,4 +1,4 @@
-sudo docker pull postgres:latest
+sudo docker pull postgres:17
 echo
 echo
 echo
