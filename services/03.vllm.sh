@@ -1,8 +1,9 @@
-sudo docker stop $(sudo docker container ls -a | grep "vllm/vllm-openai:latest"| awk '{print $1}')
-
-
-
-sudo docker run --runtime nvidia --gpus all \
+sudo docker inspect VLLM_0 >/dev/null
+if [ $? = 0 ]
+then
+    sudo docker start VLLM_0 
+else
+sudo docker run --name VLLM_0 --runtime nvidia --gpus all \
   -v $AGENT_INFRA_MODELS_DIR/$AGENT_INFRA_MODEL:/local_model \
   -p 8000:8000 \
   --ipc=host \
@@ -14,11 +15,10 @@ sudo docker run --runtime nvidia --gpus all \
   --dtype float16 \
   --max-model-len 32000 >& $AGENT_INFRA_LOG_DIR/vllm.log &
 
-WAIT_FOR_STARTUP=1
+  WAIT_FOR_STARTUP=1
 
-while [ $WAIT_FOR_STARTUP = 1 ]
-do
-
+  while [ $WAIT_FOR_STARTUP = 1 ]
+  do
       echo grep "Application startup complete" $AGENT_INFRA_LOG_DIR/vllm.log
       grep "Application startup complete" $AGENT_INFRA_LOG_DIR/vllm.log
       if [ $? = 0 ]
@@ -27,12 +27,15 @@ do
       fi
       
       sleep 5
-done
+  done
 
 
-echo "VLLM Process is started ..."
+  echo "VLLM Process is started ..."
 
-nvidia-smi
+  nvidia-smi
+ 
+  #sudo docker logs VLLM_0
 
+  ## max-model-len 32000 : context len is 32K
 
-## max-model-len 32000 : context len is 32K
+fi
