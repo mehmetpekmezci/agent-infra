@@ -21,6 +21,9 @@ do
    echo
    echo
    bash $start_script
+   echo "Waiting 5 seconds to let the $start_script start ..."
+   sleep 5
+   
 done
 
 

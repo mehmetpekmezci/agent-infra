@@ -1,14 +1,14 @@
 
 DOCKER_NAME=VLLM_0
-sudo docker inspect $DOCKER_NAME >/dev/null
+sudo docker inspect $DOCKER_NAME &>/dev/null
 if [ $? = 0 ]
 then
     sudo docker start $DOCKER_NAME 
 else
+#sudo docker run --name $DOCKER_NAME --runtime nvidia --restart=always --gpus all \
 sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
   -v $AGENT_INFRA_MODELS_DIR/$AGENT_INFRA_MODEL:/local_model \
   -p 8000:8000 \
-  --restart=always \
   --ipc=host \
   --env "HF_HUB_OFFLINE=1" \
   --env "TRANSFORMERS_OFFLINE=1" \
