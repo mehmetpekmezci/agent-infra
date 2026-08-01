@@ -32,6 +32,10 @@ AI
 
     Open WebUI
 
+Gateway
+
+    new-api
+
 Automation
 
     n8n

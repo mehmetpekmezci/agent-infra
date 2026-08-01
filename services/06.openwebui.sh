@@ -1,20 +1,17 @@
-mkdir -p $AGENT_INFRA_DATA_DIR/redis_data
+DOCKER_NAME=OPEN_WEB_UI_0
 
-sudo docker inspect REDIS_0 >/dev/null
+mkdir -p $AGENT_INFRA_DATA_DIR/open_web_ui_data
+
+sudo docker inspect $DOCKER_NAME >/dev/null
 if [ $? = 0 ]
 then
-    sudo docker start REDIS_0 
-    #sudo docker container rm -f POSTGRE_0
+    sudo docker start $DOCKER_NAME
+    #sudo docker container rm -f $DOCKER_NAME
 else
-    docker run -d --name REDIS_0 -p 6379:6379 -v $AGENT_INFRA_DATA_DIR/redis_data:/data --restart unless-stopped redis redis-server --appendonly yes --requirepass "your_strong_password" >& $AGENT_INFRA_LOG_DIR/redis.log &
+    #docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v $AGENT_INFRA_DATA_DIR/open_web_ui_data:/app/backend/data --name $DOCKER_NAME --restart always ghcr.io/open-webui/open-webui:main
+    docker run -d -p 8080:8080 --add-host=host.docker.internal:host-gateway -e OPENAI_API_BASE_URL=http://host.docker.internal:8000/v1 -v $AGENT_INFRA_DATA_DIR/open_web_ui_data:/app/backend/data --name $DOCKER_NAME --restart always ghcr.io/open-webui/open-webui:main
 
-    docker run -d \
-  -p 3000:8080 \
-  --add-host=host.docker.internal:host-gateway \
-  -v open-webui:/app/backend/data \
-  --name open-webui \
-  --restart always \
-  ghcr.io/open-webui/open-webui:main
+
 
 fi
 

@@ -1,11 +1,14 @@
-sudo docker inspect VLLM_0 >/dev/null
+
+DOCKER_NAME=VLLM_0
+sudo docker inspect $DOCKER_NAME >/dev/null
 if [ $? = 0 ]
 then
-    sudo docker start VLLM_0 
+    sudo docker start $DOCKER_NAME 
 else
-sudo docker run --name VLLM_0 --runtime nvidia --gpus all \
+sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
   -v $AGENT_INFRA_MODELS_DIR/$AGENT_INFRA_MODEL:/local_model \
   -p 8000:8000 \
+  --restart=always \
   --ipc=host \
   --env "HF_HUB_OFFLINE=1" \
   --env "TRANSFORMERS_OFFLINE=1" \
@@ -15,27 +18,28 @@ sudo docker run --name VLLM_0 --runtime nvidia --gpus all \
   --dtype float16 \
   --max-model-len 32000 >& $AGENT_INFRA_LOG_DIR/vllm.log &
 
-  WAIT_FOR_STARTUP=1
+  ## max-model-len 32000 : context len is 32K
 
-  while [ $WAIT_FOR_STARTUP = 1 ]
-  do
-      echo grep "Application startup complete" $AGENT_INFRA_LOG_DIR/vllm.log
-      grep "Application startup complete" $AGENT_INFRA_LOG_DIR/vllm.log
+fi
+
+
+WAIT_FOR_STARTUP=1
+
+while [ $WAIT_FOR_STARTUP = 1 ]
+do
+      sudo docker ps | grep $DOCKER_NAME
       if [ $? = 0 ]
       then
 	      WAIT_FOR_STARTUP=0
       fi
       
       sleep 5
-  done
+done
 
 
-  echo "VLLM Process is started ..."
+echo "$DOCKER_NAME Process is started ..."
 
-  nvidia-smi
+nvidia-smi
  
-  #sudo docker logs VLLM_0
+#sudo docker logs $DOCKER_NAME
 
-  ## max-model-len 32000 : context len is 32K
-
-fi

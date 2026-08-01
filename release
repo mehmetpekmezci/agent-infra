@@ -13,3 +13,7 @@ export AGENT_INFRA_LOG_DIR=$AGENT_INFRA_DIR/logs
 export AGENT_INFRA_DATA_DIR=$AGENT_INFRA_DIR/data
 
 
+alias dport='docker container ls --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}" -a'
+
+
+
