@@ -13,7 +13,7 @@ cd $AGENT_INFRA_DIR/services
 mkdir -p $AGENT_INFRA_LOG_DIR
 
 
-for start_script in $(ls *.sh| grep -v _ | grep [0-9] | grep -v 00)
+for start_script in $(ls *.sh| grep [0-9] | grep -v 00)
 do
    echo
    echo
