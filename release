@@ -6,6 +6,8 @@ export AGENT_INFRA_MODELS_DIR=$AGENT_INFRA_DIR/models
 
 export AGENT_INFRA_MODEL="Qwen/Qwen2.5-Coder-1.5B-Instruct"
 
+export AGENT_INFRA_MODEL_TOOL_CALL_PARSER="hermes"
+
 export AGENT_INFRA_DEV_TOOLS=$AGENT_INFRA_DIR/dev-tools
 
 export AGENT_INFRA_LOG_DIR=$AGENT_INFRA_DIR/logs
