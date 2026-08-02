@@ -2,8 +2,11 @@
 ## you may also select a release from there and install the image by its version.
 
 
-# sudo docker pull vllm/vllm-openai:v0.25.1
+# sudo docker pull vllm/vllm-openai:v0.26.0
 sudo docker pull vllm/vllm-openai:latest
+
+sudo docker run --rm --entrypoint pip vllm/vllm-openai:latest show vllm
+sudo docker inspect --format='{{index .Config.Labels "org.opencontainers.image.version"}}' vllm/vllm-openai:latest
 
 echo
 echo
