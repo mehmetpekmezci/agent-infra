@@ -1,3 +1,13 @@
+
+
+if [ "$AGENT_INFRA_DIR" = "" ]
+then
+        echo "AGENT_INFRA_DIR environment variable not found ! "
+        echo "Source the release file in the agent-infra directory !"
+        exit 1
+fi
+
+
 DOCKER_NAME=OPEN_WEB_UI_0
 
 mkdir -p $AGENT_INFRA_DATA_DIR/open_web_ui_data
@@ -16,4 +26,38 @@ else
 
 
 fi
+
+
+echo '
+
+For the first-time setup, Click on the "Get Started" button found on the bottom of the page.
+    Name = Mehmet Pekmezci
+    Email = mehmet.pekmezci.32@gmail.com
+    Password = admin123456
+
+    Then Click "Create Admin Account"
+
+
+To configure new-api in the open web ui, click on the "user icon" found in the top-most and the right-most of the page.
+
+Click on Admin Panel
+
+Click on Settings on the top menu.
+
+Click on Connections link on the left menu.
+
+In the "Manage OpenAI API connections" section in the page, there is an entry, and a "settings" icon in the right-most of that line, click on that icon.
+       URL=http://host.docker.internal:3000/v1
+           Get API KEY from the new-api admin web intraface (http://localhost:3000/keys) , click on the copy icon near the Api Key of API_KEY_0 line.
+       Auth = Bearer, <paste the api key you copied from new-api>
+       Save
+
+NOTE: if you get this error : "auto" tool choice requires --enable-auto-tool-choice and --tool-call-parser to be set 
+      then you should moodify 01.vllm.sh and start the docker image using "--enable-auto-tool-choice --tool-call-parser hermes" for qwen, "--enable-auto-tool-choice --tool-call-parser llama3" for ollama.
+
+
+
+
+
+'
 

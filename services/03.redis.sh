@@ -1,4 +1,12 @@
 
+if [ "$AGENT_INFRA_DIR" = "" ]
+then
+        echo "AGENT_INFRA_DIR environment variable not found ! "
+        echo "Source the release file in the agent-infra directory !"
+        exit 1
+fi
+
+
 DOCKER_NAME=REDIS_0
 
 mkdir -p $AGENT_INFRA_DATA_DIR/redis_data

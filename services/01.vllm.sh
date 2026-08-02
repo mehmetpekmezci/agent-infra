@@ -1,4 +1,13 @@
 
+
+if [ "$AGENT_INFRA_DIR" = "" ]
+then
+        echo "AGENT_INFRA_DIR environment variable not found ! "
+        echo "Source the release file in the agent-infra directory !"
+        exit 1
+fi
+
+
 DOCKER_NAME=VLLM_0
 sudo docker inspect $DOCKER_NAME &>/dev/null
 if [ $? = 0 ]
@@ -8,6 +17,7 @@ else
 #sudo docker run --name $DOCKER_NAME --runtime nvidia --restart=always --gpus all \
 sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
   -v $AGENT_INFRA_MODELS_DIR/$AGENT_INFRA_MODEL:/local_model \
+  --enable-auto-tool-choice --tool-call-parser $AGENT_INFRA_MODEL_TOOL_CALL_PARSER \
   -p 8000:8000 \
   --ipc=host \
   --env "HF_HUB_OFFLINE=1" \
