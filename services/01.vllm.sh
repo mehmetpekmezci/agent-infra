@@ -55,7 +55,6 @@ sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
 
 fi
 
-exit
 
 WAIT_FOR_STARTUP=1
 
