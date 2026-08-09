@@ -38,4 +38,5 @@ done
 
 echo "$DOCKER_NAME Process is started ..."
 
+echo "mongosh \"mongodb://admin:your_secure_password@localhost:27017\" "
 

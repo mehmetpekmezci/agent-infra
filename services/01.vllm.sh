@@ -31,6 +31,7 @@ echo sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
   --enable-auto-tool-choice --tool-call-parser $AGENT_INFRA_MODEL_TOOL_CALL_PARSER \
   --gpu-memory-utilization 0.85 \
   --dtype float16 \
+  --kv-cache-memory=2919837389 \
   --max-model-len 32000 
 
 sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
@@ -44,6 +45,7 @@ sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
   --enable-auto-tool-choice --tool-call-parser $AGENT_INFRA_MODEL_TOOL_CALL_PARSER \
   --gpu-memory-utilization 0.85 \
   --dtype float16 \
+  --kv-cache-memory=2919837389 \
   --max-model-len 32000 >& $AGENT_INFRA_LOG_DIR/vllm.log &
 
 

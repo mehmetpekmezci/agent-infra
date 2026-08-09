@@ -27,7 +27,9 @@ do
 done
 
 
-
+## docker exec -it <conainer_name or id> /bin/bash
+## example : docker exec -it WEB_PROTEGE_0 /bin/bash
+## 
 
 
 

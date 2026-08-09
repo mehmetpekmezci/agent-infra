@@ -40,3 +40,4 @@ done
 echo "$DOCKER_NAME Process is started ..."
 
 
+echo "n8n : node config : AI > Open AI > Message a model.      http://host.docker.internal:3000/v1  , apikey can be copied from http://localhost:3000/keys"

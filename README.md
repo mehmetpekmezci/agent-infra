@@ -10,96 +10,24 @@ Infra modules and installation scripts for ai agents
 
 2.  Ubuntu 24.04
 
-## HOW TO INSTALL
-1. Clone this repository
-2. source the release file 
-3. go to install directory and run 00.main.sh , which will execute all the other installers sequentially.
+##  [INSTALLATION] (/docs/01.install.md)
 
+##  [CONFIGURE] (/docs/02.configure.md)
 
-## WHAT WILL IT INSTALL 
+##  Use Cases, Scenarios and Examples 
 
-Core Infrastructure
+### [Simple Java Development With Coding Agents] (/docs/03.01.usage.exammple.simple.java.md)
 
-    Docker Engine
+### [Simple Qt Development With Coding Agents] (/docs/03.01.usage.exammple.simple.qt.md)
 
-    Docker Compose
+### [Simple Rust Development With Coding Agents] (/docs/03.01.usage.exammple.simple.rust.md)
 
-    NVIDIA Container Toolkit ( CUDA DRIVERS ARE FOUND IN THE DOCKER IMAGES, NOT INSTALLED ON THE HOST MACHINE)
+### [Refactoring Java Projects] (/docs/03.01.usage.exammple.simple.java.md)
 
-AI
+### [Porting Java Project to Qt ] (/docs/03.01.usage.exammple.simple.java.md)
 
-    vLLM
-
-    Open WebUI
-
-Gateway
-
-    new-api
-
-Automation
-
-    n8n
-
-Knowledge Engineering
-
-    Protégé Desktop
-
-    WebProtégé
-
-    Apache Jena Fuseki
-
-    Neo4j
-
-    LLMWiki
-
-RAG
-
-    Qdrant
-
-    GraphRAG
-
-    Apache Tika
-
-    SearXNG
-
-Storage
-
-    RustFS (S3-compatible Object Storage)
-
-Databases
-
-    PostgreSQL
-
-    Redis
-
-    MongoDB
-
-Monitoring
-
-    Prometheus
-
-    Grafana
-
-Development
-
-    Visual Studio Code
-
-    Kilo Code
-
-    Python
-
-    uv
-
-    Git
-
-    Git LFS
-
-    Node.js
-
-    Docker Extension
-
-    Jupyter
-
-    graphify
+### [Porting Java Project to Rust ] (/docs/03.01.usage.exammple.simple.java.md)
+    
+### [ Oritng Complete Code Base with multiple agent ]
 
     
