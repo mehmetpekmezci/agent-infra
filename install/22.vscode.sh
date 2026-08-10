@@ -21,7 +21,10 @@ fi
 echo ls $AGENT_INFRA_DEV_TOOLS/VSCode-linux-x64
 ls $AGENT_INFRA_DEV_TOOLS/VSCode-linux-x64
 
-echo "./code --no-sandbox" > $AGENT_INFRA_DEV_TOOLS/VSCode-linux-x64/code.sh
+echo "cd $AGENT_INFRA_DEV_TOOLS/VSCode-linux-x64;./code --no-sandbox" > $AGENT_INFRA_DEV_TOOLS/VSCode-linux-x64/code.sh
+
+chmod +x $AGENT_INFRA_DEV_TOOLS/VSCode-linux-x64/code.sh
+
 
 
 
