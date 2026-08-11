@@ -1,20 +1,26 @@
 # agent-infra
-Infra modules and installation scripts for ai agents
+Infra modules and installation scripts for ai agents and ai-powered software development environment.
 
 ## REQUIREMENTS:
 1.  A computer with a NVIDIA GPU that is supported by VLLM 
 
-    https://docs.vllm.ai/en/stable/getting_started/installation/gpu/#requirements
+    For the list of GPUs supported by VLLM : https://docs.vllm.ai/en/stable/getting_started/installation/gpu/#requirements
 
-    https://www.digitalocean.com/community/conceptual-articles/vllm-gpu-sizing-configuration-guide
+    For the GPU size calculation : https://www.digitalocean.com/community/conceptual-articles/vllm-gpu-sizing-configuration-guide
 
 2.  Ubuntu 24.04
 
-##  [INSTALLATION] (/docs/01.install.md)
+##  INSTALLATION 
 
-##  [CONFIGURE] (/docs/02.configure.md)
+    List of installed components and installation descriptions : [INSTALLATION] (docs/01.install.md)
+    
+##  CONFIGURATION
 
-##  Usage Examples of this AI-Powered Software Development Environment.
+    Configuration of installed components : [CONFIGURATION] (docs/02.configure.md)
+
+##  USAGE
+
+    Usage Examples of this AI-Powered Software Development Environment.
 
 ### [Simple Java Development With Coding Agents] (/docs/03.01.usage.exammple.simple.java.md)
 Multiagent example : bussiness analyst, architect, coder, document generator, unit test coder, scenario test coder, code reviewer( bitbucket) , static analyzer(mcp), test runner, test report generator, release manager, product admin, platform admin.
