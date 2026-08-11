@@ -12,15 +12,15 @@ Infra modules and installation scripts for ai agents and ai-powered software dev
 
 ##  INSTALLATION 
 
-    List of installed components and installation descriptions : [INSTALLATION] (docs/01.install.md)
+List of installed components and installation descriptions : [INSTALLATION] (docs/01.install.md)
     
 ##  CONFIGURATION
 
-    Configuration of installed components : [CONFIGURATION] (docs/02.configure.md)
+Configuration of installed components : [CONFIGURATION] (docs/02.configure.md)
 
 ##  USAGE
 
-    Usage Examples of this AI-Powered Software Development Environment.
+Usage Examples of this AI-Powered Software Development Environment.
 
 ### [Simple Java Development With Coding Agents] (/docs/03.01.usage.exammple.simple.java.md)
 Multiagent example : bussiness analyst, architect, coder, document generator, unit test coder, scenario test coder, code reviewer( bitbucket) , static analyzer(mcp), test runner, test report generator, release manager, product admin, platform admin.
