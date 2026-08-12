@@ -1,4 +1,4 @@
-sudo docker pull stain/jena-fuseki:latest
+sudo docker pull conceptkernel/jena-fuseki:6.0.0-1
 echo
 echo
 echo

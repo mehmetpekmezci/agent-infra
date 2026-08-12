@@ -1,4 +1,4 @@
-sudo docker pull neo4j:latest
+sudo docker pull neo4j:5.26.29-ubi10
 echo
 echo
 echo

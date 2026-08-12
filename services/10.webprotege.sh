@@ -18,8 +18,10 @@ if [ $? = 0 ]
 then
     sudo docker start $DOCKER_NAME  
 else
+    sudo docker run --name $DOCKER_NAME --add-host=host.docker.internal:host-gateway -p 5000:8080 -e webprotege.mongodb.host=host.docker.internal  -d protegeproject/webprotege:latest  >& $AGENT_INFRA_LOG_DIR/web_protege.log &
     #sudo docker run --name $DOCKER_NAME --add-host=host.docker.internal:host-gateway -p 5000:8080 -e webprotege.mongodb.host=host.docker.internal -e webprotege.mongodb.auth.username=admin  -e webprotege.mongodb.auth.password=your_secure_password -e webprotege.mongodb.auth.source=admin -d protegeproject/webprotege:latest  >& $AGENT_INFRA_LOG_DIR/web_protege.log &
-    sudo docker run --name $DOCKER_NAME --add-host=host.docker.internal:host-gateway -p 5000:8080 -e webprotege.mongodb.uri="mongodb://admin:your_secure_password@host.docker.internal:27017/admin?authSource=admin"  -d protegeproject/webprotege:latest  >& $AGENT_INFRA_LOG_DIR/web_protege.log &
+    #sudo docker run --name $DOCKER_NAME --add-host=host.docker.internal:host-gateway -p 5000:8080 -e webprotege.mongodb.uri="mongodb://admin:your_secure_password@host.docker.internal:27017/webprotege?authSource=admin" -d protegeproject/webprotege:latest  >& $AGENT_INFRA_LOG_DIR/web_protege.log &
+    #sudo docker run --name $DOCKER_NAME --add-host=host.docker.internal:host-gateway -p 5000:8080 -e webprotege.mongodb.uri="mongodb://admin:your_secure_password@host.docker.internal:27017/admin?authSource=admin"  -d protegeproject/webprotege:latest  >& $AGENT_INFRA_LOG_DIR/web_protege.log &
 
 fi
 

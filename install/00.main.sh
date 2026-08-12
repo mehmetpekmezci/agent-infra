@@ -44,4 +44,5 @@ do
 done
 
 
+echo "docker image inspect <image_name_or_id> --format '{{json .Config.Labels}}'"
 

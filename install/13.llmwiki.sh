@@ -1,5 +1,4 @@
-sudo docker pull ghcr.io/pratiyush/llm-wiki:latest
-## bir de axiomwiki var, onun imajini bulamadim, indirirken hata veriyordu.
+sudo docker pull lordraw/llmwiki:1.0.0
 echo
 echo
 echo

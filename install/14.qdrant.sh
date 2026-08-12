@@ -1,4 +1,4 @@
-sudo docker pull qdrant/qdrant:latest
+sudo docker pull qdrant/qdrant:v1.18.3
 echo
 echo
 echo

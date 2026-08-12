@@ -2,7 +2,7 @@
 ## docker pull ghcr.io/open-webui/open-webui:v0.10.1-cuda
 ## docker pull ghcr.io/open-webui/open-webui:v0.10.1-ollama
 
-sudo docker pull ghcr.io/open-webui/open-webui:main
+sudo docker pull ghcr.io/open-webui/open-webui:v0.11.0
 echo
 echo
 echo

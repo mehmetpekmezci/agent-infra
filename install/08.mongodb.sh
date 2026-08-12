@@ -1,4 +1,4 @@
-sudo docker pull mongo:latest
+sudo docker pull mongo:8.0.10
 echo
 echo
 echo

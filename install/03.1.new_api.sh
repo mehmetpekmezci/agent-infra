@@ -2,7 +2,7 @@
 ## you may also select a release from there and install the image by its version.
 
 
-sudo docker pull calciumion/new-api:latest
+sudo docker pull calciumion/new-api:v1.0.0-rc.24
 echo
 echo
 echo

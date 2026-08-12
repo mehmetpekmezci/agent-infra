@@ -18,7 +18,8 @@ then
 else
 
     # DISABLE restart=always
-    sudo docker run --name $DOCKER_NAME -e MONGO_INITDB_ROOT_USERNAME=admin  -e MONGO_INITDB_ROOT_PASSWORD=your_secure_password  -p 27017:27017 -v $AGENT_INFRA_DATA_DIR/mongo_data:/data/db -d mongo:latest >& $AGENT_INFRA_LOG_DIR/mongo.log &
+    #sudo docker run --name $DOCKER_NAME -e MONGO_INITDB_ROOT_USERNAME=admin  -e MONGO_INITDB_ROOT_PASSWORD=your_secure_password  -p 27017:27017 -v $AGENT_INFRA_DATA_DIR/mongo_data:/data/db -d mongo:latest >& $AGENT_INFRA_LOG_DIR/mongo.log &
+    sudo docker run --name $DOCKER_NAME   -p 27017:27017 -v $AGENT_INFRA_DATA_DIR/mongo_data:/data/db -d mongo:latest >& $AGENT_INFRA_LOG_DIR/mongo.log &
 
 fi
 
@@ -39,4 +40,6 @@ done
 echo "$DOCKER_NAME Process is started ..."
 
 echo "mongosh \"mongodb://admin:your_secure_password@localhost:27017\" "
+echo "sudo docker run --rm -it --add-host=host.docker.internal:host-gateway rtsp/mongosh mongosh 'mongodb://admin:your_secure_password@host.docker.internal:27017/?authSource=admin'"
+
 

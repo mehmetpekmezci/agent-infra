@@ -1,4 +1,4 @@
-sudo docker pull tigergraph/graphrag:latest
+sudo docker pull tigergraph/graphrag:2.0.1
 echo
 echo
 echo

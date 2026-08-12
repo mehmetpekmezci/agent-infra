@@ -1,4 +1,4 @@
-sudo docker pull redis:latest
+sudo docker pull redis:8.10
 echo
 echo
 echo
