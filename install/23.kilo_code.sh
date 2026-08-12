@@ -1,4 +1,5 @@
-
+## KILO CODE VERION IS : 7.4.20
+#
 mkdir -p $AGENT_INFRA_DEV_TOOLS/kilo-code
 
 cd $AGENT_INFRA_DEV_TOOLS/kilo-code

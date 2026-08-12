@@ -1,4 +1,4 @@
-sudo docker pull rustfs/rustfs:latest
+sudo docker pull rustfs/rustfs:1.0.0-rc.1
 echo
 echo
 echo

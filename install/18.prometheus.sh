@@ -1,4 +1,4 @@
-sudo docker pull prom/prometheus:latest
+sudo docker pull  ubuntu/prometheus:3.11-26.04_stable
 echo
 echo
 echo

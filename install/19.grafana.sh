@@ -1,4 +1,4 @@
-sudo docker pull grafana/grafana:latest
+sudo docker pull grafana/grafana:13.0.6
 echo
 echo
 echo
