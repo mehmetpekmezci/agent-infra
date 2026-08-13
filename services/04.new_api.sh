@@ -29,7 +29,7 @@ else
 
   #sudo docker run -d --name $DOCKER_NAME --network llm-net -p 3000:3000 -v ./data:/data -e TZ=America/New_York calciumion/new-api:latest
   # --restart always
-  sudo docker run -d --name $DOCKER_NAME  -p 3000:3000 -v $AGENT_INFRA_DATA_DIR/new_api:/data -e TZ=$(timedatectl show --property=Timezone --value) -e REDIS_CONN_STRING="redis://:redis_password@host.docker.internal:6379"  -e SQL_DSN="postgresql://pguser:pgpassword@host.docker.internal:5432/pgdb?sslmode=disable" --add-host=host.docker.internal:host-gateway calciumion/new-api:latest
+  sudo docker run -d --name $DOCKER_NAME  -p 3000:3000 -v $AGENT_INFRA_DATA_DIR/new_api:/data -e TZ=$(timedatectl show --property=Timezone --value) -e REDIS_CONN_STRING="redis://:redis_password@host.docker.internal:6379"  -e SQL_DSN="postgresql://pguser:pgpassword@host.docker.internal:5432/pgdb?sslmode=disable" --add-host=host.docker.internal:host-gateway calciumion/new-api:v1.0.0-rc.24
 
   # sudo docker logs NEWAPI_0
   # komutuyla bakinca username/password hatasi cikabilir,

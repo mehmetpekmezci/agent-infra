@@ -7,10 +7,7 @@ then
         exit 1
 fi
 
-
-sudo docker run --rm --entrypoint pip vllm/vllm-openai:latest show vllm
-sudo docker inspect --format='{{index .Config.Labels "org.opencontainers.image.version"}}' vllm/vllm-openai:latest
-
+#sudo docker run --rm --entrypoint pip vllm/vllm-openai show vllm
 
 DOCKER_NAME=VLLM_0
 sudo docker inspect $DOCKER_NAME &>/dev/null
@@ -26,7 +23,7 @@ echo sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
   --ipc=host \
   --env "HF_HUB_OFFLINE=1" \
   --env "TRANSFORMERS_OFFLINE=1" \
-  vllm/vllm-openai:latest \
+  vllm/vllm-openaiv:0.26.0 \
   --model /local_model \
   --enable-auto-tool-choice --tool-call-parser $AGENT_INFRA_MODEL_TOOL_CALL_PARSER \
   --gpu-memory-utilization 0.85 \
@@ -40,7 +37,7 @@ sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
   --ipc=host \
   --env "HF_HUB_OFFLINE=1" \
   --env "TRANSFORMERS_OFFLINE=1" \
-  vllm/vllm-openai:latest \
+  vllm/vllm-openai:v0.26.0 \
   --model /local_model \
   --enable-auto-tool-choice --tool-call-parser $AGENT_INFRA_MODEL_TOOL_CALL_PARSER \
   --gpu-memory-utilization 0.85 \
@@ -49,7 +46,7 @@ sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
   --max-model-len 32000 >& $AGENT_INFRA_LOG_DIR/vllm.log &
 
 
-#sudo docker run --name VLLM_0 --runtime nvidia --gpus all -v /home/atalet/workspace/agent-infra/models/Qwen/Qwen2.5-Coder-1.5B-Instruct:/local_model -p 8000:8000 --ipc=host --env HF_HUB_OFFLINE=1 --env TRANSFORMERS_OFFLINE=1 vllm/vllm-openai:latest   --model /local_model  --enable-auto-tool-choice --tool-call-parser hermes --gpu-memory-utilization 0.85 --dtype float16 --max-model-len 32000
+#sudo docker run --name VLLM_0 --runtime nvidia --gpus all -v /home/atalet/workspace/agent-infra/models/Qwen/Qwen2.5-Coder-1.5B-Instruct:/local_model -p 8000:8000 --ipc=host --env HF_HUB_OFFLINE=1 --env TRANSFORMERS_OFFLINE=1 vllm/vllm-openai   --model /local_model  --enable-auto-tool-choice --tool-call-parser hermes --gpu-memory-utilization 0.85 --dtype float16 --max-model-len 32000
 
 
 
