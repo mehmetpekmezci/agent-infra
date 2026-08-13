@@ -1,4 +1,4 @@
-sudo docker pull quay.io/jupyter/base-notebook:latest
+sudo docker pull jupyter/minimal-notebook:x86_64-notebook-7.0.6
 echo
 echo
 echo

@@ -1,4 +1,4 @@
-sudo docker pull node:slim
+sudo docker pull node:26.7.0
 echo
 echo
 echo
