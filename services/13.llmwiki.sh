@@ -39,7 +39,10 @@ echo "$DOCKER_NAME Process is started ..."
 
 echo "
 Karpathy's Explanation : https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f
-Go to : http://localhost:8090/docs
+
+DOCS : https://github.com/lordraw77/llmwiki
+
+SERVICE : http://localhost:8090/docs
 
 "
 
