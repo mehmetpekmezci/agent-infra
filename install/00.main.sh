@@ -1,5 +1,11 @@
 #!/bin/bash
 
+echo "If you have corrupted images 
+      run 'docker system prune'
+      before running this script !
+"
+sleep 5
+
 if [ "$AGENT_INFRA_DIR" = "" ]
 then
 	echo "AGENT_INFRA_DIR environment variable not found ! "

@@ -52,6 +52,8 @@ In the "Manage OpenAI API connections" section in the page, there is an entry, a
        Auth = Bearer, <paste the api key you copied from new-api>
        Save
 
+API_KEY = sk-EoJCdSt5ZfEzQqny7AlzEfeyNiwRpT96bgrWnwKWGCSNPOgQ
+
 NOTE: if you get this error : "auto" tool choice requires --enable-auto-tool-choice and --tool-call-parser to be set 
       then you should moodify 01.vllm.sh and start the docker image using "--enable-auto-tool-choice --tool-call-parser hermes" for qwen, "--enable-auto-tool-choice --tool-call-parser llama3" for ollama.
 

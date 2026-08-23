@@ -18,7 +18,7 @@ then
     sudo docker start $DOCKER_NAME  
 else
     # DISABLE restart=always
-    sudo docker run --name $DOCKER_NAME -p 6333:6333 -p 6334:6334  -v $AGENT_INFRA_DATA_DIR/qdrant_data:/qdrant/storage:z -d qdrant/qdrant:v1.18.3 >& $AGENT_INFRA_LOG_DIR/llmwiki.log &
+    sudo docker run --name $DOCKER_NAME -p 6333:6333 -p 6334:6334  -v $AGENT_INFRA_DATA_DIR/qdrant_data:/qdrant/storage:z -d qdrant/qdrant:v1.18.3 >& $AGENT_INFRA_LOG_DIR/qdrant.log &
 
 fi
 
