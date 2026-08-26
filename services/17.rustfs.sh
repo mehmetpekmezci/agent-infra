@@ -10,7 +10,7 @@ fi
 DOCKER_NAME=RUSTFS_0
 
 mkdir -p $AGENT_INFRA_DATA_DIR/rustfs_data/logs
-chmod -Rf 10001:10001 $AGENT_INFRA_DATA_DIR/rustfs_data 
+chmod -Rf 777 $AGENT_INFRA_DATA_DIR/rustfs_data 
 
 sudo docker inspect $DOCKER_NAME &>/dev/null
 if [ $? = 0 ]
@@ -43,6 +43,10 @@ echo "$DOCKER_NAME Process is started ..."
 
 echo "
 DOCS : https://docs.rustfs.com/en/installation/container
+       https://github.com/rustfs/rustfs
+
+GOTO : http://localhost:9001/rustfs/console/auth/login/
+Default credentials: rustfsadmin / rustfsadmin
 
 "
 

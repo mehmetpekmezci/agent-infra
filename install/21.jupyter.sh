@@ -1,4 +1,4 @@
-sudo docker pull jupyter/minimal-notebook:x86_64-notebook-7.0.6
+sudo docker pull quay.io/jupyter/scipy-notebook:2026-07-28
 echo
 echo
 echo
