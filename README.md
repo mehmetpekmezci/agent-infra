@@ -1,7 +1,39 @@
 # agent-infra
-Infra modules and installation scripts for ai agents and ai-powered software development environment.
+
+Agent-infra repository contains scripts, descriptions and example use cases of a local (offline) agentic development environment.
+
+
+| Component | Type | Description |
+| --------- | ---- | ----------- | 
+| VLLM | SERVICE | LLM Inference Engine | 
+| NewApi | SERVICE | LLM Proxy ( AI model hub/gateway) | 
+| N8N | SERVICE | n8n is a web based workflow automation platform that uniquely combines AI capabilities with business process automation | 
+| NE04J | SERVICE | Neo4j is a native graph DB | 
+| Apache Jena Fuseki | SERVICE | To Serve Ontology Files| 
+| Lordraw LLMWiki | SERVICE | LLMWiki| 
+| Qdrant | SERVICE | Vector DB| 
+| GraphRAG (Tigergraph) | SERVICE | GraphRAG (Graph Retrieval-Augmented Generation) enhances traditional RAG by embedding knowledge graphs into the LLM inference process. |
+| MCP Context Forge | SERVICE | AI gateway for MCP Services |
+| RustFS| SERVICE | distributed object storage system compatible with S3 |
+| --------- | ---- | ----------- | 
+| Protege | TOOL | Ontology Development Tool | 
+| Claude Code CLI | TOOL | An agentic, command-line coding tool built by Anthropic | 
+| Open Code CLI | TOOL | An open source agentic command-line coding tool   | 
+| Aider | TOOL | An open source agentic, command-line coding tool | 
+| Copilot | TOOL | n agentic, command-line coding tool  built by GITHUB | 
+| Okf Harness| TOOL | an independent, open-source, terminal-native tool designed to help AI coding agents maintain local knowledge bases using Google’s Open Knowledge Format (OKF) | 
+| Graphify | TOOL | an open-source tool and AI coding-assistant skill that turns a project's files—including code, documentation, PDFs, images, and videos—into a queryable knowledge graph | 
+| Obsidian | TOOL | Obsidian is a popular note-taking and knowledge-management application that stores files as plain text Markdown documents on your local device| 
+| Deep Seek Harness | TOOL | an open-source, MIT-licensed agent runtime and framework developed by DeepSeek AI that wraps a large language model (LLM) with the tools, memory, sandboxes, and loop control needed to operate as an autonomous coding and task agent| 
+| Kilo-Code CLI | TOOL | An open source agentic command-line coding tool  | 
+| VSCode with Kilo-Code extension | TOOL | Visual Studio Code Editor with kilo-code| 
+| Antigravity | TOOL | Google Antigravity is an agentic software development platform designed to let users orchestrate multiple autonomous artificial intelligence agents to build, test, and deploy applications  | 
+| Caveman | TOOL | Installed within Coding Agents. This tool reduces tokens before sanding to inference service |
+
 
 ## REQUIREMENTS:
+	
+	
 1.  A computer with a NVIDIA GPU that is supported by VLLM 
 
     For the list of GPUs supported by VLLM : https://docs.vllm.ai/en/stable/getting_started/installation/gpu/#requirements

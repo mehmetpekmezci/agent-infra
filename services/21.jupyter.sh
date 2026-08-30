@@ -18,7 +18,7 @@ then
     sudo docker start $DOCKER_NAME  
 else
     # DISABLE restart=always
-    sudo docker run --name $DOCKER_NAME -p 8888:8888 -v $AGENT_INFRA_DATA_DIR/jupyter_data/:/home/jovyan/work  --user root -e GRANT_SUDO=yes -e DOCKER_STACKS_JUPYTER_CMD=notebook -d quay.io/jupyter/scipy-notebook:2026-07-28 >& $AGENT_INFRA_LOG_DIR/jupyter.log &
+    sudo docker run --name $DOCKER_NAME -p 7777:8888 -v $AGENT_INFRA_DATA_DIR/jupyter_data/:/home/jovyan/work  --user root -e GRANT_SUDO=yes -e DOCKER_STACKS_JUPYTER_CMD=notebook -d quay.io/jupyter/scipy-notebook:2026-07-28 >& $AGENT_INFRA_LOG_DIR/jupyter.log &
 
     # prom/jupyter
 
