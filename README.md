@@ -1,6 +1,11 @@
 # agent-infra
 
-Agent-infra repository contains scripts, descriptions and example use cases of a local (offline) agentic development environment.
+Agent-infra repository contains scripts, descriptions and example use cases of a local/offline/air-gapped agentic development environment.
+
+In this repository we have: 
+1. Architecture Design Reports about tool/service choices among other alternatives.
+2. Simple usage examples of tools/services.
+3. Usage of these tools/services in a full cycle development scenario.
 
 
 | Component | Type | Description |
@@ -10,29 +15,24 @@ Agent-infra repository contains scripts, descriptions and example use cases of a
 | N8N | SERVICE | n8n is a web based workflow automation platform that uniquely combines AI capabilities with business process automation | 
 | NE04J | SERVICE | Neo4j is a native graph DB | 
 | Apache Jena Fuseki | SERVICE | To Serve Ontology Files| 
-| Lordraw LLMWiki | SERVICE | LLMWiki| 
 | Qdrant | SERVICE | Vector DB| 
 | GraphRAG (Tigergraph) | SERVICE | GraphRAG (Graph Retrieval-Augmented Generation) enhances traditional RAG by embedding knowledge graphs into the LLM inference process. |
-| MCP Context Forge | SERVICE | AI gateway for MCP Services |
-| RustFS| SERVICE | distributed object storage system compatible with S3 |
-| --------- | ---- | ----------- | 
 | Protege | TOOL | Ontology Development Tool | 
-| Claude Code CLI | TOOL | An agentic, command-line coding tool built by Anthropic | 
-| Open Code CLI | TOOL | An open source agentic command-line coding tool   | 
-| Aider | TOOL | An open source agentic, command-line coding tool | 
-| Copilot | TOOL | n agentic, command-line coding tool  built by GITHUB | 
 | Okf Harness| TOOL | an independent, open-source, terminal-native tool designed to help AI coding agents maintain local knowledge bases using Google’s Open Knowledge Format (OKF) | 
-| Graphify | TOOL | an open-source tool and AI coding-assistant skill that turns a project's files—including code, documentation, PDFs, images, and videos—into a queryable knowledge graph | 
 | Obsidian | TOOL | Obsidian is a popular note-taking and knowledge-management application that stores files as plain text Markdown documents on your local device| 
+| Open Wiki | TOOL | OpenWiki is an open-source command-line interface (CLI) tool built by LangChain designed to write and automatically maintain structured Markdown documentation for codebases using LLM agents. |
 | Deep Seek Harness | TOOL | an open-source, MIT-licensed agent runtime and framework developed by DeepSeek AI that wraps a large language model (LLM) with the tools, memory, sandboxes, and loop control needed to operate as an autonomous coding and task agent| 
 | Kilo-Code CLI | TOOL | An open source agentic command-line coding tool  | 
-| VSCode with Kilo-Code extension | TOOL | Visual Studio Code Editor with kilo-code| 
-| Antigravity | TOOL | Google Antigravity is an agentic software development platform designed to let users orchestrate multiple autonomous artificial intelligence agents to build, test, and deploy applications  | 
+| Graphify | TOOL | an open-source tool and AI coding-assistant skill that turns a project's files—including code, documentation, PDFs, images, and videos—into a queryable knowledge graph | 
 | Caveman | TOOL | Installed within Coding Agents. This tool reduces tokens before sanding to inference service |
+| RTK | TOOL | Rust Token Killer is a command-line proxy sitting between your AI agent and the shell that intercepts verbose outputs (like git log) and returns clean, deduplicated, and condensed text |
+| Headroom | TOOL | It compresses tool outputs, logs, files, RAG chunks, and conversation history before they reach the model. It is also reversible: the original is cached, so the agent can pull it back if it actually needs it. |
+| Ponytail | TOOL | It pushes the agent to reuse existing code, platform features, and dependencies before writing anything new. |
+| Opendataloader | TOOL | OpenDataLoader PDF is a high-performance, open-source document parsing engine developed by Hancom that converts complex PDF documents into structured data like Markdown, JSON, and HTML. |
 
 
-## REQUIREMENTS:
-	
+
+## Hardware and OS Requirements to Run This Environment:
 	
 1.  A computer with a NVIDIA GPU that is supported by VLLM 
 
@@ -42,13 +42,25 @@ Agent-infra repository contains scripts, descriptions and example use cases of a
 
 2.  Ubuntu 24.04
 
-##  INSTALLATION 
+3.  Sudo 
 
-List of installed components and installation descriptions : [INSTALLATION] (docs/01.install.md)
+##  Architecture Design Records
+
+Architecture design reports a:
+
+1. Why we choose VLLM : 
+2. Why we choose deep seek harness
+3. Why we choose  Plugins/APIs vs MCPs
+4. How we do context token reduction
+5. Why we choose kilo-code amojng other coding agents.
+
+##  Installation of Services and Tools 
+
+Installation scripts can be found in "install" directory. After checking
     
 ##  CONFIGURATION
 
-Configuration of installed components : [CONFIGURATION] (docs/02.configure.md)
+Configuration of installed components : [CONFIGURATION](docs/02.configure.md)
 
 ##  USAGE
 
