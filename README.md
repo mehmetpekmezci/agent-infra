@@ -2,9 +2,9 @@
 
 Agent-infra repository contains scripts, descriptions and example use cases of a local/offline/air-gapped agentic development environment.
 
-In this repository we have: 
-1. Architecture Design Reports about tool/service choices among other alternatives.
-2. Simple usage examples of tools/services.
+In this repository we describe: 
+1. Architecture Design Records about tool/service choices among other alternatives.
+2. Simple usage example of each tool/service individually.
 3. Usage of these tools/services in a full cycle development scenario.
 
 
@@ -42,17 +42,18 @@ In this repository we have:
 
 2.  Ubuntu 24.04
 
-3.  Sudo 
+3.  Sudo authorization in the operating system.
 
 ##  Architecture Design Records
 
-Architecture design reports a:
+Architecture design records about :
 
-1. Why we choose VLLM : 
-2. Why we choose deep seek harness
-3. Why we choose  Plugins/APIs vs MCPs
-4. How we do context token reduction
-5. Why we choose kilo-code amojng other coding agents.
+1. Why we choose VLLM : [VLLM_ADR](docs/adrs/adr-001-ineference-engine-vllm.md)
+2. Why we choose kilo-code among other coding assistants : [CODING_ASSISTANTS](docs/adrs/adr-002-ai-assistants.md)
+3. How we use deep seek harness and kilo-code: [DEEP_SEEK_HARNESS_USAGE](docs/adrs/adr-003-deepseek-harness.md)
+4. How we use Plugins/APIs and MCPs : [MCP_and_HARNESS](docs/adrs/aadr-004-mcp-vs-plugins.md)
+5. How we do context token reduction :  [MCP_and_HARNESS](docs/adrs/adr-005-context-token-reduction-tools.md)
+
 
 ##  Installation of Services and Tools 
 
