@@ -58,7 +58,7 @@ Architecture design records about :
 
 ##  Installation of Services and Tools 
 
-Installation scripts can be found in "install" directory. After cloning this repository, source the release file, go to intall directory and run "00.main.sh" to start installaing services and tools. 
+Installation scripts can be found in "install" directory. After cloning this repository, source the release file, go to intall directory and run "00.main.sh" to start installing services and tools. 
     
 ##  Starting Services
 
@@ -66,7 +66,7 @@ After installing services and tools, we start our services using the "services/0
 
 ##  Usage
 
-Usage examples of this AI-Powered Software Development Environment.
+After starting the services, we are ready to use agentic tools. 
 
 ### [Simple Java Development With One Agent](/docs/01.usage.exammple.simple.java.one.agent.md)
 How I Structure Claude Code Projects So Agents Don’t Get Lost in Large Codebases (https://blog.s10n.dev/how-i-structure-claude-code-projects-so-agents-dont-get-lost-in-large-codebases-9ad69a2ebb92)

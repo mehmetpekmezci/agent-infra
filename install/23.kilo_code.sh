@@ -12,7 +12,6 @@ chmod +x install
 
 ./install
 
-
 echo "
 KILO CODE command line tool is installed.
 

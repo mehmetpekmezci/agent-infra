@@ -1,10 +1,12 @@
 #!/bin/bash
 
 export AGENT_INFRA_DIR=`cd \`dirname $( readlink -f $BASH_SOURCE ) \` && pwd`
+export PATH=$AGENT_INFRA_DIR/bin:$PATH
 
 export AGENT_INFRA_MODELS_DIR=$AGENT_INFRA_DIR/models
 
 export AGENT_INFRA_MODEL="Qwen/Qwen2.5-Coder-1.5B-Instruct"
+#export AGENT_INFRA_MODEL="unsloth/Qwen2.5-VL-7B-Instruct-GGUF"
 
 export AGENT_INFRA_MODEL_TOOL_CALL_PARSER="hermes"
 
@@ -18,4 +20,11 @@ export AGENT_INFRA_DATA_DIR=$AGENT_INFRA_DIR/data
 alias dport='docker container ls --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}" -a'
 
 
+#export KILO_PROVIDER="openai-compatible"
+#export KILO_BASE_URL="http://localhost:3000/v1"
+#export OPENAI_BASE_URL="http://localhost:3000/v1"
+#export OPENAI_API_BASE="http://localhost:3000/v1"
+#export KILO_MODEL="openai-compatible/local_model"
+##export KILO_MODEL="Qwen/Qwen2.5-Coder-1.5B-Instruct"
+#export KILO_API_KEY="sk-EoJCdSt5ZfEzQqny7AlzEfeyNiwRpT96bgrWnwKWGCSNPOgQ"
 

@@ -31,6 +31,11 @@ echo sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
   --kv-cache-memory=2919837389 \
   --max-model-len 32000 
 
+##  --dtype float16 \
+##  --kv-cache-dtype fp8 \
+##  --quantization fp8, --quantization bnb, or --quantization awq \\
+
+
 sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
   -v $AGENT_INFRA_MODELS_DIR/$AGENT_INFRA_MODEL:/local_model \
   -p 8000:8000 \
