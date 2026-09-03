@@ -1,4 +1,5 @@
 # agent-infra
+ATTENTION: After cloning this repository, source the release file found in the repository before running any script .
 
 Agent-infra repository contains scripts, descriptions and example use cases of a local/offline/air-gapped agentic development environment.
 
@@ -11,7 +12,7 @@ In this repository we describe:
 | Component | Type | Description |
 | --------- | ---- | ----------- | 
 | VLLM | SERVICE | LLM Inference Engine | 
-| NewApi | SERVICE | LLM Proxy ( AI model hub/gateway) | 
+| New API | SERVICE | LLM Proxy ( AI model gateway) | 
 | N8N | SERVICE | n8n is a web based workflow automation platform that uniquely combines AI capabilities with business process automation | 
 | NE04J | SERVICE | Neo4j is a native graph DB | 
 | Apache Jena Fuseki | SERVICE | To Serve Ontology Files| 
@@ -57,43 +58,28 @@ Architecture design records about :
 
 ##  Installation of Services and Tools 
 
-Installation scripts can be found in "install" directory. After checking
+Installation scripts can be found in "install" directory. After cloning this repository, source the release file, go to intall directory and run "00.main.sh" to start installaing services and tools. 
     
-##  CONFIGURATION
+##  Starting Services
 
-Configuration of installed components : [CONFIGURATION](docs/02.configure.md)
+After installing services and tools, we start our services using the "services/00.main.sh" script which triggers other start scripts in this directory.
 
-##  USAGE
+##  Usage
 
-Usage Examples of this AI-Powered Software Development Environment.
+Usage examples of this AI-Powered Software Development Environment.
 
-### [Simple Java Development With Coding Agents] (/docs/03.01.usage.exammple.simple.java.md)
-Multiagent example : bussiness analyst, architect, coder, document generator, unit test coder, scenario test coder, code reviewer( bitbucket) , static analyzer(mcp), test runner, test report generator, release manager, product admin, platform admin.
-Skills and coding book rags
+### [Simple Java Development With One Agent](/docs/01.usage.exammple.simple.java.one.agent.md)
+How I Structure Claude Code Projects So Agents Don’t Get Lost in Large Codebases (https://blog.s10n.dev/how-i-structure-claude-code-projects-so-agents-dont-get-lost-in-large-codebases-9ad69a2ebb92)
+How To Use Claude Like a Senior Engineer, Not a Chatbot (https://medium.com/codetodeploy/how-to-use-claude-like-a-senior-engineer-not-a-chatbot-6490dcaf1614)
 
-### [Simple Qt Development With Coding Agents] (/docs/03.01.usage.exammple.simple.qt.md)
+### [Simple C++ Development With One Agents] (/docs/03.01.usage.exammple.simple.qt.md)
 
-### [Simple Rust Development With Coding Agents] (/docs/03.01.usage.exammple.simple.rust.md)
+### [Simple Qt Development With One Agents] (/docs/03.01.usage.exammple.simple.qt.md)
 
-### [ Using LLM Wiki ] (/docs/03.02.llmwiki.md)
+### [Simple Rust Development With One Agents] (/docs/03.01.usage.exammple.simple.rust.md)
 
-### [Refactoring Java Projects] (/docs/03.01.usage.exammple.simple.java.md)
-
-### [Porting Java Project to Qt ] (/docs/03.01.usage.exammple.simple.java.md)
-
-### [Porting Java Project to Rust ] (/docs/03.01.usage.exammple.simple.java.md)
-    
-### [ Poritng Complete Code Base with multiple agent ]
-
-## Important Tips 
-
-### How I Structure Claude Code Projects So Agents Don’t Get Lost in Large Codebases (https://blog.s10n.dev/how-i-structure-claude-code-projects-so-agents-dont-get-lost-in-large-codebases-9ad69a2ebb92)
-
-### How To Use Claude Like a Senior Engineer, Not a Chatbot (https://medium.com/codetodeploy/how-to-use-claude-like-a-senior-engineer-not-a-chatbot-6490dcaf1614)
-
-### How I Cut Claude Code Token Usage by 90%+ With 5 Tools, Custom Hooks, and Enforcement (https://medium.com/@abdulgafoorabid/how-i-cut-claude-code-token-usage-by-90-with-4-tools-custom-hooks-and-enforcement-d3f8d2488cd6)
-
-### How to create a skill worth using  (https://uxplanet.org/i-tested-20-popular-claude-code-skills-most-of-them-were-useless-6bfdf190a6d1)
+### [Simple Java Development Using Skills](/docs/01.usage.exammple.simple.java.using.skills.md)
+    How to create a skill worth using  (https://uxplanet.org/i-tested-20-popular-claude-code-skills-most-of-them-were-useless-6bfdf190a6d1)
 
 If you’re building your own skill, follow this path:
 
@@ -103,5 +89,27 @@ If you’re building your own skill, follow this path:
     Cut anything the model does by default. If Claude already does it without being told, deleting it costs you nothing.
     Keep the main instructions short; push depth into referenced files. Use progressive disclosure and let Claude load the detail only when the task demands it.
     Measure. Run the task with and without the skill. If the output doesn’t change, or doesn’t change for the better, the skill isn’t earning its context.
+
+### [Simple Java Development Using Multiple Coding Agents](/docs/01.usage.exammple.simple.java.md)
+Multiagent example : bussiness analyst, architect, coder, document generator, unit test coder, scenario test coder, code reviewer( bitbucket) , static analyzer(mcp), test runner, test report generator, release manager, product admin, platform admin.
+Skills and coding book rags
+
+### [ Using Graphify ] (/docs/03.02.llmwiki.md)
+
+### [ Using Obsidian ] (/docs/03.02.llmwiki.md)
+
+### [ Using LLM Wiki ] (/docs/03.02.llmwiki.md)
+
+### [ Using Caveman RTK Headroom Ponytai ] (/docs/03.02.llmwiki.md)
+How I Cut Claude Code Token Usage by 90%+ With 5 Tools, Custom Hooks, and Enforcement (https://medium.com/@abdulgafoorabid/how-i-cut-claude-code-token-usage-by-90-with-4-tools-custom-hooks-and-enforcement-d3f8d2488cd6)
+
+### [ Refactoring Java Projects] (/docs/03.01.usage.exammple.simple.java.md)
+
+### [ Porting Java Project to Qt ] (/docs/03.01.usage.exammple.simple.java.md)
+
+### [ Porting Java Project to Rust ] (/docs/03.01.usage.exammple.simple.java.md)
+    
+### [ Poritng Complete Code Base with multiple agent ]
+
     
     
