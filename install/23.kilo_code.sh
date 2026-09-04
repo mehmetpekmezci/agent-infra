@@ -12,6 +12,45 @@ chmod +x install
 
 ./install
 
+
+grep "http://localhost:3000/v1" $HOME/.config/kilo/kilo.jsonc > /dev/null
+
+if [ $? != 0 ]
+then
+    cp $HOME/.config/kilo/kilo.jsonc $HOME/.config/kilo/kilo.jsonc.org
+
+    echo '
+{
+  "$schema": "https://app.kilo.ai/config.json",
+  "provider": {
+    "openai-compatible": {
+      "baseUrl": "http://localhost:3000/v1",
+      "apiKey": "sk-EoJCdSt5ZfEzQqny7AlzEfeyNiwRpT96bgrWnwKWGCSNPOgQ",
+      "models": {
+        "/local_model": {
+          "name": "Local Model for instance Qwen/Qwen2.5-Coder-1.5B-Instruct AGENT_INFRA_MODEL ",
+          "limit": {
+            "context": 32000,
+            "output": 8192
+          }
+        }
+      }
+    }
+  },
+  "permission": {
+    "bash": "allow"
+  }
+}
+    ' > $HOME/.config/kilo/kilo.jsonc
+
+   echo " Change the apiKey in file $HOME/.config/kilo/kio.jsonc file, Get API KEY from the new-api admin web intraface (http://localhost:3000/keys) , click on the copy icon near the Api Key of API_KEY_0 line.  Auth = Bearer, <paste the api key you copied from new-api>,  Save"
+else
+	echo " $HOME/.config/kilo/kio.jsonc file contains http://localhost:3000/keys, maybe it would be good idea to check the apiKey in that file :)"
+fi
+
+echo "Print Any Key"
+read 
+
 echo "
 KILO CODE command line tool is installed.
 
@@ -30,7 +69,12 @@ If you also want to install kilo-code extyension of vscode, please follow these 
 
 
 
+echo "Print Any Key"
+read 
 
 
+
+
+ 
 
 
