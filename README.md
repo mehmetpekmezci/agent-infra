@@ -45,6 +45,8 @@ In this repository we describe:
 
 3.  Sudo authorization in the operating system.
 
+4.  100GB of disk space
+
 ##  Architecture Design Records
 
 Architecture design records about :

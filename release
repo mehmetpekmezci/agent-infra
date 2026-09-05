@@ -5,10 +5,16 @@ export PATH=$AGENT_INFRA_DIR/bin:$PATH
 
 export AGENT_INFRA_MODELS_DIR=$AGENT_INFRA_DIR/models
 
-export AGENT_INFRA_MODEL="Qwen/Qwen2.5-Coder-1.5B-Instruct"
-#export AGENT_INFRA_MODEL="unsloth/Qwen2.5-VL-7B-Instruct-GGUF"
+#export AGENT_INFRA_MODEL="Qwen/Qwen2.5-Coder-1.5B-Instruct"
+#export AGENT_INFRA_MODEL_TOOL_CALL_PARSER="hermes"
+#export AGENT_INFRA_MODEL_REASONING_PARSER="auto"
+#export AGENT_INFRA_MODEL_TOKENIZER=""
 
-export AGENT_INFRA_MODEL_TOOL_CALL_PARSER="hermes"
+
+export AGENT_INFRA_MODEL="QuantTrio/Qwen3.5-4B-AWQ" 
+export AGENT_INFRA_MODEL_TOOL_CALL_PARSER="qwen3_coder"
+export AGENT_INFRA_MODEL_REASONING_PARSER="qwen3"
+
 
 export AGENT_INFRA_DEV_TOOLS=$AGENT_INFRA_DIR/dev-tools
 

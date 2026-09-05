@@ -15,47 +15,47 @@ if [ $? = 0 ]
 then
     sudo docker start $DOCKER_NAME 
 else
-#sudo docker run --name $DOCKER_NAME --runtime nvidia --restart=always --gpus all \
 
-echo sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
-  -v $AGENT_INFRA_MODELS_DIR/$AGENT_INFRA_MODEL:/local_model \
+#  --model /local_model/$AGENT_INFRA_SUB_MODEL \
+#  --tokenizer /local_model/tokenizer \
+#  --hf-config-path /local_model/config.json \
+#  --gpu-memory-utilization 0.95 \
+#  --enable-auto-tool-choice --tool-call-parser $AGENT_INFRA_MODEL_TOOL_CALL_PARSER \
+#  --reasoning-parser $AGENT_INFRA_MODEL_REASONING_PARSER \
+#  --dtype float16 \
+#  --kv-cache-dtype fp8 \
+#  --max-model-len 16000" 
+
+
+## kv-cache-memory=519837389 == 500MB
+COMMAND="sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
+	  -v $AGENT_INFRA_MODELS_DIR/$AGENT_INFRA_MODEL:/local_model \
   -p 8000:8000 \
   --ipc=host \
   --env "HF_HUB_OFFLINE=1" \
   --env "TRANSFORMERS_OFFLINE=1" \
-  vllm/vllm-openaiv:0.26.0 \
+  vllm/vllm-openai:v0.28.0 \
   --model /local_model \
-  --enable-auto-tool-choice --tool-call-parser $AGENT_INFRA_MODEL_TOOL_CALL_PARSER \
-  --gpu-memory-utilization 0.85 \
+  --gpu-memory-utilization 0.95 \
   --dtype float16 \
-  --kv-cache-memory=2919837389 \
-  --max-model-len 32000 
-
-##  --dtype float16 \
-##  --kv-cache-dtype fp8 \
-##  --quantization fp8, --quantization bnb, or --quantization awq \\
-
-
-sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
-  -v $AGENT_INFRA_MODELS_DIR/$AGENT_INFRA_MODEL:/local_model \
-  -p 8000:8000 \
-  --ipc=host \
-  --env "HF_HUB_OFFLINE=1" \
-  --env "TRANSFORMERS_OFFLINE=1" \
-  vllm/vllm-openai:v0.26.0 \
-  --model /local_model \
   --enable-auto-tool-choice --tool-call-parser $AGENT_INFRA_MODEL_TOOL_CALL_PARSER \
-  --gpu-memory-utilization 0.85 \
-  --dtype float16 \
-  --kv-cache-memory=2919837389 \
-  --max-model-len 32000 >& $AGENT_INFRA_LOG_DIR/vllm.log &
+  --reasoning-parser $AGENT_INFRA_MODEL_REASONING_PARSER \
+  --kv-cache-dtype fp8 \
+  --cpu-offload-gb 2 \
+  --enforce-eager \
+  --max-model-len 8000"
 
 
-#sudo docker run --name VLLM_0 --runtime nvidia --gpus all -v /home/atalet/workspace/agent-infra/models/Qwen/Qwen2.5-Coder-1.5B-Instruct:/local_model -p 8000:8000 --ipc=host --env HF_HUB_OFFLINE=1 --env TRANSFORMERS_OFFLINE=1 vllm/vllm-openai   --model /local_model  --enable-auto-tool-choice --tool-call-parser hermes --gpu-memory-utilization 0.85 --dtype float16 --max-model-len 32000
+## --kv-cache-memory=519837389 == 500MB
+  ## --max-model-len 32000 : context len is 32K
+##  --dtype float16 
+##  --kv-cache-dtype fp8 
+##  --quantization fp8, --quantization bnb, or --quantization awq 
+#  --restart=always 
 
+echo $COMMAND
+bash -c "$COMMAND" >& $AGENT_INFRA_LOG_DIR/vllm.log &
 
-
-  ## max-model-len 32000 : context len is 32K
 
 fi
 

@@ -2,10 +2,8 @@
 ## you may also select a release from there and install the image by its version.
 
 
-sudo docker pull vllm/vllm-openai:v0.26.0
-
-sudo docker run --rm --entrypoint pip vllm/vllm-openai:v0.26.0 show vllm
-
+sudo docker pull vllm/vllm-openai:v0.28.0
+sudo docker run --rm --entrypoint pip vllm/vllm-openai:v0.28.0 show vllm
 echo
 echo
 echo
