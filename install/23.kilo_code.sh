@@ -1,5 +1,12 @@
 ## KILO CODE VERION IS : 7.4.20
 #
+#
+
+sudo apt install wl-clipboard # you need to install this pkg for clipboard functionality of kilo-code cli
+# this is for wayland, below is for xorg
+sudo apt install xclip
+
+
 mkdir -p $AGENT_INFRA_DEV_TOOLS/kilo-code
 
 cd $AGENT_INFRA_DEV_TOOLS/kilo-code
