@@ -34,3 +34,7 @@ alias dport='docker container ls --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}
 ##export KILO_MODEL="Qwen/Qwen2.5-Coder-1.5B-Instruct"
 #export KILO_API_KEY="sk-EoJCdSt5ZfEzQqny7AlzEfeyNiwRpT96bgrWnwKWGCSNPOgQ"
 
+
+. ~/sdk/rust-dev-env/release
+
+

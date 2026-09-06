@@ -28,7 +28,7 @@ then
       "apiKey": "sk-EoJCdSt5ZfEzQqny7AlzEfeyNiwRpT96bgrWnwKWGCSNPOgQ",
       "models": {
         "/local_model": {
-          "name": "Local Model for instance Qwen/Qwen2.5-Coder-1.5B-Instruct AGENT_INFRA_MODEL ",
+          "name": "Local Model",
           "limit": {
             "context": 32000,
             "output": 8192
