@@ -55,7 +55,7 @@ Architecture design records about :
 2. Why we choose kilo-code among other coding assistants : [CODING_ASSISTANTS](docs/adrs/adr-002-ai-assistants.md)
 3. How we use deep seek harness and kilo-code: [DEEP_SEEK_HARNESS_USAGE](docs/adrs/adr-003-deepseek-harness.md)
 4. How we use Plugins/APIs and MCPs : [MCP_and_HARNESS](docs/adrs/aadr-004-mcp-vs-plugins.md)
-5. How we do context token reduction :  [MCP_and_HARNESS](docs/adrs/adr-005-context-token-reduction-tools.md)
+5. How we do context token reduction :  [CONTEXT_TOKEN_REDUCTION](docs/adrs/adr-005-context-token-reduction-tools.md)
 
 
 ##  Installation of Services and Tools 
@@ -70,7 +70,20 @@ After installing services and tools, we start our services using the "services/0
 
 After starting the services, we are ready to use agentic tools. 
 
-### [Simple Java Development With One Agent](/docs/01.usage.exammple.simple.java.one.agent.md)
+### 1. Simple Rust Development With One Agent
+#### 1.1. Prepare Work Directory and Github Repository
+	mkdir -p ~/agentspace
+	cd ~/agentspace
+	git clone git@github.com:mehmetpekmezci/agent-managed-rust-project.git
+#### 1.2. Start Kilo-Code coding agent and generate code.
+	cd ~/agentspace/agent-managed-rust-project
+	kilo
+		> create a rust project with name simple_calculator
+		> implement a simple calculator in main.rs . main.rs reads first value, math operator, second value as float value from terminal and performs the operation and prints the result.
+		> run the main
+
+
+
 How I Structure Claude Code Projects So Agents Don’t Get Lost in Large Codebases (https://blog.s10n.dev/how-i-structure-claude-code-projects-so-agents-dont-get-lost-in-large-codebases-9ad69a2ebb92)
 How To Use Claude Like a Senior Engineer, Not a Chatbot (https://medium.com/codetodeploy/how-to-use-claude-like-a-senior-engineer-not-a-chatbot-6490dcaf1614)
 
