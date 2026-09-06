@@ -26,24 +26,31 @@ else
 #  --kv-cache-dtype fp8 \
 #  --max-model-len 16000" 
 
-
+##  --cpu-offload-gb 2 \
+## --language-model-only  _> image and video modes are off
 ## kv-cache-memory=519837389 == 500MB
+#--env PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
+##  --kv-cache-memory-bytes 30M \
+#  --max-num-batched-tokens=10000
 COMMAND="sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
 	  -v $AGENT_INFRA_MODELS_DIR/$AGENT_INFRA_MODEL:/local_model \
   -p 8000:8000 \
   --ipc=host \
   --env "HF_HUB_OFFLINE=1" \
   --env "TRANSFORMERS_OFFLINE=1" \
+  --env PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
   vllm/vllm-openai:v0.28.0 \
   --model /local_model \
-  --gpu-memory-utilization 0.95 \
+  --gpu-memory-utilization 0.98 \
+  --language-model-only \
   --dtype float16 \
   --enable-auto-tool-choice --tool-call-parser $AGENT_INFRA_MODEL_TOOL_CALL_PARSER \
   --reasoning-parser $AGENT_INFRA_MODEL_REASONING_PARSER \
   --kv-cache-dtype fp8 \
-  --cpu-offload-gb 2 \
   --enforce-eager \
-  --max-model-len 8000"
+  --max-num-seqs=1 \
+  --kv-cache-memory-bytes 650M \
+  --max-model-len 32000"
 
 
 ## --kv-cache-memory=519837389 == 500MB
