@@ -34,7 +34,11 @@ alias dport='docker container ls --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}
 ##export KILO_MODEL="Qwen/Qwen2.5-Coder-1.5B-Instruct"
 #export KILO_API_KEY="sk-EoJCdSt5ZfEzQqny7AlzEfeyNiwRpT96bgrWnwKWGCSNPOgQ"
 
-
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>> AGENT_INFRA_DIR=$AGENT_INFRA_DIR "
+echo ">>> AGENT_INFRA_MODEL=$AGENT_INFRA_MODEL "
+echo ">>> AGENT_INFRA_DEV_TOOLS=$AGENT_INFRA_DEV_TOOLS "
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 if [ -f ~/sdk/rust-dev-env/release ]
 then
 . ~/sdk/rust-dev-env/release

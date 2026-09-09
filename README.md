@@ -75,13 +75,46 @@ After starting the services, we are ready to use agentic tools.
 	mkdir -p ~/agentspace
 	cd ~/agentspace
 	git clone git@github.com:mehmetpekmezci/agent-managed-rust-project.git
-#### 1.2. Start Kilo-Code coding agent and generate code.
+#### 1.2. CODE GENERATION
+	source ~sdk/rust-dev-env/release
+	source ~/workspace/agent-infra/release
 	cd ~/agentspace/agent-managed-rust-project
 	kilo
 		> create a rust project with name simple_calculator
 		> implement a simple calculator in main.rs . main.rs reads first value, math operator, second value as float value from terminal and performs the operation and prints the result.
-		> run the main
+		> run the main.
+		> commit all source codes in simple_calculator to the git with a meaningful comment :)
+			> The LLM Says : Done. The code has been committed to git and the calculation 5 * 6 = 30 was executed successfully.
+			
+#### 1.3. CODE REVIEW
+	source ~sdk/rust-dev-env/release
+	source ~/workspace/agent-infra/release
+	cd ~/agentspace/agent-managed-rust-project
+	kilo
+		> your role is "code reviewer". review the code in the simple_calculator directory and evaluate the codes by using the coding principles in https://github.com/havelsan/rust-dev-env/blob/main/reference-projects/PRINCIPLES.md and https://github.com/havelsan/rust-dev-env/blob/main/reference-projects/COMMON_MISTAKES.md. Commit a new issue to github if you find any issue.
+			> generates comments in :
+				~/agentspace/agent-managed-rust-project/.kilo/command/simple_calculator_review.md (100 lines)
+				~/agentspace/agent-managed-rust-project/simple_calculator/issues/REVIEW-001.md (262 lines)
 
+
+
+1. Don’t spam prompts to fix errors (Prompt Thrashing).
+2. Don’t assume model is understanding ( Write Clear Prompts)
+3. Don’t use too many MCP Servers (Risk of selecting wrong MCP
+would increase)
+4. Regularly reevaluate (possibly outdated) assumptions about the
+"best" tools
+5. Don’t persist with dead-end conversations
+
+Chain of Tought (COT)
+Input Data (Previous mails, examples) IN PARANTHESIS
+Explicit Negative
+Venn Diagram of what is possible
+Intersection, Union, Exclusion
+
+
+
+#### 1.2. Start Kilo-Code coding agent and generate code.
 
 
 How I Structure Claude Code Projects So Agents Don’t Get Lost in Large Codebases (https://blog.s10n.dev/how-i-structure-claude-code-projects-so-agents-dont-get-lost-in-large-codebases-9ad69a2ebb92)
