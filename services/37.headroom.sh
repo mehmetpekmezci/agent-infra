@@ -1,4 +1,4 @@
-headroom proxy --port 8787
+headroom proxy --port 8787 >& $AGENT_INFRA_LOG_DIR/headroom.log &
 
 
 echo "

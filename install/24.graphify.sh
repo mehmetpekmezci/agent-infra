@@ -3,7 +3,7 @@
 #curl -fsSL https://kilo.ai/cli/install | bash
 #curl -fsSL https://kilo.ai/cli/install 
 pip3 install graphifyy --break-system-packages
-
+graphify kilo install
 
 
 

@@ -13,41 +13,51 @@ cd $AGENT_INFRA_DEV_TOOLS/kilo-code
 
 #curl -fsSL https://kilo.ai/cli/install | bash
 #curl -fsSL https://kilo.ai/cli/install 
+
+
 wget https://kilo.ai/cli/install 
-
 chmod +x install
-
 ./install
 
 
-grep "http://localhost:3000/v1" $HOME/.config/kilo/kilo.jsonc > /dev/null
-
-if [ $? != 0 ]
+grep "http://localhost:8787/v1" $HOME/.config/kilo/kilo.jsonc > /dev/null
+if [ $? = 0 ]
 then
     cp $HOME/.config/kilo/kilo.jsonc $HOME/.config/kilo/kilo.jsonc.org
 
     echo '
 {
   "$schema": "https://app.kilo.ai/config.json",
+
+  // 1. Point the default session to your custom provider and model identifier
+  "model": "local//local_model",
+
+  // 2. Define custom providers using the singular "provider" key block
   "provider": {
-    "openai-compatible": {
-      "baseUrl": "http://localhost:3000/v1",
-      "apiKey": "sk-EoJCdSt5ZfEzQqny7AlzEfeyNiwRpT96bgrWnwKWGCSNPOgQ",
+    "local": {
+      "options": {
+        "baseURL": "http://localhost:8787/v1",
+        "apiKey": "sk-EoJCdSt5ZfEzQqny7AlzEfeyNiwRpT96bgrWnwKWGCSNPOgQ"
+      },
       "models": {
         "/local_model": {
-          "name": "Local Model",
+          "name": "Local Model written in AGENT_INFRA_MODEL env. variable",
           "limit": {
             "context": 32000,
-            "output": 8192
+            "output": 8000
           }
         }
       }
     }
   },
+
   "permission": {
-    "bash": "allow"
+    "bash": "allow",
+    "fs": "allow"
   }
+
 }
+
     ' > $HOME/.config/kilo/kilo.jsonc
 
    echo " Change the apiKey in file $HOME/.config/kilo/kio.jsonc file, Get API KEY from the new-api admin web intraface (http://localhost:3000/keys) , click on the copy icon near the Api Key of API_KEY_0 line.  Auth = Bearer, <paste the api key you copied from new-api>,  Save"

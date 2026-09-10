@@ -79,6 +79,7 @@ After starting the services, we are ready to use agentic tools.
 	source ~sdk/rust-dev-env/release
 	source ~/workspace/agent-infra/release
 	cd ~/agentspace/agent-managed-rust-project
+	## NOTE: WE USE CTRL-INSERT TO PASTE TEXT.
 	kilo
 		> create a rust project with name simple_calculator
 		> implement a simple calculator in main.rs . main.rs reads first value, math operator, second value as float value from terminal and performs the operation and prints the result.
@@ -96,8 +97,41 @@ After starting the services, we are ready to use agentic tools.
 				~/agentspace/agent-managed-rust-project/.kilo/command/simple_calculator_review.md (100 lines)
 				~/agentspace/agent-managed-rust-project/simple_calculator/issues/REVIEW-001.md (262 lines)
 
+#### 1.4. CODE IMPROVEMENT
+	source ~sdk/rust-dev-env/release
+	source ~/workspace/agent-infra/release
+	cd ~/agentspace/agent-managed-rust-project
+	kilo
+		> improve the code in simple_calculator project using the code review notes in ~/agentspace/agent-managed-rust-project/simple_calculator/issues/REVIEW-001.md, generate unit tests for the code, run the tests and generate a test report in simple_calculator/reports directory.
+			> generates report in : ~/agentspace/agent-managed-rust-project/simple_calculator/reports/test_report.md
+		> commit the code with a meaningful comment
+		> push the commits
+			
+#### 1.5. GENERATE SCENARIO TESTS (FAILED)
+	source ~sdk/rust-dev-env/release
+	source ~/workspace/agent-infra/release
+	cd ~/agentspace/agent-managed-rust-project
+	kilo
+		> generate scenario tests for the code in simple_calculator project into test directory besides src directory, try to be creative while generating scenario test with vast combination of scenarios, run the tests and generate a test report in simple_calculator/reports as scenario_test_result.md.
+			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
+			
 
-
+#### 1.5. GENERATE SCENARIO TESTS USING TOKEN REDUCTION TOOLS
+Now we configure token reduction tools, you may check the descriptions of each tool that is used below from the [ Token Reduction ADR ](docs/ards/adr-005-context-token-reduction-tools.md)
+As we do the configuretion, from now on when you run the installation scripts, it will be automatically configured, for example headroom service is automatically configured and kilo.jsonc is configured fot headroom. 
+	source ~sdk/rust-dev-env/release
+	source ~/workspace/agent-infra/release
+	cd ~/agentspace/agent-managed-rust-project
+	#rtk init --agent kilocode
+	graphify .
+	caveman run -- kilo
+		> generate scenario tests for the code in simple_calculator project into test directory besides src directory, try to be creative while generating scenario test with vast combination of scenarios, run the tests and generate a test report in simple_calculator/reports as scenario_test_result.md.
+		> /graphify .
+			
+			
+			
+			
+			
 1. Don’t spam prompts to fix errors (Prompt Thrashing).
 2. Don’t assume model is understanding ( Write Clear Prompts)
 3. Don’t use too many MCP Servers (Risk of selecting wrong MCP
