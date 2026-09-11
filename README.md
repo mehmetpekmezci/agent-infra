@@ -1,5 +1,4 @@
 # agent-infra
-ATTENTION: After cloning this repository, source the release file found in the repository before running any script .
 
 Agent-infra repository contains scripts, descriptions and example use cases of a local/offline/air-gapped agentic development environment.
 
@@ -7,6 +6,10 @@ In this repository we describe:
 1. Architecture Design Records about tool/service choices among other alternatives.
 2. Simple usage example of each tool/service individually.
 3. Usage of these tools/services in a full cycle development scenario.
+
+ATTENTION: 
+1. After cloning this repository, source the release file found in the repository before running any script .
+2. "Start scripts" in services directory only triggers the existing container if it exists. If you change anything in the script, you should remove the container. ( E.g :  sudo docker rm -f VLLM_0; cd services;./01.vllm.sh)
 
 
 | Component | Type | Description |
@@ -27,9 +30,7 @@ In this repository we describe:
 | Graphify | TOOL | an open-source tool and AI coding-assistant skill that turns a project's files—including code, documentation, PDFs, images, and videos—into a queryable knowledge graph | 
 | Caveman | TOOL | Installed within Coding Agents. This tool reduces tokens before sanding to inference service |
 | RTK | TOOL | Rust Token Killer is a command-line proxy sitting between your AI agent and the shell that intercepts verbose outputs (like git log) and returns clean, deduplicated, and condensed text |
-| Headroom | TOOL | It compresses tool outputs, logs, files, RAG chunks, and conversation history before they reach the model. It is also reversible: the original is cached, so the agent can pull it back if it actually needs it. |
 | Ponytail | TOOL | It pushes the agent to reuse existing code, platform features, and dependencies before writing anything new. |
-| Opendataloader | TOOL | OpenDataLoader PDF is a high-performance, open-source document parsing engine developed by Hancom that converts complex PDF documents into structured data like Markdown, JSON, and HTML. |
 
 
 
@@ -83,7 +84,7 @@ After starting the services, we are ready to use agentic tools.
 	kilo
 		> create a rust project with name simple_calculator
 		> implement a simple calculator in main.rs . main.rs reads first value, math operator, second value as float value from terminal and performs the operation and prints the result.
-		> run the main.
+		> run the main and feed the values 5 + 2 if interactive.
 		> commit all source codes in simple_calculator to the git with a meaningful comment :)
 			> The LLM Says : Done. The code has been committed to git and the calculation 5 * 6 = 30 was executed successfully.
 			
@@ -92,7 +93,7 @@ After starting the services, we are ready to use agentic tools.
 	source ~/workspace/agent-infra/release
 	cd ~/agentspace/agent-managed-rust-project
 	kilo
-		> your role is "code reviewer". review the code in the simple_calculator directory and evaluate the codes by using the coding principles in https://github.com/havelsan/rust-dev-env/blob/main/reference-projects/PRINCIPLES.md and https://github.com/havelsan/rust-dev-env/blob/main/reference-projects/COMMON_MISTAKES.md. Commit a new issue to github if you find any issue.
+		> your role is "code reviewer". review the code in the simple_calculator directory and evaluate the codes by using the coding principles in ~/sdk/rust-dev-env/reference-projects/PRINCIPLES.md and ~/sdk/rust-dev-env/reference-projects/COMMON_MISTAKES.md. Note the issues into the issues/REVIEW-001.md file.
 			> generates comments in :
 				~/agentspace/agent-managed-rust-project/.kilo/command/simple_calculator_review.md (100 lines)
 				~/agentspace/agent-managed-rust-project/simple_calculator/issues/REVIEW-001.md (262 lines)
@@ -103,30 +104,83 @@ After starting the services, we are ready to use agentic tools.
 	cd ~/agentspace/agent-managed-rust-project
 	kilo
 		> improve the code in simple_calculator project using the code review notes in ~/agentspace/agent-managed-rust-project/simple_calculator/issues/REVIEW-001.md, generate unit tests for the code, run the tests and generate a test report in simple_calculator/reports directory.
-			> generates report in : ~/agentspace/agent-managed-rust-project/simple_calculator/reports/test_report.md
-		> commit the code with a meaningful comment
-		> push the commits
-			
-#### 1.5. GENERATE SCENARIO TESTS (FAILED)
-	source ~sdk/rust-dev-env/release
-	source ~/workspace/agent-infra/release
-	cd ~/agentspace/agent-managed-rust-project
-	kilo
-		> generate scenario tests for the code in simple_calculator project into test directory besides src directory, try to be creative while generating scenario test with vast combination of scenarios, run the tests and generate a test report in simple_calculator/reports as scenario_test_result.md.
 			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
-			
 
-#### 1.5. GENERATE SCENARIO TESTS USING TOKEN REDUCTION TOOLS
+
+#### 1.5. CODE IMPROVEMENT USING TOKEN REDUCTION TOOLS
 Now we configure token reduction tools, you may check the descriptions of each tool that is used below from the [ Token Reduction ADR ](docs/ards/adr-005-context-token-reduction-tools.md)
 As we do the configuretion, from now on when you run the installation scripts, it will be automatically configured, for example headroom service is automatically configured and kilo.jsonc is configured fot headroom. 
 	source ~sdk/rust-dev-env/release
 	source ~/workspace/agent-infra/release
 	cd ~/agentspace/agent-managed-rust-project
-	#rtk init --agent kilocode
+	rtk init --agent kilocode
+	#graphify kilo install
 	graphify .
 	caveman run -- kilo
-		> generate scenario tests for the code in simple_calculator project into test directory besides src directory, try to be creative while generating scenario test with vast combination of scenarios, run the tests and generate a test report in simple_calculator/reports as scenario_test_result.md.
-		> /graphify .
+		> improve the code in simple_calculator project using the code review notes in ~/agentspace/agent-managed-rust-project/simple_calculator/issues/REVIEW-001.md, generate unit tests for the code, run the tests and generate a test report in simple_calculator/reports directory.
+			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
+
+			
+#### 1.6. CODE IMPROVEMENT USING TASK DIVISION
+	source ~sdk/rust-dev-env/release
+	source ~/workspace/agent-infra/release
+	cd ~/agentspace/agent-managed-rust-project
+	rtk init --agent kilocode
+	#graphify kilo install
+	graphify .
+	caveman run -- kilo
+		> improve the code in simple_calculator project using the code review notes in ~/agentspace/agent-managed-rust-project/simple_calculator/issues/REVIEW-001.md, 
+			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
+		> generate unit tests for the code, run the tests and generate a test report in simple_calculator/reports directory.
+			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
+
+
+			
+#### 1.7. CODE IMPROVEMENT USING TASK SUB-ENUMERATION
+	source ~sdk/rust-dev-env/release
+	source ~/workspace/agent-infra/release
+	cd ~/agentspace/agent-managed-rust-project
+	rtk init --agent kilocode
+	#graphify kilo install
+	graphify .
+	caveman run -- kilo
+		> improve the code in simple_calculator project using the code review notes in ~/agentspace/agent-managed-rust-project/simple_calculator/issues/REVIEW-001.md, do it one by one. Apply each improvement one by one.
+			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
+		> generate unit tests for the code, run the tests and generate a test report in simple_calculator/reports directory.
+			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
+
+
+#### 1.8. CODE IMPROVEMENT USING MEMORY
+	source ~sdk/rust-dev-env/release
+	source ~/workspace/agent-infra/release
+	cd ~/agentspace/agent-managed-rust-project
+	rtk init --agent kilocode
+	#graphify kilo install
+	graphify .
+	caveman run -- kilo
+		> /memory enable
+		> improve the code in simple_calculator project using the code review notes in ~/agentspace/agent-managed-rust-project/simple_calculator/issues/REVIEW-001.md, do it one by one. Apply each improvement one by one.
+			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
+		> generate unit tests for the code, run the tests and generate a test report in simple_calculator/reports directory.
+			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
+
+
+			
+#### 1.8. CODE IMPROVEMENT USING MEMORY
+	source ~sdk/rust-dev-env/release
+	source ~/workspace/agent-infra/release
+	cd ~/agentspace/agent-managed-rust-project
+	rtk init --agent kilocode
+	#graphify kilo install
+	graphify .
+	caveman run -- kilo
+		> /memory enable
+		> improve the code in simple_calculator project using the code review notes in ~/agentspace/agent-managed-rust-project/simple_calculator/issues/REVIEW-001.md, do it one by one. Apply each improvement one by one.
+			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
+		> generate unit tests for the code, run the tests and generate a test report in simple_calculator/reports directory.
+			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
+
+
 			
 			
 			

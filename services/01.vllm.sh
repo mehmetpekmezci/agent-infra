@@ -27,6 +27,7 @@ else
 #  --max-model-len 16000" 
 
 ##  --cpu-offload-gb 2 \
+##  --kv-offloading-size 2 \
 ## --language-model-only  _> image and video modes are off
 ## kv-cache-memory=519837389 == 500MB
 #--env PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
@@ -48,7 +49,7 @@ COMMAND="sudo docker run --name $DOCKER_NAME --runtime nvidia --gpus all \
   --reasoning-parser $AGENT_INFRA_MODEL_REASONING_PARSER \
   --kv-cache-dtype fp8 \
   --enforce-eager \
-  --max-num-seqs=1 \
+  --max-num-seqs=4 \
   --kv-cache-memory-bytes 650M \
   --max-model-len 32000"
 

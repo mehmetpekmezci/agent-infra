@@ -30,11 +30,10 @@ alias dport='docker container ls --format "table {{.ID}}\t{{.Names}}\t{{.Ports}}
 #The api key below is the one i get from my local machine.
 export OPENAI_API_KEY="sk-EoJCdSt5ZfEzQqny7AlzEfeyNiwRpT96bgrWnwKWGCSNPOgQ"
 # Adress of the local newapi gateway
-#export OPENAI_BASE_URL="http://localhost:3000/v1"  
-export OPENAI_TARGET_API_URL="http://localhost:3000/v1" ## for headroom
-export OPENAI_BASE_URL="http://localhost:8787/v1"  
+export OPENAI_BASE_URL="http://localhost:3000/v1"  
 # The name "/local_model" is set in newapi
 export OPENAI_MODEL=/local_model
+
 
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo ">>> AGENT_INFRA_DIR=$AGENT_INFRA_DIR "

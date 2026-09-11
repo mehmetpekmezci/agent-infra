@@ -29,6 +29,9 @@ then
 {
   "$schema": "https://app.kilo.ai/config.json",
 
+  // ONLY this provider is allowed
+  "enabled_providers": ["local"],
+
   // 1. Point the default session to your custom provider and model identifier
   "model": "local//local_model",
 

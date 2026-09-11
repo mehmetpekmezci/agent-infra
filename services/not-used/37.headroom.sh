@@ -1,4 +1,4 @@
-headroom proxy --port 8787 >& $AGENT_INFRA_LOG_DIR/headroom.log &
+headroom proxy --port 8787  >& $AGENT_INFRA_LOG_DIR/headroom.log &
 
 
 echo "
@@ -13,6 +13,8 @@ Point Kilo Code's API base endpoint to your running Headroom proxy instead of hi
     Plaintext
 
     http://127.0.0.1:8787/v1
+
+    HEALTH : http://localhost:8787/health
 
 3. Layer Caveman into Your Kilo Code Session
 
