@@ -129,9 +129,9 @@ As we do the configuretion, from now on when you run the installation scripts, i
 	#graphify kilo install
 	graphify .
 	caveman run -- kilo
-		> improve the code in simple_calculator project using the code review notes in ~/agentspace/agent-managed-rust-project/simple_calculator/issues/REVIEW-001.md, 
+		> TASK-1 : improve the code in simple_calculator project using the code review notes in ~/agentspace/agent-managed-rust-project/simple_calculator/issues/REVIEW-001.md, 
 			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
-		> generate unit tests for the code, run the tests and generate a test report in simple_calculator/reports directory.
+		> TASK-2 : generate unit tests for the code, run the tests and generate a test report in simple_calculator/reports directory.
 			> TRIED 3 TIMES BUT COULD NOT GENERATE THE TEST CODE DUE TO CONTEXT LENGTH LIMITATION WHICH IS 32K
 
 
@@ -166,7 +166,7 @@ As we do the configuretion, from now on when you run the installation scripts, i
 
 
 			
-#### 1.8. CODE IMPROVEMENT USING MEMORY
+#### 1.9. CODE IMPROVEMENT USING HARNESSING
 	source ~sdk/rust-dev-env/release
 	source ~/workspace/agent-infra/release
 	cd ~/agentspace/agent-managed-rust-project

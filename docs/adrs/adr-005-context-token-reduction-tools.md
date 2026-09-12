@@ -30,7 +30,7 @@ We will adopt a **layered composition strategy** rather than selecting a single 
 
 1. **For Structural Context (Graph Layer):** Integrate **Graphify** as our primary static repository mapper. This will run during workspace initialization or pre-commit hooks to supply local agents with precise relational maps rather than dumping raw file trees.
 2. **For Token Reduction & Output Purity (Efficiency Layer):** Deploy **RTK** for aggressive pre-processing and token minimization of ingested source files, paired with **Caveman** mode enforcement in agent system prompts to eliminate verbose conversational output and enforce raw patch delivery.
-3. **For Operational Safeguards & Session Flow (Orchestration Layer):** Implement **Headroom** budgeting logic within local execution harnesses to track window limits dynamically, complemented by **Ponytail** for managing git-aware file slicing during interactive CLI coding sessions.
+3. **For Operational Safeguards & Session Flow (Orchestration Layer): We will use **Ponytail** for managing git-aware file slicing during interactive CLI coding sessions.
 
 ---
 
@@ -39,7 +39,6 @@ We will adopt a **layered composition strategy** rather than selecting a single 
 ### Positive
 * **Maximized Context Efficiency:** Combining RTK's pre-processing with structural mapping ensures agents receive high-signal, low-noise context.
 * **Deterministic Agent Behavior:** Caveman prompt enforcement prevents agents from generating conversational padding, saving output tokens and execution time.
-* **Safe Long-Horizon Executions:** Headroom monitoring safeguards multi-step agent loops from abrupt context window exhaustion.
 
 ### Negative
 * **Toolchain Complexity:** Managing multiple distinct utilities requires robust initialization scripts and clear separation of concerns in development harnesses.
