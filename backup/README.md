@@ -16,7 +16,16 @@ ATTENTION:
 | --------- | ---- | ----------- | 
 | VLLM | SERVICE | LLM Inference Engine | 
 | New API | SERVICE | LLM Proxy ( AI model gateway) | 
+| N8N | SERVICE | n8n is a web based workflow automation platform that uniquely combines AI capabilities with business process automation | 
+| NE04J | SERVICE | Neo4j is a native graph DB | 
+| Apache Jena Fuseki | SERVICE | To Serve Ontology Files| 
+| Qdrant | SERVICE | Vector DB| 
+| GraphRAG (Tigergraph) | SERVICE | GraphRAG (Graph Retrieval-Augmented Generation) enhances traditional RAG by embedding knowledge graphs into the LLM inference process. |
+| Protege | TOOL | Ontology Development Tool | 
+| Okf Harness| TOOL | an independent, open-source, terminal-native tool designed to help AI coding agents maintain local knowledge bases using Google’s Open Knowledge Format (OKF) | 
 | Obsidian | TOOL | Obsidian is a popular note-taking and knowledge-management application that stores files as plain text Markdown documents on your local device| 
+| Open Wiki | TOOL | OpenWiki is an open-source command-line interface (CLI) tool built by LangChain designed to write and automatically maintain structured Markdown documentation for codebases using LLM agents. |
+| Deep Seek Harness | TOOL | an open-source, MIT-licensed agent runtime and framework developed by DeepSeek AI that wraps a large language model (LLM) with the tools, memory, sandboxes, and loop control needed to operate as an autonomous coding and task agent| 
 | Kilo-Code CLI | TOOL | An open source agentic command-line coding tool  | 
 | Graphify | TOOL | an open-source tool and AI coding-assistant skill that turns a project's files—including code, documentation, PDFs, images, and videos—into a queryable knowledge graph | 
 | Caveman | TOOL | Installed within Coding Agents. This tool reduces tokens before sanding to inference service |
@@ -27,7 +36,7 @@ ATTENTION:
 
 ## Hardware and OS Requirements to Run This Environment:
 	
-1.  A computer with a NVIDIA GPU (with minimum 8GB RAM) that is supported by VLLM 
+1.  A computer with a NVIDIA GPU that is supported by VLLM 
 
     For the list of GPUs supported by VLLM : https://docs.vllm.ai/en/stable/getting_started/installation/gpu/#requirements
 
@@ -58,121 +67,19 @@ Clone this repository into your wworkspace directory, source the release file an
 
 After installing services and tools, source the ~/workspace/agent-infra/release file then start services by running the ~/workspace/agent-infra/services/00.main.sh script.
 
-##  How to Write Prompt
+## Principles
 
 1. Don’t spam prompts to fix errors (Prompt Thrashing).
-2. Don’t assume model is understanding (Write Clear Prompts)
-3. Don’t use too many MCP Servers / Skills / Modes / APIs ... (Risk of selecting wrong service/api would increase)
-4. Regularly reevaluate (possibly outdated) assumptions about the "best" tools, skills, modes, mcps, apis ...
+2. Don’t assume model is understanding ( Write Clear Prompts)
+3. Don’t use too many MCP Servers (Risk of selecting wrong MCP would increase)
+4. Regularly reevaluate (possibly outdated) assumptions about the"best" tools
 5. Don’t persist with dead-end conversations
 5. Chain of Tought (COT) : Explain step by step what to do.
-6. Input Data (previous mails, examples) should be given in paranthesis.
-7. Output Data format should be explicitly specified ( list, table, json format, code, ...) 
-8. If you want to emphasize something not to do, especially explain it so.
-9. Specify who the output is intended for (e.g., beginner, researcher, executive, child).
+6. Input Data (Previous mails, examples) IN PARANTHESIS
+7. Explicit Negative : If you want to emphasize womething not to do, especially explain it so.
+8. Venn Diagram of what is possible : Intersection, Union, Exclusion
 
-10. Give explicit constraints: State requirements such as length, language, format, scope, exclusions, or deadlines.
-11. Define what “success” means: Give measurable or observable criteria for a satisfactory answer. 
-12. Ask for grounded reasoning: For factual or analytical tasks, request that conclusions be supported by the provided evidence or reliable sources.
-13. Handle ambiguity explicitly: Tell the model whether it should ask questions, make reasonable assumptions, or provide alternatives when information is missing.
-14. Decompose complex tasks: Break large objectives into sequential subtasks rather than asking for everything simultaneously.
-15. Specify uncertainty behavior: Tell the model what to do when it does not know something: flag uncertainty, ask for clarification, or refrain from guessing.
-16. Minimize hidden assumptions: If something matters to the result, put it explicitly in the prompt rather than assuming the model will infer it.
-17. Treat the prompt as a specification: he strongest prompts resemble a good technical specification: objective + context + inputs + constraints + procedure/criteria + output format + quality requirements.
-18. Venn Diagram of what is possible : Define information sets. Use intersection, union and exclusion while defining new rules.
-
-## How to Write Skill
-https://bibek-poudel.medium.com/the-skill-md-pattern-how-to-write-ai-agent-skills-that-actually-work-72a3169dd7ee
-
-Skills are called automatically by kilo code agent. 
-
-The directory structure is :
-
-.kilo/skills/your-skill-name/
-├── SKILL.md          # Required: instructions + metadata
-├── scripts/          # Optional: executable code the agent runs
-├── references/       # Optional: docs loaded only when needed
-└── assets/           # Optional: templates, images, fonts
-
-1. Kilo Session starts ( you issue the command "kilo" )
-   --> Kilo Code Agent loads: name + description from every skill (~100 tokens each)
-2. User asks: "Can you write a README for this project?"
-   --> Agent reads: readme-writer/SKILL.md full body (Level 2)
-3. SKILL.md references a style guide file
-   --> Agent reads: readme-writer/references/style.md (Level 3)
-4. SKILL.md includes a validation script
-   --> Agent executes: scripts/validate.sh 
-   (runs without being read into context)
-
-
-The description field in your YAML frontmatter is not for humans. It is the trigger condition the agent uses when deciding whether to activate your skill. 
-[What the skill does] + [When to use it, with specific trigger phrases]
-
-
-The agentskills.io spec defines the skill constraints:
-1. name: lowercase letters, numbers, and hyphens only, max 64 characters, must not start or end with a hyphen, no consecutive hyphens
-2. description: max 1024 characters, must describe both what the skill does and when to use it
-3. The file must be named exactly SKILL.md, case-sensitive
-4. Avoid XML angle brackets (< or >) in frontmatter as they can inject unintended instructions into the system prompt
-
-https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf
-
-https://levelup.gitconnected.com/the-simple-guide-to-agent-skills-3d510521f11a
-
-https://www.skillsdirectory.com/docs/skill-file-structure
-
-https://ai.sulat.com/writing-opencode-agent-skills-a-practical-guide-with-examples-870ff24eec66
-
-https://github.com/mgechev/skills-best-practices
-https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
-
-
-
-## How to Write Modes (Agents)
-
-https://github.com/jtgsystems/Custom-Modes-Roo-Code/
-https://github.com/rahulvrane/awesome-claude-agents
-https://github.com/anderfredx/awesome-claude-code
-https://github.com/asgeirtj/system_prompts_leaks
-https://github.com/0xfurai/claude-code-subagents
-https://github.com/wshobson/agents
-https://github.com/VoltAgent/awesome-claude-code-subagents
-
-
-## How to Write Workflows (Commands) 
-
-https://github.com/danielrosehill/Claude-Slash-Commands
-https://github.com/jqueryscript/Claude-Code-Slash-Commands-Cheatsheet
-https://github.com/hesreallyhim/awesome-claude-code
-https://github.com/wshobson/commands
-https://github.com/cassler/awesome-claude-code-setup
-
-
-## How to Use Harness composed of all Skills/Modes/Wokrflows
-Assuming you are using kilo code agent, you can install predefined skills/modes/workflows into your project directory by following these instructions :
-
-1. Go to your project directory and run the script $AGENT_INFRA_DIR/harness/install_kilo_harness.sh. This will install predefined skilss/modes/workflows from $AGENT_INFRA_DIR/harness/ directory. The directory content is prepared using the following sites :
-
-	https://github.com/stjbrown/agent-knowledge
- 	https://github.com/addyosmani/agent-skills
-	https://github.com/supabase/agent-skills
- 	https://github.com/VoltAgent/awesome-agent-skills
-	https://github.com/NeoLabHQ/context-engineering-kit/
-	https://github.com/fvadicamo/dev-agent-skills
-	https://github.com/garrytan/gstack
-	https://github.com/Kilo-Org/kilo-marketplace
-	https://github.com/sametbrr/llm-wiki-manager
-	https://github.com/mshashank0/mcp-server-for-atlassian-ai-assistant
-	https://github.com/alibaba/open-code-review
-	https://github.com/ehmo/platform-design-skills
-	https://github.com/cloudflare/security-audit-skill
-	https://github.com/anthropics/skills
-	https://github.com/NVIDIA/skills/
-	https://github.com/amirkiarafiei/subagent-cli-skills
-	https://github.com/obra/superpowers
-
-
-## Examples 
+##  Usage
 
 After starting the services, we are ready to use agentic tools. 
 
@@ -243,12 +150,6 @@ As we do the configuretion, from now on when you run the installation scripts, i
         To be sure about graphify output is used by kilo code , we ask to kilo code : "What are the primary God nodes and cross-module connections in this codebase based on the graphify report"
         
 ### 2 Building Harness
-
-32K context içinde rust projeleri geliştireceğiz veya vllm +  LLM AutoEncoder Latent Vector ile büyük LLM'leri küçük GPU'ya sığdırma.
-
-
-
-
 Agent = Model + Harness. The harness does six things the model cannot do on its own. 
 1. It shapes what the model sees on each call (context assembly). 
 2. It decides what the model is allowed to do (tool contracts and validators). 

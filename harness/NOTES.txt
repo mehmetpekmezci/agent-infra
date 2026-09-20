@@ -1,0 +1,946 @@
+Today 1:24 PM
+With kilocode i want to implement harness, example github repos 
+https://github.com/garrytan/gstack
+https://github.com/Kilo-Org/kilo-marketplace
+https://github.com/addyosmani/agent-skills
+https://github.com/obra/superpowers
+https://github.com/alibaba/open-code-review
+https://github.com/cloudflare/security-audit-skill
+https://github.com/mshashank0/mcp-server-for-atlassian-ai-assistant
+https://github.com/anthropics/skills
+https://github.com/NVIDIA/skills
+https://github.com/VoDaiLocz/kilo-kit-mcp
+https://github.com/ehmo/platform-design-skills
+https://github.com/fvadicamo/dev-agent-skills
+https://github.com/NeoLabHQ/context-engineering-kit/
+https://github.com/sametbrr/llm-wiki-manager
+https://github.com/amirkiarafiei/subagent-cli-skills
+https://github.com/stjbrown/agent-knowledge
+https://catalog.redhat.com/en/ai/skills/detail/agentic-skill-pack-for-site-reliability-engineers
+
+
+
+-----------------------------------------------------
+
+Yes. I would not start by copying gstack, Superpowers, or the marketplace wholesale. I’d treat them as reference architectures and build a small, opinionated harness around Kilo’s native primitives.
+
+One important correction first: if by .harness you mean a project-local directory, that can be your source-of-truth for your harness, but Kilo’s current native project skill discovery is .kilo/skills/ (and .agents/skills/ for compatibility). Current Kilo also uses Markdown agent files for custom modes; the old .kilocodemodes approach is legacy.
+1. First, understand the four layers
+
+I'd structure your thinking like this:
+
+                    YOUR HARNESS
+                         │
+          ┌──────────────┼──────────────┐
+          │              │              │
+        MODES          SKILLS          TOOLS
+          │              │              │
+    "Who/How"       "What/How"     "What can
+                     knowledge      actually
+                     + workflow     be done"
+          │              │              │
+          └──────────────┼──────────────┘
+                         │
+                    WORKFLOWS
+                         │
+               "How these compose"
+
+More concretely:
+Modes
+
+A mode is an agent persona + permissions + behavior.
+
+Examples:
+
+architect
+implementer
+reviewer
+debugger
+qa
+security
+researcher
+
+Kilo explicitly supports custom modes for specialized tasks and tool access.
+Skills
+
+A skill is reusable knowledge/workflow.
+
+For example:
+
+skills/
+├── requirements/
+├── architecture/
+├── test-driven-development/
+├── code-review/
+├── debugging/
+├── git-workflow/
+└── documentation/
+
+Kilo's current skill model is particularly nice here: a skill is basically a directory containing SKILL.md, with optional scripts, references, assets, etc.
+Tools
+
+Tools are capabilities rather than behavior:
+
+filesystem
+git
+shell
+browser
+github
+database
+docker
+search
+
+Don't turn every tool into a "skill". A skill should tell the agent how to use capabilities, not duplicate the capabilities themselves.
+Workflows
+
+This is the part I think you should borrow heavily from gstack + Superpowers.
+
+For example:
+
+feature development
+
+        ↓
+   requirements
+        ↓
+    architecture
+        ↓
+ implementation
+        ↓
+      tests
+        ↓
+      review
+        ↓
+       QA
+        ↓
+      commit
+
+That is much more valuable than simply having 50 independent skills.
+2. What I would borrow from each repository
+
+There are four different ideas here, and they shouldn't be mixed together.
+gstack → workflow/orchestration
+
+gstack is particularly interesting for its workflow decomposition.
+
+Its skills form a development lifecycle:
+
+office-hours
+      ↓
+spec
+      ↓
+plan-ceo-review
+      ↓
+plan-eng-review
+      ↓
+implementation
+      ↓
+review
+      ↓
+qa
+      ↓
+ship
+
+The important insight isn't the individual prompts.
+
+It's:
+
+    Different phases of software development deserve different agent behaviors.
+
+For example, gstack's /investigate explicitly focuses on root-cause investigation rather than immediately attempting fixes, while /qa is a dedicated verification workflow.
+
+I'd steal that philosophy.
+3. Superpowers → development methodology
+
+Superpowers is the one I'd study most carefully for your core engineering workflow.
+
+Its central idea is:
+
+don't immediately code
+        ↓
+understand the problem
+        ↓
+write/design the solution
+        ↓
+get agreement
+        ↓
+create implementation plan
+        ↓
+implement
+        ↓
+verify
+
+That is very compatible with what you're trying to build.
+
+Superpowers describes itself as a complete software-development methodology built from composable skills, rather than merely a collection of prompts.
+
+That's an important distinction.
+
+You don't want:
+
+100 clever prompts
+
+You want:
+
+a development operating system
+
+4. Kilo Marketplace → packaging/interface
+
+The Kilo Marketplace is useful for learning the actual Kilo conventions.
+
+It separates:
+
+skills
+agents
+MCP servers
+
+and its skills follow the Agent Skills format with:
+
+skill-name/
+└── SKILL.md
+
+plus optional:
+
+scripts/
+references/
+assets/
+examples/
+
+So I'd use Kilo Marketplace as the compatibility target.
+5. Agent Skills → interoperability
+
+Agent Skills by Addy Osmani
+
+The big idea to take from this ecosystem is:
+
+    Don't make your skills Kilo-specific unless you have to.
+
+For example:
+
+.harness/
+└── skills/
+    └── code-review/
+        └── SKILL.md
+
+should ideally be usable by:
+
+Kilo
+Claude Code
+Codex
+Gemini
+Cursor
+other Agent Skills-compatible agents
+
+Then Kilo-specific adapters can live elsewhere.
+
+That's a much better long-term architecture.
+6. I would build this architecture
+
+I'd start with:
+
+your-project/
+│
+├── .harness/
+│   │
+│   ├── README.md
+│   ├── manifest.yaml
+│   │
+│   ├── skills/
+│   │   ├── discovery/
+│   │   │   └── SKILL.md
+│   │   │
+│   │   ├── specification/
+│   │   │   └── SKILL.md
+│   │   │
+│   │   ├── architecture/
+│   │   │   └── SKILL.md
+│   │   │
+│   │   ├── implementation/
+│   │   │   └── SKILL.md
+│   │   │
+│   │   ├── testing/
+│   │   │   └── SKILL.md
+│   │   │
+│   │   ├── debugging/
+│   │   │   └── SKILL.md
+│   │   │
+│   │   ├── code-review/
+│   │   │   └── SKILL.md
+│   │   │
+│   │   └── documentation/
+│   │       └── SKILL.md
+│   │
+│   ├── modes/
+│   │   ├── architect.md
+│   │   ├── developer.md
+│   │   ├── reviewer.md
+│   │   ├── debugger.md
+│   │   └── qa.md
+│   │
+│   ├── workflows/
+│   │   ├── feature.md
+│   │   ├── bugfix.md
+│   │   ├── refactor.md
+│   │   └── release.md
+│   │
+│   ├── tools/
+│   │   └── ...
+│   │
+│   └── policies/
+│       ├── safety.md
+│       ├── git.md
+│       └── quality.md
+│
+└── .kilo/
+    └── skills/
+        └── ...
+
+But there's one subtlety:
+Don't make .harness and .kilo compete.
+
+I'd make:
+
+.harness/
+    ← YOUR SOURCE OF TRUTH
+
+.kilo/
+    ← Kilo integration
+
+In other words, .harness is your framework, while .kilo contains whatever Kilo needs to consume from it.
+
+Kilo currently supports project-level .kilo/skills/, and also .agents/skills/ as an interoperability location.
+7. But don't implement all of that initially
+
+This is where I'd strongly recommend restraint.
+
+Your v0.1 should have only:
+
+.harness/
+├── README.md
+├── skills/
+│   ├── specification/
+│   │   └── SKILL.md
+│   ├── architecture/
+│   │   └── SKILL.md
+│   ├── implementation/
+│   │   └── SKILL.md
+│   ├── debugging/
+│   │   └── SKILL.md
+│   └── code-review/
+│       └── SKILL.md
+│
+├── workflows/
+│   └── feature.md
+│
+└── modes/
+    ├── architect.md
+    ├── developer.md
+    └── reviewer.md
+
+That's enough to validate the architecture.
+8. Your first workflow should be feature
+
+I'd make this the backbone.
+
+Something like:
+
+FEATURE WORKFLOW
+
+1. DISCOVER
+   ↓
+2. SPECIFY
+   ↓
+3. ARCHITECT
+   ↓
+4. PLAN
+   ↓
+5. IMPLEMENT
+   ↓
+6. TEST
+   ↓
+7. REVIEW
+   ↓
+8. QA
+   ↓
+9. SHIP
+
+Then define gates.
+
+For example:
+
+DISCOVER
+   │
+   └── requirements understood?
+          │
+          yes
+          ↓
+SPECIFY
+   │
+   └── acceptance criteria defined?
+          │
+          yes
+          ↓
+ARCHITECT
+   │
+   └── architecture decision recorded?
+          │
+          yes
+          ↓
+IMPLEMENT
+
+This is where your harness becomes much more interesting than a folder full of prompts.
+9. Make each skill extremely explicit
+
+For example:
+
+---
+name: code-review
+description: Review an implementation for correctness, regressions, security,
+testing gaps, maintainability, and adherence to project conventions. Use after
+implementation or when explicitly asked to review code.
+---
+
+Then:
+
+# Code Review
+
+## Objective
+
+Find defects, not stylistic preferences.
+
+## Process
+
+1. Read the relevant project instructions.
+2. Inspect the git diff.
+3. Identify affected components.
+4. Trace changed behavior.
+5. Check error handling.
+6. Check tests.
+7. Check security implications.
+8. Check backwards compatibility.
+9. Report findings ordered by severity.
+
+## Rules
+
+- Do not modify code.
+- Do not report hypothetical problems without evidence.
+- Prefer concrete file/line references.
+- Distinguish bugs from suggestions.
+
+## Output
+
+### Critical
+...
+
+### Major
+...
+
+### Minor
+...
+
+### Suggestions
+...
+
+That's a real skill.
+
+Not:
+
+You are an expert code reviewer.
+Review this code.
+
+10. Build modes around responsibilities
+
+I'd initially use only five.
+architect
+
+Goal:
+understand → model → decide → document
+
+Allowed:
+read
+search
+analyze
+write planning artifacts
+
+Avoid:
+implementation
+destructive commands
+
+developer
+
+Goal:
+implement approved plan
+
+Allowed:
+read
+write
+edit
+test
+git
+shell
+
+reviewer
+
+Goal:
+find problems
+
+Allowed:
+read
+search
+git diff
+tests
+
+Avoid:
+editing implementation
+
+debugger
+
+Goal:
+identify root cause
+
+Process:
+reproduce
+→ observe
+→ hypothesize
+→ test hypothesis
+→ identify root cause
+→ propose fix
+
+qa
+
+Goal:
+verify behavior from the user's perspective
+
+Process:
+requirements
+→ test cases
+→ execute
+→ record evidence
+→ report failures
+
+This maps nicely onto the kinds of specialization Kilo's custom modes are designed for.
+11. Don't create a "super agent"
+
+One temptation will be:
+
+/harness
+
+You can do everything.
+Use all skills.
+Use all tools.
+Plan, code, test, review and deploy.
+
+I would avoid that.
+
+Instead:
+
+             ┌───────────────┐
+             │    Harness    │
+             └───────┬───────┘
+                     │
+        ┌────────────┼────────────┐
+        ↓            ↓            ↓
+    Architect     Developer     Reviewer
+        │            │            │
+      skills       skills       skills
+        │            │            │
+        └────────────┼────────────┘
+                     ↓
+                   QA
+
+The purpose of the harness is coordination and constraints, not making one agent omnipotent.
+12. The really important piece: artifacts
+
+I'd make every workflow stage produce an artifact.
+
+For example:
+
+.harness/
+└── work/
+    └── 2026-09-15-feature-x/
+        ├── requirements.md
+        ├── spec.md
+        ├── architecture.md
+        ├── plan.md
+        ├── implementation.md
+        ├── test-report.md
+        ├── review.md
+        └── qa-report.md
+
+Then agents don't have to reconstruct the entire conversation.
+
+They can say:
+
+read:
+  requirements.md
+  spec.md
+  architecture.md
+  plan.md
+
+execute:
+  implementation
+
+This is one of the strongest ideas you can borrow from the Superpowers/gstack philosophy.
+13. Add a state machine
+
+Eventually I'd make:
+
+workflow: feature
+
+states:
+  - discovery
+  - specification
+  - architecture
+  - planning
+  - implementation
+  - testing
+  - review
+  - qa
+  - shipping
+
+transitions:
+
+  discovery:
+    next: specification
+
+  specification:
+    requires:
+      - spec.md
+    next: architecture
+
+  architecture:
+    requires:
+      - architecture.md
+    next: planning
+
+  planning:
+    requires:
+      - plan.md
+    next: implementation
+
+  implementation:
+    next: testing
+
+  testing:
+    requires:
+      - tests-passing
+    next: review
+
+  review:
+    requires:
+      - no-critical-findings
+    next: qa
+
+  qa:
+    requires:
+      - qa-passed
+    next: shipping
+
+Now you've moved from prompt collection → agent framework.
+14. Add a router
+
+This is another idea worth borrowing from gstack.
+
+The agent should recognize:
+
+"I want to build X"
+        ↓
+feature workflow
+
+"this is broken"
+        ↓
+debugging workflow
+
+"review this PR"
+        ↓
+review workflow
+
+"refactor X"
+        ↓
+refactor workflow
+
+"add tests"
+        ↓
+testing workflow
+
+gstack actually documents explicit routing rules such as product ideas → /office-hours, architecture → /plan-eng-review, bugs → /investigate, QA → /qa, etc.
+
+I'd implement a similar routing layer in your harness.
+15. Don't copy skills blindly
+
+This is particularly important with the repositories you've found.
+
+Create a spreadsheet/table mentally like:
+Source	What to take
+gstack	workflow decomposition
+Superpowers	software-development methodology
+Kilo Marketplace	Kilo packaging/conventions
+Agent Skills	portable skill format
+Your harness	orchestration + project-specific policy
+
+Then for each external skill ask:
+
+Does this represent:
+
+A. reusable knowledge?
+B. reusable workflow?
+C. agent personality?
+D. tool capability?
+E. project policy?
+F. orchestration?
+
+Put it in the appropriate layer.
+
+That prevents your .harness directory from becoming a giant pile of markdown.
+16. Your .harness/README.md should explain the architecture
+
+I'd make the README itself the contract:
+
+# Harness
+
+This repository defines the project's agent engineering system.
+
+## Architecture
+
+Modes
+  = who the agent is and what it is allowed to do.
+
+Skills
+  = reusable knowledge and procedures.
+
+Tools
+  = capabilities available to agents.
+
+Workflows
+  = sequences of skills/modes used to accomplish a goal.
+
+Policies
+  = non-negotiable project constraints.
+
+Artifacts
+  = persistent state produced by workflows.
+
+Then document:
+
+                    WORKFLOW
+                       │
+             ┌─────────┴─────────┐
+             │                   │
+           MODE               SKILLS
+             │                   │
+             └─────────┬─────────┘
+                       │
+                     TOOLS
+                       │
+                       ↓
+                   ARTIFACT
+
+17. The implementation order I'd use
+Phase 1 — Foundation
+
+Build:
+
+.harness/
+├── README.md
+├── skills/
+├── modes/
+├── workflows/
+└── policies/
+
+Nothing fancy.
+Phase 2 — Five core skills
+
+Implement:
+
+specification
+architecture
+implementation
+testing
+code-review
+
+Don't import 50 skills yet.
+Phase 3 — Three modes
+
+Implement:
+
+architect
+developer
+reviewer
+
+Get those working well.
+Phase 4 — One workflow
+
+Implement:
+
+feature
+
+with:
+
+spec → architecture → plan → implementation → test → review
+
+Phase 5 — Evaluation
+
+This is where I would borrow heavily from Superpowers.
+
+Create test scenarios:
+
+evals/
+├── simple-feature.md
+├── ambiguous-feature.md
+├── bug-fix.md
+├── bad-architecture.md
+├── regression.md
+└── security-sensitive-change.md
+
+For each:
+
+INPUT
+EXPECTED BEHAVIOR
+EXPECTED ARTIFACTS
+EXPECTED TOOL USE
+FAILURE CONDITIONS
+
+Superpowers explicitly has a skill-behavior evaluation setup, which is a useful model for treating agent workflows as things that should actually be tested rather than merely admired.
+18. Only then add the fancy stuff
+
+After v0.1 works:
+
+             v0.1
+              │
+              ↓
+        core workflow
+              │
+       ┌──────┴──────┐
+       ↓             ↓
+    subagents       MCP
+       │             │
+       ↓             ↓
+   parallelism    external tools
+       │
+       ↓
+     QA loop
+       │
+       ↓
+   autonomous mode
+
+Eventually you could have:
+
+/harness feature "Add OAuth"
+
+        ↓
+
+      Router
+
+        ↓
+
+    Architect
+        │
+        ├── specification skill
+        ├── architecture skill
+        └── security skill
+
+        ↓
+
+    Developer
+        │
+        ├── implementation
+        └── testing
+
+        ↓
+
+    Reviewer
+        │
+        ├── code-review
+        └── security-review
+
+        ↓
+
+       QA
+        │
+        └── browser/testing tools
+
+        ↓
+
+      Ship
+
+That is the system I'd aim for.
+One more important point
+
+I would not insist on .harness being the directory Kilo itself discovers.
+
+Think of it as:
+
+                    .harness
+                 /     |      \
+                /      |       \
+           skills    modes    workflows
+              |
+              ↓
+        Agent Skills format
+              |
+       ┌──────┴──────┐
+       ↓             ↓
+     Kilo          other agents
+       |
+       ↓
+   .kilo/skills
+
+That makes your harness agent-agnostic, while Kilo is your first runtime.
+
+Kilo's current documentation explicitly positions Skills as an interoperable/open format and supports project-level .kilo/skills/; that makes this separation a good fit.
+My recommended starting point
+
+Don't start coding the whole framework.
+
+Start with these three files:
+
+.harness/
+├── README.md
+├── workflows/
+│   └── feature.md
+└── skills/
+    └── specification/
+        └── SKILL.md
+
+Then make Kilo successfully execute:
+
+User:
+"Add X to the application."
+
+        ↓
+
+feature workflow
+
+        ↓
+
+specification skill
+
+        ↓
+
+spec.md
+
+        ↓
+
+human approval
+
+        ↓
+
+architecture
+
+        ↓
+
+implementation
+
+        ↓
+
+review
+
+        ↓
+
+QA
+
+Once that loop works reliably, then extract modes, tools, subagents, MCP integrations, routing, evals, and marketplace packaging.
+
+That will keep you from building a beautiful .harness architecture that doesn't actually improve the agent's behavior.
+
+
+
