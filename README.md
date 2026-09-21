@@ -88,11 +88,17 @@ Skills are called automatically by kilo code agent.
 
 The directory structure is :
 
-.kilo/skills/your-skill-name/
-├── SKILL.md          # Required: instructions + metadata
-├── scripts/          # Optional: executable code the agent runs
-├── references/       # Optional: docs loaded only when needed
-└── assets/           # Optional: templates, images, fonts
+	.kilo/skills/your-skill-name/
+	├── SKILL.md # Required - main skill file
+	├── scripts/ # Optional - executable code
+	│ ├── process_data.py # Example
+	│ └── validate.sh # Example
+	├── references/ # Optional - documentation
+	│ ├── api-guide.md # Example
+	│ └── examples/ # Example
+	└── assets/ # Optional - templates, etc.
+	└── report-template.md # Example
+
 
 1. Kilo Session starts ( you issue the command "kilo" )
    --> Kilo Code Agent loads: name + description from every skill (~100 tokens each)
@@ -106,14 +112,42 @@ The directory structure is :
 
 
 The description field in your YAML frontmatter is not for humans. It is the trigger condition the agent uses when deciding whether to activate your skill. 
-[What the skill does] + [When to use it, with specific trigger phrases]
-
+	description: [What the skill does] + [When to use it, with specific trigger phrases]
+Bad Example: 
+	description: Creates sophisticated multi-page documentation with advanced formatting.
+Good Example: 
+	description: Creates and writes professional README.md files for software projects. Use when user asks to "write a README", "create a readme", "document this project", "generate project documentation", or "help me write a README.md".
 
 The agentskills.io spec defines the skill constraints:
 1. name: lowercase letters, numbers, and hyphens only, max 64 characters, must not start or end with a hyphen, no consecutive hyphens
 2. description: max 1024 characters, must describe both what the skill does and when to use it
 3. The file must be named exactly SKILL.md, case-sensitive
 4. Avoid XML angle brackets (< or >) in frontmatter as they can inject unintended instructions into the system prompt
+
+
+### Example Skill
+
+	.kilo/
+	└── skills/
+	    └── data-quality-checker/
+	        ├── SKILL.md
+	        │
+	        ├── scripts/
+	        │   ├── process_data.py
+	        │   └── validate.sh
+	        │
+	        ├── references/
+	        │   ├── api-guide.md
+	        │   └── examples/
+	        │       └── example-usage.md
+	        │
+	        └── assets/
+	            └── report-template.md
+
+
+
+
+
 
 https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf
 
@@ -126,6 +160,10 @@ https://ai.sulat.com/writing-opencode-agent-skills-a-practical-guide-with-exampl
 https://github.com/mgechev/skills-best-practices
 https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
 
+
+
+https://github.com/VoltAgent/awesome-agent-skills
+https://github.com/sickn33/agentic-awesome-skills
 
 
 ## How to Write Modes (Agents)
