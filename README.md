@@ -70,7 +70,6 @@ After installing services and tools, source the ~/workspace/agent-infra/release 
 7. Output Data format should be explicitly specified ( list, table, json format, code, ...) 
 8. If you want to emphasize something not to do, especially explain it so.
 9. Specify who the output is intended for (e.g., beginner, researcher, executive, child).
-
 10. Give explicit constraints: State requirements such as length, language, format, scope, exclusions, or deadlines.
 11. Define what “success” means: Give measurable or observable criteria for a satisfactory answer. 
 12. Ask for grounded reasoning: For factual or analytical tasks, request that conclusions be supported by the provided evidence or reliable sources.
@@ -82,7 +81,7 @@ After installing services and tools, source the ~/workspace/agent-infra/release 
 18. Venn Diagram of what is possible : Define information sets. Use intersection, union and exclusion while defining new rules.
 
 ## How to Write Skill
-https://bibek-poudel.medium.com/the-skill-md-pattern-how-to-write-ai-agent-skills-that-actually-work-72a3169dd7ee
+
 
 Skills are called automatically by kilo code agent. 
 
@@ -91,14 +90,15 @@ The directory structure is :
 	.kilo/skills/your-skill-name/
 	├── SKILL.md # Required - main skill file
 	├── scripts/ # Optional - executable code
-	│ ├── process_data.py # Example
-	│ └── validate.sh # Example
+	│   ├── process_data.py # Example
+	│   └── validate.sh # Example
 	├── references/ # Optional - documentation
-	│ ├── api-guide.md # Example
-	│ └── examples/ # Example
+	│   ├── api-guide.md # Example
+	│   └── examples/ # Example
 	└── assets/ # Optional - templates, etc.
-	└── report-template.md # Example
+	    └── report-template.md # Example
 
+.kilo directory (which also contains agents/modes and workflows/commands) is found in the main project directory (for example in the root directory of the project's git repository ( you can also use .agents instead of .kilo directory name and commit to git repo, .kilo name is ignored by default ).
 
 1. Kilo Session starts ( you issue the command "kilo" )
    --> Kilo Code Agent loads: name + description from every skill (~100 tokens each)
@@ -112,7 +112,7 @@ The directory structure is :
 
 
 The description field in your YAML frontmatter is not for humans. It is the trigger condition the agent uses when deciding whether to activate your skill. 
-	description: [What the skill does] + [When to use it, with specific trigger phrases]
+	description: [What the skill does] + [When to use it, with specific trigger phrases] + [Key capabilities]
 Bad Example: 
 	description: Creates sophisticated multi-page documentation with advanced formatting.
 Good Example: 
@@ -125,58 +125,299 @@ The agentskills.io spec defines the skill constraints:
 4. Avoid XML angle brackets (< or >) in frontmatter as they can inject unintended instructions into the system prompt
 
 
+Tests :
+
+1. Triggering tests
+   Goal: Ensure your skill loads at the right times.
+   Test cases:
+     - Triggers on obvious tasks
+     - Triggers on paraphrased requests
+     - Doesn't trigger on unrelated topics
+2. Functional tests
+   Goal: Verify the skill produces correct outputs.
+   Test cases:
+     - Valid outputs generated
+     - API calls succeed
+     - Error handling works
+     - Edge cases covered
+3. Performance comparison
+   Goal: Prove the skill improves results vs. baseline.
+   How will you know your skill is working :
+      - Skill triggers on 90% of relevant queries
+        – How to measure: Run 10-20 test queries that should trigger your skill. Track
+          how many times it loads automatically vs. requires explicit invocation
+      - Completes workflow in X tool calls
+        – How to measure: Compare the same task with and without the skill enabled.
+          Count tool calls and total tokens consumed.
+
+Always write in third person. The description is injected into the system prompt, and inconsistent point-of-view can cause discovery problems.
+
+    Good: "Processes Excel files and generates reports"
+    Avoid: "I can help you process Excel files"
+    Avoid: "You can use this to process Excel files"
+
+
+ATTENTION : You have to write descriptions as clear as possible and non-ambiguous, beacuse Your Skill shares the context window with :
+
+    The system prompt
+    Conversation history
+    Other Skills' metadata
+    Your actual request
+
+
+Define clear boundaries:
+
+	Start with a short section that explains when this skill should be used. Is it intended for API usage? CLI workflows? 
+	Git repositories? Specific permission levels? Being explicit about scope prevents agents from applying the wrong logic
+	in the wrong context, and setting clear boundaries dramatically reduces misuse.
+
+Provide a structural overview:
+
+	Before describing workflows, orient the model. Identify the core objects in your product, key configuration files, or 
+	primary entry points. This gives the agent a mental map of your system before it begins acting. LLMs perform better when they
+	understand structure first, then action.
+
+Document workflows — not features:
+
+	Avoid abstract feature descriptions. Instead, describe how to complete real tasks step by step. If a workflow requires a specific
+	sequence, state the order directly. If permissions, prerequisites, or environment setup are required, list them clearly. Precision
+	reduces ambiguity — and less ambiguity makes AI behavior more reliable.
+
+Include simple “if/then” decision rules:
+
+	If there are multiple ways to accomplish something, clarify when to choose one over another. Short “if/then” guidance in plain
+	language can significantly improve consistency. For example: if the task requires sequential steps, follow the ordered process;
+	if it presents alternatives, surface options clearly. These lightweight rules help LLMs choose correctly instead of guessing.
+
+Add guardrails and common pitfalls:
+
+	Your skill file shouldn’t just describe what can be done — it should also define limits. Include a short section that outlines
+	unsupported actions, configuration conflicts, environment constraints, or known failure modes. Negative constraints are powerful 
+	for LLMs. They reduce subtle mistakes that would otherwise require human review. Finally, ensure your skill.md stays aligned with 
+	your broader product documentation. It isn’t a replacement for full technical documentation — it’s a focused layer that helps AI
+	agents use it correctly. If you already have product docs, this skill generator can help you build a skill.md draft from your 
+	existing documentation, giving you a head-start in building skills for your product. It will still need reviewing and improving
+	manually, but it may kickstart this process for you.
+
+
+References :
+
+	https://www.gitbook.com/blog/skill-md
+	https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf
+	https://bibek-poudel.medium.com/the-skill-md-pattern-how-to-write-ai-agent-skills-that-actually-work-72a3169dd7ee
+	https://levelup.gitconnected.com/the-simple-guide-to-agent-skills-3d510521f11a
+	https://www.skillsdirectory.com/docs/skill-file-structure
+	https://ai.sulat.com/writing-opencode-agent-skills-a-practical-guide-with-examples-870ff24eec66
+	https://github.com/mgechev/skills-best-practices
+	https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
+	https://github.com/VoltAgent/awesome-agent-skills
+	https://github.com/sickn33/agentic-awesome-skills
+
+
 ### Example Skill
+
+Directory Structure :
 
 	.kilo/
 	└── skills/
-	    └── data-quality-checker/
-	        ├── SKILL.md
+	    └── summarizer-skill/
 	        │
-	        ├── scripts/
-	        │   ├── process_data.py
-	        │   └── validate.sh
-	        │
-	        ├── references/
-	        │   ├── api-guide.md
-	        │   └── examples/
-	        │       └── example-usage.md
-	        │
-	        └── assets/
-	            └── report-template.md
+		├── SKILL.md              # Main entry point and instructions for the agent
+		├── scripts/              # Executable code or helper scripts used by the agent
+		│   └── process_text.py   # Python utility to perform the core task
+		├── references/           # Documentation, guidelines, or source materials
+		│   └── formatting_rules.md # Style guide or schema the agent must follow
+		└── assets/               # Static files, templates, or binary resources
+		    └── template.md       # Output markdown template
+
+When the agent is invoked with this skill, it inspects SKILL.md, runs the code inside scripts/ to handle heavy lifting, references the guidelines in references/ for formatting checks, and populates the template found in assets/ to produce the final result.
+
+
+SKILL.md :
+
+	
+	---
+	name: text-summarizer
+	description: Guides stable API and interface design. Use when designing APIs, module boundaries, or any public interface. Use when creating REST or GraphQL endpoints, defining type contracts between modules, or establishing boundaries between frontend and backend.
+
+	---
+
+
+	# Text Summarizer Skill
+
+	## Overview
+	This skill processes raw text inputs, applies structural formatting rules, and generates a clean, standardized report.
+
+	## Directory Layout
+	* `scripts/`: Contains the execution logic (`process_text.py`).
+	* `references/`: Contains compliance and formatting guidelines (`formatting_rules.md`).
+	* `assets/`: Contains output templates (`template.md`).
+
+	## Execution Steps
+	1. Read the input text provided by the user.
+	2. Execute the processing script to extract key metrics and summaries:
+ 	  ```bash
+	   python scripts/process_text.py --input "path/to/input.txt"
+	   ```
+	3. Consult references/formatting_rules.md to ensure compliance with output standards.
+	4. Render the final output using the structure defined in assets/template.md.
+
+scripts/process_text.py: 
+
+	#!/usr/bin/env python3
+	import argparse
+	import sys
+
+	def summarize_text(text: str) -> dict:
+	    words = text.split()
+	    return {
+	        "word_count": len(words),
+ 	       "preview": " ".join(words[:10]) + ("..." if len(words) > 10 else "")
+  	  }
+
+	if __name__ == "__main__":
+ 	   parser = argparse.ArgumentParser(description="Process and summarize input text.")
+  	  parser.add_argument("--input", type=str, required=True, help="Text to process")
+ 	   args = parser.parse_args()
+    
+ 	   result = summarize_text(args.input)
+	   print(f"Word Count: {result['word_count']}")
+ 	   print(f"Preview: {result['preview']}")
+
+references/formatting_rules.md:
+
+	# Formatting Compliance Rules
+	1. **Tone:** Keep all generated summaries objective and concise.
+	2. **Structure:** Every report must begin with metadata (Word Count, Timestamp).
+	3. **Language:** Avoid colloquialisms and filler words.
+
+assets/template.md:
+
+	# Execution Report
+
+	**Status:** SUCCESS  
+	**Word Count:** {{word_count}}  
+
+	## Executive Summary
+	{{preview}}
+	
+
+## How to Write Modes (Agents/SubAgents)
+
+Directory Structure :
+
+	.kilo/
+	└── agents/
+	    └── *.md
+
+
+1. Structure of an Mode (Agent) .md File
+   An agent file consists of two primary sections: 
+   - YAML Frontmatter (Header between --- blocks) : Defines metadata, UI appearance, and tool/file permissions.
+   - Markdown Body: Acts as the system prompt or role definition that shapes the agent's behavior, tone, and methodology.
+    
+2. Best Practices for Frontmatter (Header between --- blocks) Configuration
+   The frontmatter dictates what the agent can and cannot do. Leverage granular permissions to optimize safety and focus:
+   - Restrict Tool Access: Limit high-risk capabilities like shell commands (bash) or unrestricted file editing for read-only or specialized review agents.
+   - Use Precise File Globbing: Restrict the edit permission to specific file extensions to prevent accidental modifications to core source code.
+   - Set Clear Descriptions: Write concise summaries in the description field so users understand the agent's exact use case in the agent picker.
+
+3. Best Practices for Writing Agent Instructions (Body)
+   Define a Strong Persona Immediately: Start the markdown body with a direct statement defining the agent's role (e.g., "You are a technical writing expert specializing in clear documentation...").
+
+   - Keep Instructions Focused: Unlike project-wide AGENTS.md files (which handle global codebase rules), individual agent files should focus purely on how that specific agent executes its specialized task.
+   - Specify Behavioral Constraints: Explicitly state what the agent should avoid doing (e.g., "Do not modify implementation source code" or "Always ask before executing destructive shell commands").
+   - Use Clean Markdown Formatting: Organize guidelines using headers, bullet points, and bold text so the LLM parses the hierarchical instructions accurately.
+
+
+Frontmatter Fields :
+- description : String : A short summary displayed in the agent picker and used by the orchestrator for task delegation.
+- mode : String : Role classification:• primary (user-selectable in the UI)• subagent (only invoked by other agents)• all (both) 
+- model :  String : Pins a specific model using provider/model format (e.g., anthropic/claude-sonnet-4-20250514). 
+- permission :  Object : Per-agent permission overrides controlling tool access (e.g., allowing or denying edit, bash).
+- color : String : UI identifier color for the agent picker, specified as a hex code (#10B981) or theme keyword (primary, accent, warning). 
+- steps : Integer : Maximum agentic iterations allowed before forcing a text-only response. 
+- temperature / top_p : Number : Sampling parameters for the agent's underlying model. 
+- variant : String : Default model variant. 
+- hidden : Boolean : If true, hides the agent from the UI (typically used for background subagents). 
+- disable : Boolean : If true, completely disables and removes the agent. 
+
+Note: The agent's identifier (name) is automatically derived from its filename (minus the .md extension). Nested subdirectories create namespaced names, such as agents/backend/sql.md resulting in backend/sql.
+
+
+Core Guidelines
+
+- Clarity First: Explain complex technical concepts simply, targeting both beginner and advanced developers.
+- Strict Scope: You are only permitted to edit Markdown (.md or .mdx) files. Do not attempt to modify source code files.
+- Structure: Always organize documentation with logical headings, tables where appropriate, and actionable code examples.
+- Tone: Professional, objective, and instructional.
+
+References :
+
+	https://github.com/jtgsystems/Custom-Modes-Roo-Code/
+	https://github.com/rahulvrane/awesome-claude-agents
+	https://github.com/anderfredx/awesome-claude-code
+	https://github.com/asgeirtj/system_prompts_leaks
+	https://github.com/0xfurai/claude-code-subagents
+	https://github.com/wshobson/agents
+	https://github.com/VoltAgent/awesome-claude-code-subagents
+
+### Example Mode
+
+Directory Structure :
+
+	.kilo/
+	├── agents/
+	│   └── summarizer.md
+	│
+	└── skills/
+	    └── summarizer-skill/
+	        └── SKILL.md
 
 
 
+summarizer.md :
+
+	---
+	description: Summarizes documents and technical content using the summarizer-skill.
+	mode: subagent
+	model: anthropic/claude-sonnet-4
+	permission:
+	  read: allow
+	  write: deny
+	  edit: deny
+	  bash: deny
+	color: "#8B5CF6"
+	temperature: 0.2
+	variant: summarizer
+	hidden: false
+	disable: false
+	---
+	
+	# Summarizer Agent
+	
+	Use the `summarizer-skill` skill for all summarization tasks.
+	
+	## Steps
+	
+	1. Determine what the user wants summarized.
+	2. Identify and read the relevant source material.
+	3. Invoke and follow `summarizer-skill`.
+	4. Produce the requested summary format.
+	5. Verify that the summary accurately represents the source.
+	6. Return the result without modifying project files.
+	
+	## Rules
+	
+	- Always use `summarizer-skill` when performing summarization.
+	- Do not reproduce the skill's instructions here; use the skill itself.
+	- Do not modify, create, or delete files.
+	- Do not execute shell commands.
+	- Do not invent information or citations.
+	
 
 
-
-https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf
-
-https://levelup.gitconnected.com/the-simple-guide-to-agent-skills-3d510521f11a
-
-https://www.skillsdirectory.com/docs/skill-file-structure
-
-https://ai.sulat.com/writing-opencode-agent-skills-a-practical-guide-with-examples-870ff24eec66
-
-https://github.com/mgechev/skills-best-practices
-https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
-
-
-
-https://github.com/VoltAgent/awesome-agent-skills
-https://github.com/sickn33/agentic-awesome-skills
-
-
-## How to Write Modes (Agents)
-
-https://github.com/jtgsystems/Custom-Modes-Roo-Code/
-https://github.com/rahulvrane/awesome-claude-agents
-https://github.com/anderfredx/awesome-claude-code
-https://github.com/asgeirtj/system_prompts_leaks
-https://github.com/0xfurai/claude-code-subagents
-https://github.com/wshobson/agents
-https://github.com/VoltAgent/awesome-claude-code-subagents
-
-
+	       
 ## How to Write Workflows (Commands) 
 
 https://github.com/danielrosehill/Claude-Slash-Commands
@@ -186,7 +427,7 @@ https://github.com/wshobson/commands
 https://github.com/cassler/awesome-claude-code-setup
 
 
-## How to Use Harness composed of all Skills/Modes/Wokrflows
+## How to compose a Harness using Skills/Modes/Wokrflows/Memory
 Assuming you are using kilo code agent, you can install predefined skills/modes/workflows into your project directory by following these instructions :
 
 1. Go to your project directory and run the script $AGENT_INFRA_DIR/harness/install_kilo_harness.sh. This will install predefined skilss/modes/workflows from $AGENT_INFRA_DIR/harness/ directory. The directory content is prepared using the following sites :
