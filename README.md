@@ -58,7 +58,7 @@ Clone this repository into your wworkspace directory, source the release file an
 
 After installing services and tools, source the ~/workspace/agent-infra/release file then start services by running the ~/workspace/agent-infra/services/00.main.sh script.
 
-##  Using the General-Purpose Harness in your project
+##  Installing the Agent-Infra's General-Purpose Harness in your project
 
 0. Switch to a user that can NOT execute sudo commands, and also that does NOT have git master/tag privileges.
 1. Clone a copy of your project into a directory.
@@ -67,6 +67,8 @@ After installing services and tools, source the ~/workspace/agent-infra/release 
 4. Run the harness installation script : ( ~workspace/agent-infra/harness/install_kilo_harness.sh)  
 
 This command create .kilo directory if it does not exists , and creates links (if not exists) to the skill/mode/workflow files found in the ~/workspace/agent-infra/harness directory.
+
+NOTE: we could also install in ~/.config/kilo/ directory. But we don't prefer to make a global installation, we install to only in-repository <project_dir>/.kilo directory.
 
 ##  How to Write Prompt
 
@@ -450,6 +452,8 @@ summarizer.md :
       
 	       
 ## How to Write Workflows (Commands) 
+
+
 
 https://github.com/danielrosehill/Claude-Slash-Commands
 https://github.com/jqueryscript/Claude-Code-Slash-Commands-Cheatsheet
