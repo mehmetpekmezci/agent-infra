@@ -17,6 +17,9 @@ do
         do       
             f=$(basename $sub)
 	    mkdir -p .kilo/$kilo_harness
-            ln -s $sub .kilo/$kilo_harness/$f
+	    if [ ! -e .kilo/$kilo_harness/$f ]
+	    then
+                ln -s $sub .kilo/$kilo_harness/$f
+            fi
         done
 done

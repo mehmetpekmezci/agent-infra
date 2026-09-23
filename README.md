@@ -58,6 +58,16 @@ Clone this repository into your wworkspace directory, source the release file an
 
 After installing services and tools, source the ~/workspace/agent-infra/release file then start services by running the ~/workspace/agent-infra/services/00.main.sh script.
 
+##  Using the General-Purpose Harness in your project
+
+0. Switch to a user that can NOT execute sudo commands, and also that does NOT have git master/tag privileges.
+1. Clone a copy of your project into a directory.
+2. Checkout a branch that "kilo code agent" can commit. (or even push)
+3. Source the release file : ~workspace/agent-infra/release 
+4. Run the harness installation script : ( ~workspace/agent-infra/harness/install_kilo_harness.sh)  
+
+This command create .kilo directory if it does not exists , and creates links (if not exists) to the skill/mode/workflow files found in the ~/workspace/agent-infra/harness directory.
+
 ##  How to Write Prompt
 
 1. Don’t spam prompts to fix errors (Prompt Thrashing).
@@ -362,7 +372,7 @@ References :
 	https://github.com/wshobson/agents
 	https://github.com/VoltAgent/awesome-claude-code-subagents
 
-### Example Mode
+### Example Mode/Agent
 
 Directory Structure :
 
@@ -417,6 +427,27 @@ summarizer.md :
 	
 
 
+### Another Example of Mode/Agent Usage
+
+
+                    ┌──────────────────┐
+                    │   Main Agent     │
+                    │   / Orchestrator │   -----------------------> Agent, only it is written in it's instructions to use other agents.
+                    └────────┬─────────┘
+                             │
+             ┌───────────────┼───────────────┐
+             ▼               ▼               ▼
+      ┌────────────┐  ┌────────────┐  ┌────────────┐
+      │ Researcher │  │  Engineer  │  │  Reviewer  │--------------> Agent, it is written in their instructions to use skills.
+      └─────┬──────┘  └─────┬──────┘  └─────┬──────┘
+            │               │               │
+        ┌───┴───┐       ┌───┴───┐       ┌───┴───┐
+        ▼       ▼       ▼       ▼       ▼       ▼
+      Search  Papers   Code   Tests   Critic  Editor --------------> Skill
+      
+
+      
+      
 	       
 ## How to Write Workflows (Commands) 
 
