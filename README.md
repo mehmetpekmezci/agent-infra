@@ -453,13 +453,269 @@ summarizer.md :
 	       
 ## How to Write Workflows (Commands) 
 
+Command/Workflow -> Agent -> Skill
+
+A good command/workflow file should answer:
+
+- When should this command be used?
+- What inputs does it accept?
+- What exact steps should the agent follow?
+- What constraints must it respect?
+- What should the final output look like?
+- How does it know it succeeded?
 
 
-https://github.com/danielrosehill/Claude-Slash-Commands
-https://github.com/jqueryscript/Claude-Code-Slash-Commands-Cheatsheet
-https://github.com/hesreallyhim/awesome-claude-code
-https://github.com/wshobson/commands
-https://github.com/cassler/awesome-claude-code-setup
+Best practices : 
+1. Separate workflow from policy 
+
+	## Workflow
+
+	1. Inspect the existing implementation.
+	2. Identify affected tests.
+	3. Implement the change.
+	4. Run the relevant tests.
+	5. Run the formatter.
+	6. Report the result.
+
+	## Constraints
+
+	- Do not modify public APIs unless explicitly requested.
+	- Do not introduce new dependencies without approval.
+	- Preserve backward compatibility.
+
+2. Give the agent decision rules
+
+	## Test selection
+
+	- If only `src/foo.ts` changes, run the tests covering `foo`.
+	- If shared utilities change, run the entire unit-test suite.
+	- If database schemas change, run migrations and integration tests.
+	- If configuration affecting production changes, run the full validation suite.
+
+
+3. Explicitly distinguish inspection from modification
+
+	## Phase 1 — Inspect
+	
+	Do not modify files during this phase.
+	
+	- Inspect the repository structure.
+	- Read the relevant implementation.
+	- Read existing tests.
+	- Identify conventions used by neighboring code.
+
+	## Phase 2 — Implement
+
+	Only after understanding the existing implementation:
+
+	- Modify the smallest necessary set of files.
+	- Follow existing project conventions.
+
+4. Specify what "done" means
+
+	## Definition of Done
+
+	The task is complete only when:
+	
+	- The requested behavior is implemented.
+	- Existing tests pass.
+	- New behavior has test coverage.
+	- Formatting and linting pass.
+	- No unrelated files were modified.
+	- The final response lists all modified files.
+
+5. Prefer deterministic commands
+If you know the command, give it explicitly.
+
+	Run:
+	
+	```bash
+	pnpm lint
+	pnpm test
+	pnpm typecheck
+
+6. Tell the agent how to handle uncertainty
+This prevents the agent from confidently inventing architecture.
+
+	## Uncertainty
+	
+	If the requested behavior conflicts with an existing architectural constraint:
+	
+	1. Identify the conflict.
+	2. Inspect existing patterns for precedent.
+	3. Prefer the established project pattern.
+	4. If no clear precedent exists, stop before making a potentially breaking architectural decision and report the ambiguity.
+	
+
+7. Keep commands composable ( multiple files containing different parts )
+
+Instead of one enormous:
+
+	.kilo/commands/develop-feature.md
+	
+Then each command has a focused responsibility:
+
+	.kilo/
+	└── commands/
+	    ├── inspect.md
+	    ├── implement.md
+	    ├── test.md
+	    ├── review.md
+	    ├── refactor.md
+	    └── release.md
+	
+Then each command has a focused responsibility.
+For Example :
+
+	# Review
+	
+	Review the current changes without modifying files.
+	
+	## Steps
+	
+	1. Inspect `git diff`.
+	2. Check changed files against project conventions.
+	3. Check for correctness issues.
+	4. Check for missing tests.
+	5. Check for unnecessary changes.
+	6. Run relevant static checks.
+	
+	## Output
+	
+	Report findings grouped by severity:
+	
+	- Critical
+	- High
+	- Medium
+	- Low
+	- Informational
+	
+	Do not modify files.
+	
+That's substantially easier for an agent to follow than a 500-line "do everything" command.
+
+
+8. Don't duplicate global instructions (for example those written in AGENTS.md file)
+If your project already has AGENTS.md don't copy all of that into every .kilo/commands/*.md.
+
+9. Use explicit "do not" constraints sparingly
+Negative instructions are useful when there's a known failure mode:
+
+	Do not modify generated files.
+	Do not change the public API.
+	Do not add dependencies.
+	Do not commit changes.
+	
+
+10. Make the final response part of the contract 
+For automated workflows, this is surprisingly important.
+For example:
+
+	## Final response
+	
+	Use this format:
+	
+	### Summary
+	- ...
+	
+	### Files changed
+	- `path/to/file`
+	
+	### Validation
+	- `pnpm test` — passed
+	- `pnpm lint` — passed
+	
+	### Notes
+	- ...
+	
+
+Now downstream humans—or another automated process—get predictable output.
+
+11. Avoid putting too much prose into workflow files
+
+A command file isn't the place for an essay about why the architecture exists.
+
+Instead of:
+
+	The reason we use repositories is that historically...
+
+prefer:
+
+	All database access must go through the repository layer.
+	Do not access the ORM directly from services.
+
+
+References :
+
+	https://github.com/danielrosehill/Claude-Slash-Commands
+	https://github.com/jqueryscript/Claude-Code-Slash-Commands-Cheatsheet
+	https://github.com/hesreallyhim/awesome-claude-code
+	https://github.com/wshobson/commands
+	https://github.com/cassler/awesome-claude-code-setup
+
+
+## Example Workflow(Command)
+
+
+Directory Structure :
+
+	.kilo/
+	├── agents/
+	│   └── summarizer.md
+	│
+	├── commands/
+	│   └── summarization.md
+	│
+	└── skills/
+	    └── summarizer-skill/
+	        └── SKILL.md
+
+
+
+summarization.md :
+
+	---
+	description: Summarize the text according to company conventions
+	agent: code
+	---
+	
+	# Summarize
+	
+	## Workflow
+	
+	1. Inspect the existing texts and their summaries in directory /data.
+	2. Identify summarized text relation to the orginal text.
+	3. Summarize the text.
+	4. Review the summary according to the http://company-net/company-document-properties.md .
+	5. Summarize the text again regarding the last review.
+	6. Write it to a new file.
+	
+
+task delegation to an agent example, summarization.md :
+
+	---
+	description: Summarize the text according to company conventions
+	agent: code
+	---
+	
+	Delegate the implementation to `summarizer`.
+	
+	Provide the summarizer with:
+	
+	- The original user request.
+	- The company standards documents in /data/standars directory.
+	- Any relevant findings from repository inspection.
+	
+	The summarizer should:
+	
+	- Summarize the requested change.
+	- Follow company conventions.
+	- Make the smallest reasonable summary.
+	- Avoid unrelated refactoring.
+
+
+Summarization command (workflow) isbcallable as "/summarization" in the kilo command line. Summarization command calls agents, agents call skills. "agent:code" in the frontmatter header, you can set agent parameter as "code", which is default kilo's agent, or you may set to one of your custom agents, like "summarizer".
+
 
 
 ## How to compose a Harness using Skills/Modes/Wokrflows/Memory
