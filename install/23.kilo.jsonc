@@ -38,6 +38,18 @@
     "enabled": false
   }
 
+  "mcp": {
+    "gitea": {
+      "type": "local",
+      "command": ["gitea-mcp"],
+      "args": ["-t", "stdio"],
+      "enabled": true,
+      "environment": {
+        "GITEA_HOST": "http://localhost:13000",
+        "GITEA_ACCESS_TOKEN": "{env:GITEA_USER_PAT}"
+      }
+    }
+  }
 }
 
     
