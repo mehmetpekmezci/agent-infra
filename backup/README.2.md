@@ -72,11 +72,11 @@ After installing services and tools, source the ~/workspace/agent-infra/release 
 
 After starting the services, we are ready to use kilo agentic coding tool. 
 
-#### Prepare Work Directory and Github Repository
+#### Prepare Work Directory
 
-	mkdir -p ~/agentspace
-	cd ~/agentspace
-	git clone git@github.com:mehmetpekmezci/agent-managed-rust-project.git
+	mkdir -p ~/agentspace/agent-managed-rust-project
+	cd ~/agentspace/agent-managed-rust-project
+
 
 	
 #### Code Generation
@@ -166,7 +166,7 @@ NOTE: we could also install in ~/.config/kilo/ directory. But we don't prefer to
 
 ##  How to Write Prompt
 
-1. Don’t spam prompts to fix errors (Prompt Thrashing).
+1. Don’t spam prompts to fix errors (Prompt Trashing).
 2. Don’t assume model is understanding (Write Clear Prompts)
 3. Don’t use too many MCP Servers / Skills / Modes / APIs ... (Risk of selecting wrong service/api would increase)
 4. Regularly reevaluate (possibly outdated) assumptions about the "best" tools, skills, modes, mcps, apis ...
@@ -982,7 +982,7 @@ We build a harness for our development environment.  We will use the following m
 |  **81** | Incident Manager                      | Operations             | Production incident coordination, escalation, communication, resolution tracking, and post-incident reviews.                                                           |
 |  **82** | Configuration Manager                 | Operations             | Configuration baselines, environment consistency, version control, configuration tracking, and change control.                                                         |
 
-
+ 
 ### Agent Command Catalog (Rust, Gitea-driven)
 
 Every command also accepts the global parameters: `[--target] [--scope module/crate/workspace/system] [--depth quick/standard/thorough] [--roles +N,-N] [--gates po,review,qa,security,none] [--priority p0..p3] [--milestone] [--input] [--output] [--budget] [--parent #issue] [--dry-run]`.
@@ -1230,12 +1230,20 @@ Each skill is a `skill.md` that agents load, with a matching helper script. Conv
 
 ### Building .kilo harness set
 
-I promted the following text in the claude.ai web interface that it gave me kilo.
-also can you make use of rtk, caveman , graphify , ponytail in your md files and scripts, and reprepare the zip file?
-i need the developer and other roles to pay attention to these topic also , can you add these to the md files  of kilo dynamic pack, as topics to pay attention before starting to work   :  0. every code should be written in domain driven architecture, clean code and test driven approach. 1.  for the team leader : read $RUST_DEV_ENV/books/rust_design_patterns.pdf and summarize it part by part  and output to summaries/rust_design_patterns.pdf.md file if this file does not exists. And for the developer and reviewer roles , they should obey the patterns summarized in it. 2.  developers and reviewers should pay attention to $SDK_DEV_ENV/reference-projects/COMMON_MISTAKES.md and reference-projects/PRINCIPLES.md 3. Pay attention to karpathy rules , download and put the files in .kilo directory the file https://github.com/multica-ai/andrej-karpathy-skills/blob/main/skills/karpathy-guidelines/SKILL.md as karpathy_skill.md .
+I prompted the following text in the claude.ai web interface that it gave me kilo code commands, agents and skills that are loaded on demand.
 
+1. can you create a .kilo/commands, and .kilo/agents and .kilo/skills and .kilo/skills/scripts all for these commands, agents, skills listed above as a zip file?
+2. as i only have 32kb context size, i need to implement commands, agents, skills that will be enabled / disabled dynamically (loaded/unloaded from context) by using different levels of agentic memories
+3. also can you make use of rtk, caveman , graphify , ponytail in your md files and scripts, and reprepare the zip file?
+4. i need the developer and other roles to pay attention to these topic also , can you add these to the md files  of kilo dynamic pack, as topics to pay attention before starting to work   :  0. every code should be written in domain driven architecture, clean code and test driven approach. 1.  for the coordinator : read $RUST_DEV_ENV/books/rust_design_patterns.pdf and summarize it part by part  and output to summaries/rust_design_patterns.pdf.md file if this file does not exists. And for the developer and reviewer roles , they should obey the patterns summarized in it. 2.  developers and reviewers should pay attention to $SDK_DEV_ENV/reference-projects/COMMON_MISTAKES.md and reference-projects/PRINCIPLES.md 3. Pay attention to karpathy rules , download and put the files in .kilo directory the file https://github.com/multica-ai/andrej-karpathy-skills/blob/main/skills/karpathy-guidelines/SKILL.md as karpathy_skill.md .
+5. I added two bullets manually in coordinator.md :
+   - Analyze the assigned issue or document link assigned using a gitea issue, checks consistency, ambiguity, contradiction, Completeness, Redundancy, Validity, Relevance, Accuracy, Clarity, Correctness, Entailment, Satisfiability.          
+   - In each step, every agent sends it's task to researcher to check if there already is an open source program / library. This agent makes research on the internet using google.com, scholar.google.com, or any ai site if it can.
+6. Go to $AGENT_INFRA_DIR/harness/kilo_commands_agents_skills/dot.kilo/library/agents, create a gitea user for all agents in 
 
-1. Go to your project directory and run the script $AGENT_INFRA_DIR/harness/install_kilo_harness.sh. This will install predefined skilss/modes/workflows from $AGENT_INFRA_DIR/harness/ directory. The directory content is prepared using the following sites :
+### Installing and Using .kilo harness set
+
+Go to your project directory and run the script $AGENT_INFRA_DIR/harness/install_kilo_harness.sh. This will install predefined skilss/modes/workflows from $AGENT_INFRA_DIR/harness/ directory. The directory content is prepared using the following sites :
 
 
 

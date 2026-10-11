@@ -1,6 +1,6 @@
 if [ "$AGENT_INFRA_DIR" = "" ]
 then
-	echo "no AGENT_INFRA_DIR env. var. found. Please source the 'release' file found in the parent directory of this script (agent-infra/release)"
+	echo "no AGENT_INFRA_DIR envvironment variable found. Please source the 'release' file found in the parent directory of this script (agent-infra/release)"
 	exit 1
 fi
 
