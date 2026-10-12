@@ -635,7 +635,7 @@ We build a harness for our development environment.  We will use the following m
 | ------: | ------------------------------------- | ---------------------- |
 |   **1** | Human                                 |  Starts the project by assigning an issue to the coordinator. Every critical decision should be asked to this role through the gitea issues.|
 |   **2** | Coordinator                           |  Central coordination agent. Owns project-level workflow; communicates with the Human and all agents through Gitea Issues; assigns, tracks, and escalates work. Every worker can assign issue only to Coordinator.|
-|   **3** | Worker                                |  Coordinator starts a worker then loads an agent definition from the library. Every agent finishes it's work by assigning an output issue to the coordinator or by setting an issue to "work done" status. |
+|   **3** | Worker                                |  Coordinator starts a worker then loads an agent definition from the harness library. Every agent finishes it's work by assigning an output issue to the coordinator or by setting an issue to "work done" status. |
  
 
 ### Agent Skills Catalog (Rust, Gitea-driven)
