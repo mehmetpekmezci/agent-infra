@@ -6,7 +6,16 @@ fi
 
 echo "Applying $AGENT_INFRA_DIR/harness to this directory ..."
 
-mkdir -p .kilo
+CURRENT_DIR=$(pwd)
+
+echo "You are in $CURRENT_DIR, we will create two sub directories for coordinator and for worker, then decorate the .kilo directories and start the kilo agent"
+
+mkdir -p coordinator-workspace/.kilo/agents
+mkdir -p coordinator-workspace/.kilo/skills
+
+mkdir -p worker-workspace/.kilo/agents
+mkdir -p worker-workspace/.kilo/skills
+
 
 for dir in modes-agents workflows-commands skills-skills
 do

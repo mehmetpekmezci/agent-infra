@@ -166,412 +166,16 @@ NOTE: we could also install in ~/.config/kilo/ directory. But we don't prefer to
 
 ##  How to Write Prompt
 
-1. Don’t spam prompts to fix errors (Prompt Trashing).
-2. Don’t assume model is understanding (Write Clear Prompts)
-3. Don’t use too many MCP Servers / Skills / Modes / APIs ... (Risk of selecting wrong service/api would increase)
-4. Regularly reevaluate (possibly outdated) assumptions about the "best" tools, skills, modes, mcps, apis ...
-5. Don’t persist with dead-end conversations
-5. Chain of Tought (COT) : Explain step by step what to do.
-6. Input Data (previous mails, examples) should be given in paranthesis.
-7. Output Data format should be explicitly specified ( list, table, json format, code, ...) 
-8. If you want to emphasize something not to do, especially explain it so.
-9. Specify who the output is intended for (e.g., beginner, researcher, executive, child).
-10. Give explicit constraints: State requirements such as length, language, format, scope, exclusions, or deadlines.
-11. Define what “success” means: Give measurable or observable criteria for a satisfactory answer. 
-12. Ask for grounded reasoning: For factual or analytical tasks, request that conclusions be supported by the provided evidence or reliable sources.
-13. Handle ambiguity explicitly: Tell the model whether it should ask questions, make reasonable assumptions, or provide alternatives when information is missing.
-14. Decompose complex tasks: Break large objectives into sequential subtasks rather than asking for everything simultaneously.
-15. Specify uncertainty behavior: Tell the model what to do when it does not know something: flag uncertainty, ask for clarification, or refrain from guessing.
-16. Minimize hidden assumptions: If something matters to the result, put it explicitly in the prompt rather than assuming the model will infer it.
-17. Treat the prompt as a specification: he strongest prompts resemble a good technical specification: objective + context + inputs + constraints + procedure/criteria + output format + quality requirements.
-18. Venn Diagram of what is possible : Define information sets. Use intersection, union and exclusion while defining new rules.
+How to write a prompt is described in  [HOW_TO_WRITE_PROMPT](docs/howtos/01.prompt.md)
 
 ## How to Write Skill
 
+How to write a skill is described in  [HOW_TO_WRITE_SKILL](docs/howtos/02.skill.md)
 
-Skills are called automatically by kilo code agent. 
 
-The directory structure is :
+## How to Write Agents (SubAgents/Modes/Roles)
 
-	.kilo/skills/your-skill-name/
-	├── SKILL.md # Required - main skill file
-	├── scripts/ # Optional - executable code
-	│   ├── process_data.py # Example
-	│   └── validate.sh # Example
-	├── references/ # Optional - documentation
-	│   ├── api-guide.md # Example
-	│   └── examples/ # Example
-	└── assets/ # Optional - templates, etc.
-	    └── report-template.md # Example
-
-.kilo directory (which also contains agents/modes and workflows/commands) is found in the main project directory (for example in the root directory of the project's git repository ( you can also use .agents instead of .kilo directory name and commit to git repo, .kilo name is ignored by default ).
-
-1. Kilo Session starts ( you issue the command "kilo" )
-   --> Kilo Code Agent loads: name + description from every skill (~100 tokens each)
-2. User asks: "Can you write a README for this project?"
-   --> Agent reads: readme-writer/SKILL.md full body (Level 2)
-3. SKILL.md references a style guide file
-   --> Agent reads: readme-writer/references/style.md (Level 3)
-4. SKILL.md includes a validation script
-   --> Agent executes: scripts/validate.sh 
-   (runs without being read into context)
-
-
-The description field in your YAML frontmatter is not for humans. It is the trigger condition the agent uses when deciding whether to activate your skill. 
-	description: [What the skill does] + [When to use it, with specific trigger phrases] + [Key capabilities]
-Bad Example: 
-	description: Creates sophisticated multi-page documentation with advanced formatting.
-Good Example: 
-	description: Creates and writes professional README.md files for software projects. Use when user asks to "write a README", "create a readme", "document this project", "generate project documentation", or "help me write a README.md".
-
-The agentskills.io spec defines the skill constraints:
-1. name: lowercase letters, numbers, and hyphens only, max 64 characters, must not start or end with a hyphen, no consecutive hyphens
-2. description: max 1024 characters, must describe both what the skill does and when to use it
-3. The file must be named exactly SKILL.md, case-sensitive
-4. Avoid XML angle brackets (< or >) in frontmatter as they can inject unintended instructions into the system prompt
-
-
-Tests :
-
-1. Triggering tests
-   Goal: Ensure your skill loads at the right times.
-   Test cases:
-     - Triggers on obvious tasks
-     - Triggers on paraphrased requests
-     - Doesn't trigger on unrelated topics
-2. Functional tests
-   Goal: Verify the skill produces correct outputs.
-   Test cases:
-     - Valid outputs generated
-     - API calls succeed
-     - Error handling works
-     - Edge cases covered
-3. Performance comparison
-   Goal: Prove the skill improves results vs. baseline.
-   How will you know your skill is working :
-      - Skill triggers on 90% of relevant queries
-        – How to measure: Run 10-20 test queries that should trigger your skill. Track
-          how many times it loads automatically vs. requires explicit invocation
-      - Completes workflow in X tool calls
-        – How to measure: Compare the same task with and without the skill enabled.
-          Count tool calls and total tokens consumed.
-
-Always write in third person. The description is injected into the system prompt, and inconsistent point-of-view can cause discovery problems.
-
-    Good: "Processes Excel files and generates reports"
-    Avoid: "I can help you process Excel files"
-    Avoid: "You can use this to process Excel files"
-
-
-ATTENTION : You have to write descriptions as clear as possible and non-ambiguous, beacuse Your Skill shares the context window with :
-
-    The system prompt
-    Conversation history
-    Other Skills' metadata
-    Your actual request
-
-
-Define clear boundaries:
-
-	Start with a short section that explains when this skill should be used. Is it intended for API usage? CLI workflows? 
-	Git repositories? Specific permission levels? Being explicit about scope prevents agents from applying the wrong logic
-	in the wrong context, and setting clear boundaries dramatically reduces misuse.
-
-Provide a structural overview:
-
-	Before describing workflows, orient the model. Identify the core objects in your product, key configuration files, or 
-	primary entry points. This gives the agent a mental map of your system before it begins acting. LLMs perform better when they
-	understand structure first, then action.
-
-Document workflows — not features:
-
-	Avoid abstract feature descriptions. Instead, describe how to complete real tasks step by step. If a workflow requires a specific
-	sequence, state the order directly. If permissions, prerequisites, or environment setup are required, list them clearly. Precision
-	reduces ambiguity — and less ambiguity makes AI behavior more reliable.
-
-Include simple “if/then” decision rules:
-
-	If there are multiple ways to accomplish something, clarify when to choose one over another. Short “if/then” guidance in plain
-	language can significantly improve consistency. For example: if the task requires sequential steps, follow the ordered process;
-	if it presents alternatives, surface options clearly. These lightweight rules help LLMs choose correctly instead of guessing.
-
-Add guardrails and common pitfalls:
-
-	Your skill file shouldn’t just describe what can be done — it should also define limits. Include a short section that outlines
-	unsupported actions, configuration conflicts, environment constraints, or known failure modes. Negative constraints are powerful 
-	for LLMs. They reduce subtle mistakes that would otherwise require human review. Finally, ensure your skill.md stays aligned with 
-	your broader product documentation. It isn’t a replacement for full technical documentation — it’s a focused layer that helps AI
-	agents use it correctly. If you already have product docs, this skill generator can help you build a skill.md draft from your 
-	existing documentation, giving you a head-start in building skills for your product. It will still need reviewing and improving
-	manually, but it may kickstart this process for you.
-
-
-References :
-
-	https://www.gitbook.com/blog/skill-md
-	https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf
-	https://bibek-poudel.medium.com/the-skill-md-pattern-how-to-write-ai-agent-skills-that-actually-work-72a3169dd7ee
-	https://levelup.gitconnected.com/the-simple-guide-to-agent-skills-3d510521f11a
-	https://www.skillsdirectory.com/docs/skill-file-structure
-	https://ai.sulat.com/writing-opencode-agent-skills-a-practical-guide-with-examples-870ff24eec66
-	https://github.com/mgechev/skills-best-practices
-	https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
-	https://github.com/VoltAgent/awesome-agent-skills
-	https://github.com/sickn33/agentic-awesome-skills
-
-
-### Why does it matter?
-
-Where it actually helps:
-
-- Consistency over time/across sessions. Without a SKILL.md, Kilo might reach for a different error-handling style, crate, or pattern each session (e.g. anyhow vs thiserror, Arc<Mutex<>> vs message-passing). A SKILL.md locks in one approach, so the codebase doesn't accumulate stylistic drift — which is a real, measurable quality factor (readability, maintainability).
-- Avoiding repeated known mistakes. If your project has caught Kilo (or anyone) making a specific class of error before — e.g., a lifetime-related footgun, wrong async runtime assumption, a bad pattern for FFI/unsafe blocks — writing that down means it isn't repeated. This is a real quality lift because it encodes negative feedback that pure code-reading can't surface.
-- Correct project-specific context. Things like "this compiles with no_std," "we target this MCU/toolchain version," "this crate is banned for licensing reasons" — get these wrong and code technically compiles but is wrong for your constraints. A SKILL.md prevents that class of error entirely.
-- Enforcing verification steps. If the SKILL.md says "always run cargo clippy --all-targets -- -D warnings and cargo test before considering a task done," that's a real quality gate that wouldn't otherwise happen automatically.
-
-Where it doesn't help:
-
-- It won't make Kilo better at algorithm design, borrow-checker reasoning, or catching subtle logic bugs — that's a function of the model's underlying capability, not the presence of a document.
-- A vague or generic SKILL.md ("write clean code," "follow best practices") adds essentially nothing — the value is proportional to how specific and enforceable the instructions are.
-
-So: think of it less as "smarter Rust" and more as "fewer preventable mistakes and less inconsistency" — which is a genuine quality improvement, but a different kind than raw coding skill.
-
-
-If you’re building your own skill, follow this path:
-
-- Start from a real, recurring pain, not a topic. For example, “Our checkout form keeps shipping without the analytics events wired up” is a pain worth a skill.
-- Provide workflow, not individual actions. You need to guide AI on how to solve the problem. This guidance should be explain the process you follow when dealing with the problem.
-- Encode the decision, not the principle. Skip “handle errors gracefully.” Write “in this service, wrap external calls in withRetry and surface failures through AppError, never raw exceptions."
-- Cut anything the model does by default. If Claude already does it without being told, deleting it costs you nothing.
-- Keep the main instructions short; push depth into referenced files. Use progressive disclosure and let Claude load the detail only when the task demands it.
-- Measure. Run the task with and without the skill. If the output doesn’t change, or doesn’t change for the better, the skill isn’t earning its context.
-
-(https://uxplanet.org/i-tested-20-popular-claude-code-skills-most-of-them-were-useless-6bfdf190a6d1)
-
-### Example Skill
-
-Directory Structure :
-
-	.kilo/
-	└── skills/
-	    └── summarizer-skill/
-	        │
-		├── SKILL.md              # Main entry point and instructions for the agent
-		├── scripts/              # Executable code or helper scripts used by the agent
-		│   └── process_text.py   # Python utility to perform the core task
-		├── references/           # Documentation, guidelines, or source materials
-		│   └── formatting_rules.md # Style guide or schema the agent must follow
-		└── assets/               # Static files, templates, or binary resources
-		    └── template.md       # Output markdown template
-
-When the agent is invoked with this skill, it inspects SKILL.md, runs the code inside scripts/ to handle heavy lifting, references the guidelines in references/ for formatting checks, and populates the template found in assets/ to produce the final result.
-
-
-SKILL.md :
-
-	
-	---
-	name: text-summarizer
-	description: Guides stable API and interface design. Use when designing APIs, module boundaries, or any public interface. Use when creating REST or GraphQL endpoints, defining type contracts between modules, or establishing boundaries between frontend and backend.
-
-	---
-
-
-	# Text Summarizer Skill
-
-	## Overview
-	This skill processes raw text inputs, applies structural formatting rules, and generates a clean, standardized report.
-
-	## Directory Layout
-	* `scripts/`: Contains the execution logic (`process_text.py`).
-	* `references/`: Contains compliance and formatting guidelines (`formatting_rules.md`).
-	* `assets/`: Contains output templates (`template.md`).
-
-	## Execution Steps
-	1. Read the input text provided by the user.
-	2. Execute the processing script to extract key metrics and summaries:
- 	  ```bash
-	   python scripts/process_text.py --input "path/to/input.txt"
-	   ```
-	3. Consult references/formatting_rules.md to ensure compliance with output standards.
-	4. Render the final output using the structure defined in assets/template.md.
-
-scripts/process_text.py: 
-
-	#!/usr/bin/env python3
-	import argparse
-	import sys
-
-	def summarize_text(text: str) -> dict:
-	    words = text.split()
-	    return {
-	        "word_count": len(words),
- 	       "preview": " ".join(words[:10]) + ("..." if len(words) > 10 else "")
-  	  }
-
-	if __name__ == "__main__":
- 	   parser = argparse.ArgumentParser(description="Process and summarize input text.")
-  	  parser.add_argument("--input", type=str, required=True, help="Text to process")
- 	   args = parser.parse_args()
-    
- 	   result = summarize_text(args.input)
-	   print(f"Word Count: {result['word_count']}")
- 	   print(f"Preview: {result['preview']}")
-
-references/formatting_rules.md:
-
-	# Formatting Compliance Rules
-	1. **Tone:** Keep all generated summaries objective and concise.
-	2. **Structure:** Every report must begin with metadata (Word Count, Timestamp).
-	3. **Language:** Avoid colloquialisms and filler words.
-
-assets/template.md:
-
-	# Execution Report
-
-	**Status:** SUCCESS  
-	**Word Count:** {{word_count}}  
-
-	## Executive Summary
-	{{preview}}
-	
-
-## How to Write Modes (Agents/SubAgents)
-
-Directory Structure :
-
-	.kilo/
-	└── agents/
-	    └── *.md
-
-
-1. Structure of an Mode (Agent) .md File
-   An agent file consists of two primary sections: 
-   - YAML Frontmatter (Header between --- blocks) : Defines metadata, UI appearance, and tool/file permissions.
-   - Markdown Body: Acts as the system prompt or role definition that shapes the agent's behavior, tone, and methodology.
-    
-2. Best Practices for Frontmatter (Header between --- blocks) Configuration
-   The frontmatter dictates what the agent can and cannot do. Leverage granular permissions to optimize safety and focus:
-   - Restrict Tool Access: Limit high-risk capabilities like shell commands (bash) or unrestricted file editing for read-only or specialized review agents.
-   - Use Precise File Globbing: Restrict the edit permission to specific file extensions to prevent accidental modifications to core source code.
-   - Set Clear Descriptions: Write concise summaries in the description field so users understand the agent's exact use case in the agent picker.
-
-3. Best Practices for Writing Agent Instructions (Body)
-   Define a Strong Persona Immediately: Start the markdown body with a direct statement defining the agent's role (e.g., "You are a technical writing expert specializing in clear documentation...").
-
-   - Keep Instructions Focused: Unlike project-wide AGENTS.md files (which handle global codebase rules), individual agent files should focus purely on how that specific agent executes its specialized task.
-   - Specify Behavioral Constraints: Explicitly state what the agent should avoid doing (e.g., "Do not modify implementation source code" or "Always ask before executing destructive shell commands").
-   - Use Clean Markdown Formatting: Organize guidelines using headers, bullet points, and bold text so the LLM parses the hierarchical instructions accurately.
-
-
-Frontmatter Fields :
-- description : String : A short summary displayed in the agent picker and used by the orchestrator for task delegation.
-- mode : String : Role classification:• primary (user-selectable in the UI)• subagent (only invoked by other agents)• all (both) 
-- model :  String : Pins a specific model using provider/model format (e.g., anthropic/claude-sonnet-4-20250514). 
-- permission :  Object : Per-agent permission overrides controlling tool access (e.g., allowing or denying edit, bash).
-- color : String : UI identifier color for the agent picker, specified as a hex code (#10B981) or theme keyword (primary, accent, warning). 
-- steps : Integer : Maximum agentic iterations allowed before forcing a text-only response. 
-- temperature / top_p : Number : Sampling parameters for the agent's underlying model. 
-- variant : String : Default model variant. 
-- hidden : Boolean : If true, hides the agent from the UI (typically used for background subagents). 
-- disable : Boolean : If true, completely disables and removes the agent. 
-
-Note: The agent's identifier (name) is automatically derived from its filename (minus the .md extension). Nested subdirectories create namespaced names, such as agents/backend/sql.md resulting in backend/sql.
-
-
-Core Guidelines
-
-- Clarity First: Explain complex technical concepts simply, targeting both beginner and advanced developers.
-- Strict Scope: You are only permitted to edit Markdown (.md or .mdx) files. Do not attempt to modify source code files.
-- Structure: Always organize documentation with logical headings, tables where appropriate, and actionable code examples.
-- Tone: Professional, objective, and instructional.
-
-References :
-
-	https://github.com/jtgsystems/Custom-Modes-Roo-Code/
-	https://github.com/rahulvrane/awesome-claude-agents
-	https://github.com/anderfredx/awesome-claude-code
-	https://github.com/asgeirtj/system_prompts_leaks
-	https://github.com/0xfurai/claude-code-subagents
-	https://github.com/wshobson/agents
-	https://github.com/VoltAgent/awesome-claude-code-subagents
-
-### Why does it matter?
-Net effect for a Rust project: SKILL.md gives Kilo the knowledge (your conventions, gotchas, build commands); subagents give you division of labor with constrained permissions (a read-only explorer can't accidentally edit code; a specialized reviewer only sees what it needs); Plan Mode gives you a checkpoint before changes are made. Together they reduce wasted tokens, prevent unwanted edits, and make behavior more predictable across a large or safety-sensitive codebase.
-
-### Example Mode/Agent
-
-Directory Structure :
-
-	.kilo/
-	├── agents/
-	│   └── summarizer.md
-	│
-	└── skills/
-	    └── summarizer-skill/
-	        └── SKILL.md
-
-
-
-summarizer.md :
-
-	---
-	description: Summarizes documents and technical content using the summarizer-skill.
-	mode: subagent
-	model: anthropic/claude-sonnet-4
-	permission:
-	  read: allow
-	  write: deny
-	  edit: deny
-	  bash: deny
-	color: "#8B5CF6"
-	temperature: 0.2
-	variant: summarizer
-	hidden: false
-	disable: false
-	---
-	
-	# Summarizer Agent
-	
-	Use the `summarizer-skill` skill for all summarization tasks.
-	
-	## Steps
-	
-	1. Determine what the user wants summarized.
-	2. Identify and read the relevant source material.
-	3. Invoke and follow `summarizer-skill`.
-	4. Produce the requested summary format.
-	5. Verify that the summary accurately represents the source.
-	6. Return the result without modifying project files.
-	
-	## Rules
-	
-	- Always use `summarizer-skill` when performing summarization.
-	- Do not reproduce the skill's instructions here; use the skill itself.
-	- Do not modify, create, or delete files.
-	- Do not execute shell commands.
-	- Do not invent information or citations.
-	
-
-
-### Another Example of Mode/Agent Usage
-
-
-                    ┌──────────────────┐
-                    │   Main Agent     │
-                    │   / Orchestrator │   -----------------------> Agent, only it is written in it's instructions to use other agents.
-                    └────────┬─────────┘
-                             │
-             ┌───────────────┼───────────────┐
-             ▼               ▼               ▼
-      ┌────────────┐  ┌────────────┐  ┌────────────┐
-      │ Researcher │  │  Engineer  │  │  Reviewer  │--------------> Agent, it is written in their instructions to use skills.
-      └─────┬──────┘  └─────┬──────┘  └─────┬──────┘
-            │               │               │
-        ┌───┴───┐       ┌───┴───┐       ┌───┴───┐
-        ▼       ▼       ▼       ▼       ▼       ▼
-      Search  Papers   Code   Tests   Critic  Editor --------------> Skill
-      
+How to write an agent is described in  [HOW_TO_WRITE_AGENT](docs/howtos/03.agent.md)
 
 
 ## How to Write MCPs 
@@ -592,9 +196,13 @@ We build a harness for our development environment.  We will use the following m
 2. gitea
 3. kilo code
 
+### Rust Check List
+
+Install [rust-dev-env](https://github.com/havelsan/rust-dev-env) in $HOME/sdk/rust-dev-env  
+
 ### Gitea Check List
 
-1. If you did not already install rust-dev-env : checkout and install https://github.com/havelsan/rust-dev-env to ~/sdk directory
+1. Go to ~/sdk/rust-dev-env directory
     -  source release file
     -  go to rust-dev-env/rust directory and run install.sh
     -  go to rust-dev-env/devops directory and run install.sh , also follow the instructions in README.md file in that directory to create example users , projects and organizations. Also creating PERSONAL ACCESS TOKEN is written in that README.md file.
@@ -615,6 +223,20 @@ We build a harness for our development environment.  We will use the following m
 
 1. Check the .config/kilo/kilo.jsonc file, this should be the same as $AGENT_INFRA_DIR/install/23.kilo.jsonc  file and should contain mcp part. 
 
+>	  "mcp": {
+>	    "gitea": {
+>	      "type": "local",
+>	      "command": ["gitea-mcp"],
+>	      "args": ["-t", "stdio"],
+>	      "enabled": true,
+>	      "environment": {
+>	        "GITEA_HOST": "http://localhost:13000",
+>	        "GITEA_ACCESS_TOKEN": "{env:GITEA_USER_PAT}"
+>	      }
+>	    }
+>	  }
+
+
 2. Gitea-mcp test :
    - On the Gitea web interface as admin user :
         - Create a user in gitea (e.g. cargo-test-access) , 
@@ -627,47 +249,212 @@ We build a harness for our development environment.  We will use the following m
    - Give the command : 'create an issue in the test-repo-01 with tiltle "NEW_TEST_ISSUE" and body "ISSUE BODY ABCD" and assign to to the cargo-test-access user '
    - After this command you shoud see "NEW_TEST_ISSUE" issue created under test-repo-01.
 
- 
-  
-### Roles
 
-| Role No | Role Name                             | Description               |
+### Gitea Configs
+
+Before starting to work with agents we create the folowing organization, users and a git repository in gitea :
+
+1. Organization :  rust-agentic-org
+
+   1. Goto http://localhost:13000/ GITEA in browser.
+   2. Login as admin (if you follow rus-dev-env , default is adm001/adm001+++ ) 
+   3. Click on the "+" icon on the right-top of the page.
+   4. Click "new organization"
+        1. Organization Name : rust-agentic-org
+        2. Visibility : public
+        3. Permissions : repository admin can add and remove access for teams
+
+2. Create Users (human1, coordinator1, worker1) :  
+
+   1. Goto http://localhost:13000/ GITEA in browser.
+   2. Login as admin (if you follow rus-dev-env , default is adm001/adm001+++ ) 
+   3. Click on the icon on the right-top of  most the page.
+   4. Click "site administration"
+   5. Click on the "Identity & Access" menu item on the left menu.
+   6. Click on the "User Accounts" menu item
+   7. Click on the "Create User Account" button on the right-top of the page.
+        1. Authentication Source : local
+        2. User visibility : public
+        3. User name : human1
+        4. Email : human1@localhost.org  
+        5. Password : human1+++
+        6. Un check the "Require user to change the password"
+        7. click "Create user account"
+   8. create personal access tokens
+        1. Login as human1
+        2. Click on the rigt-top most icon on the page 
+        3. Click on the "settings" menu item
+        4. Click on the "Applications" menu item
+        5. Generate new token
+            1. Token Name : HUMAN1_PERSONAL_ACCESS_TOKEN
+            2. Repository and Organization Access : All
+            3. Token Permissions : (activitypub, issue, misc, notification, organization, package, repository, user)  , (  Read and Write )
+            4. Click on the "Create Token" button
+            5. copy the token appearing on the top of the page.
+            6. insert the "export HUMAN1_PERSONAL_ACCESS_TOKEN=a33d9663ceab39378746095a5919ff5c1d384044" line in the $HOME/workspace/agent-infra/release 
+   9. In the end the following three lines should inserted in the $HOME/workspace/agent-infra/release file.
+
+   
+> export HUMAN1_PERSONAL_ACCESS_TOKEN=a33d9663ceab39378746095a5919ff5c1d384044
+
+> export COORDINATOR1_PERSONAL_ACCESS_TOKEN=d8220143aa17a56e5811d61482a71bdd12791b94
+
+> export WORKER1_PERSONAL_ACCESS_TOKEN=8bd5ca5990103e773e67d35c2b981e48bbbeb49b
+
+
+3. Create project-01 Repository :
+
+   1. Login GITEA as admin001 user.
+   2. Click on the "Explore" menu item on the top-left menu.
+   3. Click on the "Organizations" tab.
+   4. Click on the "rust-agentic-org"
+   5. Click on the "New Team" button
+      1. Tean Name : agentic-team
+      2. Description : Agentic Team
+      3. Visibility : public
+      4. Repository Access : All Repositories
+      5. Create Repositories is checked ( Memebers can cretae new repositories within the organization)
+      6. Permissin : Administrator Access
+      7. Click on the "Create Team" button
+      8. Add worker1, coordinator1, human1 users to this team using "Add Team Member" 
+   6. Return back to the "rust-agentic-org" page using Explore > Organizations > rust-agentic-org
+   7. Create a new repository using "Create New Repository" button
+      1. Owner : rust-agentic-org
+      2. Repository name : project-01
+      3. Visibility: NOT CHECKED: Mahe repository Private. ( The repository is public)
+      4. Description : Project 01
+      5. Tepmplate :  DID_NOT_SELECT_ANYTHING
+      6. Issue Labels : Advanced
+      7. .gitignore : Rust
+      8. License : 0BSD
+      9. Readme : Default
+      10. Default Branch: main
+      11. Object Format: sha1
+      12. Template : NOT_CHECKED: Make repository a template.
+      13. Click on the Create Repository
+      
+
+  
+### Agents and Roles
+
+We currently assume that a team of agents (agentic-team composed of human, coordinator, worker) will use project-01 git repository's issues and wiki in gitea to communicate each other. When a Human assigns an issue to Coordinator the project starts. Coordinator may assign an issue to human if it can not determine what to do. 
+
+Coordinator and Worker agents are started by running $AGENT_INFRA_DIR/harness/start_agents.sh command which does the following :
+1. Creates two distinct workspace directories in the current project's directory for coordinator and worker. ( e.g. $HOME/workspace/my-project/worker-space and $HOME/workspace/my-project/coordinator-space). Each workspace has it's own .kilo/kilo.jsonc file containing corresponding GITEA_ACCESS_TOKEN parameter name as COORDINATOR1_PERSONAL_ACCESS_TOKEN and WORKER1_PERSONAL_ACCESS_TOKEN respectively. 
+2. Links base skills from $AGENT_INFRA_DIR/harness/base-skills directory into .kilo/skills directory such as gitea related skills.
+
+
+| Agent No | Agent Name                             | Description               |
 | ------: | ------------------------------------- | ---------------------- |
 |   **1** | Human                                 |  Starts the project by assigning an issue to the coordinator. Every critical decision should be asked to this role through the gitea issues.|
-|   **2** | Coordinator                           |  Central coordination agent. Owns project-level workflow; communicates with the Human and all agents through Gitea Issues; assigns, tracks, and escalates work. Every worker can assign issue only to Coordinator.|
-|   **3** | Worker                                |  Coordinator starts a worker then loads an agent definition from the harness library. Every agent finishes it's work by assigning an output issue to the coordinator or by setting an issue to "work done" status. |
+|   **2** | Coordinator                           |  Central coordination agent. Owns project-level workflow; communicates with the Human and all agents through Gitea Issues; assigns, tracks, and escalates work. Coordinator assigns the issue to the worker. Also the role to use while resolving the issue is indicated within the issue by coordinator. |
+|   **3** | Worker                                |  After starting worker agent, it continously reads gitea issues of project-01 and loads the role indicated within the issue from the library found in the $AGENT_INFRA_DIR/harness/library/roles  directory. After finishing the work the worker changes the state of the issue that it works on and enters a comment about what it did. Lastly it calls $AGENT_INFRA_DIR/harness/clear_worker.sh script, calls /reset and /reload command.|
+
  
-
-### Agent Skills Catalog (Rust, Gitea-driven)
-
-Each skill is a `skill.md` that agents load, with a matching helper script. Conventions: scripts live in `.agents/scripts/`, read the Gitea token and project settings from environment variables, print JSON to stdout, return a non-zero exit code on failure, and support `--dry-run`. Agent numbers refer to the 82-role table; `ALL` means every role.
-
-| Skill No | Skill Name | Used by Agents | Skill Description | Script Description |
-|--:|---|---|---|---|
-| 1 | `gitea-issue-management` | ALL (1–82) | Create, comment on, label, assign, link and close Gitea issues using the project label scheme (role:N, phase:x, gate:y). Gitea issues are the only communication channel between agents. | `gitea_issue.sh` wraps the Gitea REST API (create, comment, label, assign, close, list); reads the token from env and prints the issue JSON |
-| 2 | `role-handoff-protocol` | ALL (1–82) | Write a structured handoff comment (inputs consumed, artifacts produced, status, open questions, next role) so the next agent can start without re-reading the thread. | `handoff.py` posts the handoff block, sets the next-role label, and fails if a declared artifact path is missing |
-| 3 | `command-parsing-dispatch` | 2 | Validate a command and its parameters against the schema, merge defaults, policy file and overrides, and resolve the role chain. | `parse_command.py` validates args against a JSON schema, merges `.agents/policy.toml`, and emits the epic YAML |
-| 4 | `epic-decomposition` | 2, 5, 7 | Break an epic into child issues with owners, estimates, dependencies and acceptance criteria. | `decompose_epic.py` creates child issues from templates and links them as blockers or dependents |
-
+| Role No | Role Name                             | Description               |
+| ------: | ------------------------------------- | ---------------------- |
+|   **1** | Analyzer                              |  Analyze the assigned issue or document link assigned using a gitea issue, checks consistency, ambiguity, contradiction, completeness, redundancy, validity, relevance, accuracy, clarity, correctness, entailment, satisfiability. Build wiki for requirements of a project if the coordinator asks for it. Also check for asd-ste100 using asd-ste10-skill that can be found in $AGENT_INFRA_DIR/harness/library/skills. Also $RUST_DEV_ENV/reference-projects/PRINCIPLES.md (Elon Musk's recommendations, SOLID, NASA's 10 rules) and COMMON_MISTAKES.md files are taken into account. |
+|   **2** | Researcher                            |  Search for a ready-to-use library/framework in rust language for the current project's architectural, code or design requirement. If a crate has less then 10000 "Downloads all time" , then don't use it, directly ommit it.|
+|   **3** | Architect                             |  This role builds the software architecture. Coordinator periodically loads this role to check the architectutal status of a project. |
+|   **4** | Developer                             |  Rust code developer. Domain driven design, Clean Architecture, Test Driven Development, Data Driven Test, Nasa rules, Solid principles.  |
+|   **5** | Designer                              |  UX and UI designer. |
+|   **6** | Reviewer                              |  Rust Code Reviewer. |
+|   **7** | Tester                                |  Rust Test Code Writer. |
+|   **8** | Qa                                    |  Quality Assurance Engineer. Makes the last checks and builds the final rpm and deb package for project.|
 
 
+### Skills Catalog (Rust, Gitea-driven)
 
-### Building .kilo harness set
+Skills are folders with a `SKILL.md`. Base skills are linked into every workspace's `.kilo/skills` by `start_agents.sh`. Role skills are loaded by the Worker together with the role file from `$AGENT_INFRA_DIR/harness/library/roles`.
 
-I prompted the following text in the claude.ai web interface that it gave me kilo code commands, agents and skills that are loaded on demand.
+**Status legend:** `Existing` = already mentioned in your setup. `Proposed` = suggested, not yet written.
 
-1. can you create a .kilo/commands, and .kilo/agents and .kilo/skills and .kilo/skills/scripts all for these commands, agents, skills listed above as a zip file?
-2. as i only have 32kb context size, i need to implement commands, agents, skills that will be enabled / disabled dynamically (loaded/unloaded from context) by using different levels of agentic memories
-3. also can you make use of rtk, caveman , graphify , ponytail in your md files and scripts, and reprepare the zip file?
-4. i need the developer and other roles to pay attention to these topic also , can you add these to the md files  of kilo dynamic pack, as topics to pay attention before starting to work   :  0. every code should be written in domain driven architecture, clean code and test driven approach. 1.  for the coordinator : read $RUST_DEV_ENV/books/rust_design_patterns.pdf and summarize it part by part  and output to summaries/rust_design_patterns.pdf.md file if this file does not exists. And for the developer and reviewer roles , they should obey the patterns summarized in it. 2.  developers and reviewers should pay attention to $SDK_DEV_ENV/reference-projects/COMMON_MISTAKES.md and reference-projects/PRINCIPLES.md 3. Pay attention to karpathy rules , download and put the files in .kilo directory the file https://github.com/multica-ai/andrej-karpathy-skills/blob/main/skills/karpathy-guidelines/SKILL.md as karpathy_skill.md .
-5. I added two bullets manually in coordinator.md :
-   - Analyze the assigned issue or document link assigned using a gitea issue, checks consistency, ambiguity, contradiction, Completeness, Redundancy, Validity, Relevance, Accuracy, Clarity, Correctness, Entailment, Satisfiability.          
-   - In each step, every agent sends it's task to researcher to check if there already is an open source program / library. This agent makes research on the internet using google.com, scholar.google.com, or any ai site if it can.
-6. Go to $AGENT_INFRA_DIR/harness/kilo_commands_agents_skills/dot.kilo/library/agents, create a gitea user for all agents in 
+#### 1. Base skills (all agents)
 
-### Installing and Using .kilo harness set
+Location: `$AGENT_INFRA_DIR/harness/base-skills/`
 
-Go to your project directory and run the script $AGENT_INFRA_DIR/harness/install_kilo_harness.sh. This will install predefined skilss/modes/workflows from $AGENT_INFRA_DIR/harness/ directory. The directory content is prepared using the following sites :
+| ID | Skill | Description | Used by | 
+| --- | --- | --- | --- | --- |
+| B-01 | `gitea-issues` | List, read, create, comment on, assign, and change state of issues in project-01 using the agent's own `GITEA_ACCESS_TOKEN`. | Human, Coordinator, Worker | 
+| B-02 | `gitea-wiki` | Read, create, and update wiki pages in project-01. | Coordinator, Worker | 
+| B-03 | `issue-comment-protocol` | Standard comment format: what was done, files or pages changed, result, next step. Keeps handoffs readable for Human and other agents. | Coordinator, Worker | 
+| B-04 | `gitea-assignment-handoff` | Rules for assigning an issue to Human, Coordinator, or Worker, and for changing state (open, in progress, done, blocked). | Coordinator, Worker | 
+
+#### 2. Coordinator skills
+
+Location: `<coordinator-space>/.kilo/skills/`
+
+| ID | Skill | Description | Used by | 
+| --- | --- | --- | --- | --- |
+| C-01 | `issue-triage` | Read a new Human issue, split it into work items, and create the Worker issues. | Coordinator | 
+| C-02 | `role-selection` | Choose the role for each Worker issue and write it clearly in the issue body (e.g. `Role: Analyzer`). | Coordinator | 
+| C-03 | `human-escalation` | Detect an unclear or critical decision, write the question with options, and assign the issue to Human. | Coordinator | 
+| C-04 | `progress-tracking` | Track open and blocked issues, find stalled work, and report status in an issue or wiki page. | Coordinator | 
+| C-05 | `architecture-checkpoint` | Create periodic issues for the Architect role to check the architectural status of the project. | Coordinator | 
+
+#### 3. Worker skills
+
+Location: `<worker-space>/.kilo/skills/`
+
+| ID | Skill | Description | Used by | 
+| --- | --- | --- | --- | --- |
+| W-01 | `issue-polling` | Continuously read assigned issues of project-01 and pick the next one to work on. | Worker | 
+| W-02 | `role-loader` | Read the role named in the issue and load it from `$AGENT_INFRA_DIR/harness/library/roles`. | Worker | 
+| W-03 | `issue-completion` | Change the issue state, add the result comment, and assign back to Coordinator when needed. | Worker | 
+| W-04 | `worker-reset` | Run `$AGENT_INFRA_DIR/harness/clear_worker.sh`, then `/reset` and `/reload`. | Worker | 
+
+#### 4. Role skills (loaded by Worker)
+
+Location: `$AGENT_INFRA_DIR/harness/library/skills/`
+
+| ID | Role | Skill | Description | 
+| --- | --- | --- | --- | --- |
+| R-01 | Analyzer | `asd-ste100` | Check text against ASD-STE100 Simplified Technical English. | 
+| R-02 | Analyzer | `requirements-quality-check` | Check consistency, ambiguity, contradiction, completeness, redundancy, validity, relevance, accuracy, clarity, correctness, entailment, and satisfiability of an issue or linked document. | 
+| R-03 | Analyzer | `requirements-wiki-builder` | Build and update the project requirements wiki when the Coordinator asks. | 
+| R-04 | Analyzer | `principles-check` | Check work against `$RUST_DEV_ENV/reference-projects/PRINCIPLES.md` (Elon Musk's recommendations, SOLID, NASA's 10 rules) and `COMMON_MISTAKES.md`. | 
+| R-05 | Researcher | `crate-search` | Find a ready-to-use Rust crate for an architecture, code, or design requirement. | 
+| R-06 | Researcher | `crate-download-filter` | Reject any crate with fewer than 10000 "Downloads all time". Report only crates that pass. | 
+| R-07 | Architect | `architecture-assessment` | Review the current architecture against requirements. Report gaps, risks, and drift. | 
+| R-08 | Architect | `architecture-wiki` | Write architecture pages and decision records (ADR) in the wiki. | 
+| R-09 | Architect | `ddd-clean-architecture` | Define bounded contexts, layers, and dependency rules for Rust projects. | 
+| R-10 | Developer | `rust-ddd-clean-arch-dev` | Implement Rust code with Domain-Driven Design and Clean Architecture. | 
+| R-11 | Developer | `rust-tdd` | Test Driven Development workflow, including data-driven tests. | 
+| R-12 | Developer | `nasa-rules-solid` | Apply NASA's 10 rules and SOLID principles while coding. | 
+| R-13 | Designer | `ux-ui-design` | Produce UX flows and UI designs and attach them to the issue or wiki. | 
+| R-14 | Reviewer | `rust-code-review` | Review Rust code for correctness, style, `clippy` findings, principles, and common mistakes. | 
+| R-15 | Tester | `rust-test-writing` | Write unit, integration, and data-driven tests for Rust code. | 
+| R-16 | Qa | `release-checklist` | Run the final quality checks before release. | 
+| R-17 | Qa | `rpm-deb-packaging` | Build the final `.rpm` and `.deb` packages (e.g. with `cargo-generate-rpm` and `cargo-deb`). | 
+
+#### 5. Role to skill matrix
+
+| Role | Base skills | Role skills |
+| --- | --- | --- |
+| Human | B-01 | — |
+| Coordinator | B-01 to B-04 | C-01 to C-05 |
+| Worker (always) | B-01 to B-04 | W-01 to W-04 |
+| Analyzer | (Worker set) | R-01, R-02, R-03, R-04 |
+| Researcher | (Worker set) | R-05, R-06 |
+| Architect | (Worker set) | R-07, R-08, R-09 |
+| Developer | (Worker set) | R-10, R-11, R-12 |
+| Designer | (Worker set) | R-13 |
+| Reviewer | (Worker set) | R-14 (plus R-04) |
+| Tester | (Worker set) | R-15 (plus R-11) |
+| Qa | (Worker set) | R-16, R-17 |
+
+
+#### Improve the skills and agents in the harness 
+
+I entered the following prompts in the claude.ai web prompt to improve the md files :
+
+1. as i only have 32kb context size, i need to implement commands, agents, skills that will be enabled / disabled dynamically (loaded/unloaded from context) by using different levels of agentic memories
+2. also can you make use of rtk, caveman , graphify , ponytail in your md files and scripts, and reprepare the zip file?
+
+
+## How to use the harness to develop a project
+
+
 
 
 

@@ -75,3 +75,7 @@ https://github.com/hesreallyhim/awesome-claude-code
 https://github.com/vijaythecoder/awesome-claude-agents
 https://github.com/punkpeye/awesome-mcp-servers
 
+
+
+
+https://github.com/danyuchn/asd-ste100-skill
