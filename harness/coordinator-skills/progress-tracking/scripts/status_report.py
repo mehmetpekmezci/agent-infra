@@ -16,6 +16,7 @@ WIKI = os.environ.get("WIKI_CLI", os.path.join(infra, "harness/base-skills/gitea
 
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument("--stale-hours", type=float, default=24.0)
+p.add_argument("--max-items", type=int, default=8, help="max issues listed per section")
 p.add_argument("--wiki", metavar="PAGE", help="publish the report to this wiki page")
 p.add_argument("--now", help="ISO time for testing")
 a = p.parse_args()
@@ -54,7 +55,9 @@ for st in ("todo", "in-progress", "blocked", "done", "closed", "no-status"):
         out.append(f"| {st} | {len(groups[st])} |")
 for st in ("blocked", "in-progress", "todo"):
     if st in groups:
-        out += ["", f"## {st}"] + [f"- #{i['number']} ({who(i)}) {i['title']}" for i in groups[st]]
+        out += ["", f"## {st}"] + [f"- #{i['number']} ({who(i)}) {i['title']}" for i in groups[st][:a.max_items]]
+        if len(groups[st]) > a.max_items:
+            out.append(f"- (+{len(groups[st]) - a.max_items} more)")
 if stale:
     out += ["", f"## Stalled (no update for more than {a.stale_hours:g} h)"]
     out += [f"- #{i['number']} ({who(i)}) {i['title']} - {age:.0f} h" for i, age in stale]

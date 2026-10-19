@@ -1,6 +1,6 @@
 ---
 name: rust-ddd-clean-arch-dev
-description: Implement Rust code with Domain-Driven Design and Clean Architecture - entities, value objects, ports, use cases, and adapters in the correct layer, with typed errors and no panics. Use this skill whenever the Developer role writes or changes Rust code, adds a feature, creates a new aggregate or use case, or must decide in which crate or module a type belongs, even for small changes.
+description: Implement Rust code with DDD and Clean Architecture in the right layer with typed errors and no panics. Use for any Developer task.
 ---
 
 # rust-ddd-clean-arch-dev
@@ -10,7 +10,7 @@ The Developer builds what the requirements and the Architect's design say. The l
 ## Procedure
 
 1. Read the issue and its comments. Find the requirement IDs. If the design is missing or contradicts the requirement, do not invent one. Return the issue as `blocked`.
-2. Write the test first (`rust-tdd`). Then write the smallest code that passes it.
+2. Climb the `minimal-build` ladder (needed? already in repo? std? vetted crate?). Write the test first (`rust-tdd`). Then write the smallest code that passes it.
 3. Put code in the right layer:
    - Business rule or invariant: `domain` (entity, value object, domain service).
    - Workflow that uses rules: `application` (use case). It talks to the outside only through ports.
@@ -39,3 +39,7 @@ python3 $AGENT_INFRA_DIR/harness/library/skills/principles-check/scripts/rust_ru
 - Prefer small functions and explicit types over clever generics.
 - Do not add features, options, or abstractions that no requirement asks for. Every extra line is a line to test and maintain.
 - Do not add a crate before `crate-download-filter` has passed it.
+
+## Steps (split points)
+
+Use with `step-protocol`. One step = one failing test, or the smallest change that passes it, or one refactor. Check `minimal-build/scripts/diff_size.sh` after each step (max 150 added lines). New aggregate: scaffold first, then one behavior per step.

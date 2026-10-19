@@ -1,6 +1,6 @@
 ---
 name: architecture-checkpoint
-description: Periodically ask the Architect role to check the architectural status of the project by creating a standard checkpoint issue. Use this skill whenever the Coordinator finishes a group of Developer issues, when several features were added since the last check, at regular intervals during a project, or when the Human asks whether the architecture is still sound.
+description: Create a periodic Architect issue that checks architecture drift. Use after several Developer issues, before a release, or after structural changes.
 ---
 
 # architecture-checkpoint

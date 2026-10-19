@@ -18,6 +18,7 @@ p.add_argument("--result", default="")
 p.add_argument("--changed", action="append", default=[])
 p.add_argument("--next", dest="next_step", default="")
 p.add_argument("--handoff", default=os.environ.get("COORDINATOR_USER"), help="assignee after finishing")
+p.add_argument("--keep-memory", action="store_true", help="do not clear .mem/<issue> after done")
 p.add_argument("--close", action="store_true", help="also close the issue (default: leave to Coordinator)")
 a = p.parse_args()
 
@@ -43,4 +44,7 @@ if a.handoff:
     run(g + ["assign", str(a.issue), a.handoff])
 if a.close and a.status == "done":
     run(g + ["state", str(a.issue), "closed"])
+MEM = os.environ.get("MEM_CLI", os.path.join(infra, "harness/base-skills/agent-memory/scripts/mem.py"))
+if a.status == "done" and not a.keep_memory and os.path.exists(MEM):
+    subprocess.run([sys.executable, MEM, "clear", str(a.issue)], capture_output=True)
 print(f"#{a.issue}: {a.status}" + (f", assigned to {a.handoff}" if a.handoff else "") + (", closed" if a.close and a.status == "done" else ""))

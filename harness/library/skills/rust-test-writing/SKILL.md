@@ -1,6 +1,6 @@
 ---
 name: rust-test-writing
-description: Write Rust unit, integration, and data-driven tests from requirements, find public functions with no test, and check that tests are deterministic and meaningful. Use this skill whenever the Tester role gets an issue to write or extend tests, when coverage gaps must be found, when a requirement needs a verification test, or when a bug needs a regression test.
+description: Write Rust unit, integration, and data-driven tests from requirements and find untested functions. Use for Tester tasks.
 ---
 
 # rust-test-writing
@@ -32,3 +32,7 @@ This lists public functions that no test mentions. It is a gap finder. For line 
 - Tests return `Result` and use `?`. No `unwrap()`.
 - Never delete or weaken a failing test to get green. Report the defect to the Coordinator.
 - If the requirement is too vague to test, say so. Return it as `blocked` for the Analyzer role.
+
+## Steps (split points)
+
+Use with `step-protocol`. One requirement per step: table of cases, then test code, then run. Last step: gap finder.

@@ -1,6 +1,6 @@
 ---
 name: issue-comment-protocol
-description: Standard format for every comment an agent writes on a Gitea issue - what was done, result, files or wiki pages changed, and next step. Use this skill whenever an agent finishes, blocks on, or reports progress on an issue, or writes any comment that another agent or the Human must read, even if the comment is short.
+description: Standard format for every agent comment on an issue - what was done, result, files changed, next step. Use whenever you finish, block, or report on an issue.
 ---
 
 # issue-comment-protocol

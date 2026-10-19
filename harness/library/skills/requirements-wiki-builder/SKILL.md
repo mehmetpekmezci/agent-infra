@@ -1,6 +1,6 @@
 ---
 name: requirements-wiki-builder
-description: Build and update the project's requirements pages in the Gitea wiki from requirement text - an index table with ID, text, status, and source issue. Use this skill whenever the Coordinator asks the Analyzer to build, refresh, or restructure the requirements wiki, or when requirements from issues or documents must be collected in one place for later roles.
+description: Build and update the requirements index in the wiki from requirement lines. Use when the Coordinator asks the Analyzer to build or refresh the requirements wiki.
 ---
 
 # requirements-wiki-builder
@@ -30,3 +30,7 @@ The script writes `Requirements Index` (and `Requirements <PREFIX>` pages with `
 ## Status values
 
 `draft`, `accepted`, `implemented`, `verified`, `withdrawn`. The Human sets `accepted`. The Analyzer does not.
+
+## Steps (split points)
+
+Use with `step-protocol`. One step per 20 requirements: collect, quality-check. Last step: merge with the current page and publish.

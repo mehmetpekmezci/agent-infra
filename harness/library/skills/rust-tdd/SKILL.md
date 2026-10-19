@@ -1,6 +1,6 @@
 ---
 name: rust-tdd
-description: Test Driven Development workflow for Rust including data-driven tests - write a failing test, make it pass with the smallest change, refactor, and run the format, clippy, and test gate. Use this skill whenever the Developer or Tester role writes new Rust behavior, fixes a bug, adds test cases, or wants to know whether the code is green, even if the change is small.
+description: TDD workflow for Rust with data-driven tests and a fmt, clippy, test gate. Use when writing behavior, fixing bugs, or checking that code is green.
 ---
 
 # rust-tdd

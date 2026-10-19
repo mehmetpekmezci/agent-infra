@@ -1,6 +1,6 @@
 ---
 name: gitea-wiki
-description: List, read, create, and update pages in the project-01 Gitea wiki. Use this skill whenever an agent must store or look up shared project knowledge - requirements, architecture pages, decision records, status reports, design specs - in the wiki, or when an issue says "see the wiki" or "document this in the wiki".
+description: List, read (in slices), create, and update project-01 Gitea wiki pages. Use to store or look up requirements, architecture pages, ADRs, specs, and status reports.
 ---
 
 # gitea-wiki

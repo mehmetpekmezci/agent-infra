@@ -80,13 +80,18 @@ def scan(path, max_lines):
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument("paths", nargs="*", default=["."])
 p.add_argument("--max-fn-lines", type=int, default=60)
+p.add_argument("--max-findings", type=int, default=40, help="print at most this many findings")
 p.add_argument("--strict", action="store_true")
 a = p.parse_args()
 
-total = {}
+total, shown = {}, 0
 for f in sorted(set(files(a.paths))):
     for line, code, msg in scan(f, a.max_fn_lines):
-        print(f"{f}:{line}: {code} {msg}")
+        if shown < a.max_findings:
+            print(f"{f}:{line}: {code} {msg}")
+            shown += 1
         total[code] = total.get(code, 0) + 1
+if sum(total.values()) > shown:
+    print(f"(+{sum(total.values()) - shown} more findings not shown)")
 print("\nsummary: " + (", ".join(f"{k}={v}" for k, v in sorted(total.items())) or "no findings"))
 sys.exit(1 if (a.strict and total) else 0)

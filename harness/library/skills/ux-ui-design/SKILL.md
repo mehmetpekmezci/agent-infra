@@ -1,6 +1,6 @@
 ---
 name: ux-ui-design
-description: Produce UX flows and UI specifications - purpose, users, screens, flows, states, accessibility, and open questions - as a wiki page that Developers can implement. Use this skill whenever the Designer role gets an issue about a user interface, screen, command-line interaction, dashboard, report layout, or user flow, or when usability or accessibility of a feature must be defined or reviewed.
+description: Produce UX flows and UI specs (screens, states, accessibility) as wiki pages. Use for Designer tasks.
 ---
 
 # ux-ui-design
@@ -32,3 +32,7 @@ python3 $AGENT_INFRA_DIR/harness/library/skills/ux-ui-design/scripts/check_ui_sp
 - Show errors next to their cause and say how to fix them.
 - Keep the flow short. Remove a step before you design a better one.
 - For command-line tools: define commands, options, exit codes, and the exact output format.
+
+## Steps (split points)
+
+Use with `step-protocol`. One screen per step: elements, flow, states, accessibility. Last steps: check script, publish.

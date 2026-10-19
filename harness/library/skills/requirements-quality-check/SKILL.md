@@ -1,6 +1,6 @@
 ---
 name: requirements-quality-check
-description: Check an issue, requirement list, or linked document for consistency, ambiguity, contradiction, completeness, redundancy, validity, relevance, accuracy, clarity, correctness, entailment, and satisfiability, and report findings with evidence and severity. Use this skill whenever the Analyzer role gets an issue or document to analyze, review requirements, or validate a specification, even if the request only says "check this" or "is this OK".
+description: Check requirements or an issue for consistency, ambiguity, contradiction, completeness, redundancy, validity, relevance, accuracy, clarity, correctness, entailment, satisfiability. Use for Analyzer review tasks.
 ---
 
 # requirements-quality-check
@@ -28,3 +28,7 @@ It finds vague words, TBD markers, missing `shall`, long sentences, passive voic
 - Propose a concrete fix wording. Do not only say "unclear".
 - Do not rewrite requirements yourself. Meaning belongs to the Human. Suggest and let the Coordinator escalate.
 - Say what you could not check (for example, no access to a referenced standard).
+
+## Steps (split points)
+
+Use with `step-protocol`. 1. Read issue and last comments, `note` the document link. 2. Run the lint script. 3. Check 10 requirements per step against the criteria, `done` with the finding count. 4. One step for cross-checks (consistency, entailment, satisfiability) using your notes. 5. Write the wiki page. 6. Comment.

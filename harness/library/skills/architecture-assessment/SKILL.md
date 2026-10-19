@@ -1,6 +1,6 @@
 ---
 name: architecture-assessment
-description: Assess the current architecture of a Rust project against its requirements and architecture wiki, using a workspace snapshot with layer and dependency-cycle checks, and report drift, gaps, and risks with severity. Use this skill whenever the Architect role runs an architecture checkpoint, reviews the structure of a project, or is asked whether the code still follows the intended design, layers, or boundaries.
+description: Assess the real Rust workspace architecture against the design - layers, cycles, drift - with severity. Use for Architect checkpoints and structure reviews.
 ---
 
 # architecture-assessment
@@ -29,3 +29,7 @@ It lists crates, layers, local dependencies, dependency counts, and size. It fla
 
 - A decision that changes the intended architecture needs an ADR and Human approval. Do not silently update the overview page to match the code.
 - Say what you could not check.
+
+## Steps (split points)
+
+Use with `step-protocol`. 1. Wiki intent (`gitea-wiki` slices) and `graph.sh report`. 2. Snapshot. 3. One layer or crate group per step, reading only cited lines. 4. Write findings.

@@ -1,6 +1,6 @@
 ---
 name: nasa-rules-solid
-description: Apply NASA's 10 rules and the SOLID principles while writing or checking Rust code - short functions, bounded loops, no recursion, no unwrap or unsafe, small traits, dependency inversion. Use this skill whenever the Developer role writes Rust code, the Reviewer or Architect checks code against safety and design rules, or a task mentions NASA rules, SOLID, safety-critical style, or coding standards.
+description: Apply NASA's 10 rules and SOLID to Rust code. Use when writing or checking Rust for safety and design.
 ---
 
 # nasa-rules-solid
@@ -25,3 +25,7 @@ python3 $AGENT_INFRA_DIR/harness/library/skills/principles-check/scripts/rust_ru
 - Do not weaken a rule to make code pass. Change the code.
 - A deviation needs a reason that another person can check.
 - If a requirement forces a deviation (for example allocation in a loop), say so to the Coordinator. They decide whether to record an ADR.
+
+## Steps (split points)
+
+Use with `step-protocol`. Fix scanner findings 5 per step. Re-run the scanner after each step.

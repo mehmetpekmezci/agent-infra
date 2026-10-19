@@ -1,6 +1,6 @@
 ---
 name: progress-tracking
-description: Build a status report of all project-01 issues grouped by status, find stalled, blocked, and unassigned issues, and publish the report to the wiki. Use this skill whenever the Coordinator checks project progress, decides what to do next, looks for stuck work, or the Human asks "where are we" or "what is blocked".
+description: Report issue status by label and find stalled, blocked, and unassigned issues. Use at the start of each Coordinator cycle and when asked where the project stands.
 ---
 
 # progress-tracking

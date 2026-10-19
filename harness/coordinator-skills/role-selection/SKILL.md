@@ -1,6 +1,6 @@
 ---
 name: role-selection
-description: Choose which Worker role (Analyzer, Researcher, Architect, Developer, Designer, Reviewer, Tester, Qa) should resolve an issue, and write it in the issue body so the Worker can load it. Use this skill whenever the Coordinator creates or reassigns a Worker issue, or whenever an issue has no clear `Role:` line, even if the task seems obvious.
+description: Choose the Worker role for an issue and write the Role line. Use when creating or reassigning a Worker issue or when the role is unclear.
 ---
 
 # role-selection

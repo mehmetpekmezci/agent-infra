@@ -1,6 +1,6 @@
 ---
 name: release-checklist
-description: Run the final quality checks before a release - build, lint, test, audit, version, changelog, open issues, requirement coverage, and architecture status - and report a clear pass or fail with evidence. Use this skill whenever the Qa role gets a release or final-check issue, before any package is built, or when anyone asks whether the project is ready to ship.
+description: Run the final quality gate before release and report pass or fail. Use for Qa release tasks, before packaging.
 ---
 
 # release-checklist
@@ -27,3 +27,7 @@ It prints PASS, FAIL, or WARN per check and exits with the number of failures.
 - A WARN is a decision, not noise. Say why it is acceptable or escalate it.
 - Do not skip a check because it passed last time.
 - Do not change the version number. The Coordinator or the Human sets it.
+
+## Steps (split points)
+
+Use with `step-protocol`. 1. Gate script. 2. Requirement coverage, 20 per step. 3. Open issues and architecture status. 4. Report.

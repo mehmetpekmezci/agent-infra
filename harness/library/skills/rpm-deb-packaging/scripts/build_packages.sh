@@ -12,6 +12,7 @@ while [ $# -gt 0 ]; do
     *) echo "usage: $0 [--crate-dir DIR] [--package NAME] [--out DIR]" >&2; exit 64;;
   esac
 done
+RT="${AGENT_INFRA_DIR:-}/harness/base-skills/lean-shell/scripts/rt.sh"; [ -x "$RT" ] || RT=""
 command -v cargo >/dev/null || { echo "error: cargo not found" >&2; exit 127; }
 cargo deb --version >/dev/null 2>&1 || { echo "error: cargo-deb missing. Run: cargo install cargo-deb" >&2; exit 1; }
 cargo generate-rpm --version >/dev/null 2>&1 || { echo "error: cargo-generate-rpm missing. Run: cargo install cargo-generate-rpm" >&2; exit 1; }
@@ -20,7 +21,7 @@ mkdir -p "$out"
 pkgarg=(); [ -n "$package" ] && pkgarg=(-p "$package")
 
 echo "== release build"
-cargo build --release "${pkgarg[@]}"
+$RT cargo build --release "${pkgarg[@]}"
 echo "== deb"
 cargo deb --no-build "${pkgarg[@]}" --output "$out/"
 echo "== rpm"

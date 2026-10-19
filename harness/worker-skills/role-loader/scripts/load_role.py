@@ -21,6 +21,7 @@ g = p.add_mutually_exclusive_group(required=True)
 g.add_argument("--issue", type=int)
 g.add_argument("--body-file")
 p.add_argument("--name-only", action="store_true", help="print only the role name")
+p.add_argument("--max-chars", type=int, default=6000, help="cut the role file here (0 = no cut)")
 a = p.parse_args()
 
 labels = []
@@ -55,4 +56,9 @@ if not found:
     available = sorted(e.stem if e.is_file() else e.name for e in ROLES_DIR.iterdir()) if ROLES_DIR.is_dir() else []
     sys.exit(f"error: role '{role}' not found in {ROLES_DIR}. Available: {available}")
 print(f"# ROLE: {role}  (from {found})\n")
-print(found.read_text(encoding="utf-8"))
+role_text = found.read_text(encoding="utf-8")
+if a.max_chars and len(role_text) > a.max_chars:
+    print(role_text[:a.max_chars])
+    print(f"\n[role file cut at {a.max_chars} chars. Read the rest with: mem.py slice {found} 2]")
+else:
+    print(role_text)

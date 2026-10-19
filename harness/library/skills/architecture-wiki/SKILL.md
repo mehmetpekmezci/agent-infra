@@ -1,6 +1,6 @@
 ---
 name: architecture-wiki
-description: Write and maintain architecture documentation in the Gitea wiki - the Architecture Overview, Architecture Status, and numbered Architecture Decision Records (ADR) with an index. Use this skill whenever the Architect role records a design decision, documents the structure of the project, publishes the result of an architecture assessment, or the Coordinator asks "where is the architecture documented".
+description: Write the architecture overview, status page, and numbered ADRs in the wiki. Use when recording a design decision or an assessment.
 ---
 
 # architecture-wiki
@@ -40,3 +40,7 @@ Remove `--dry-run` to publish.
 - One decision per ADR. Keep it under one screen.
 - Use plain, short sentences. Add a diagram only if text cannot show the structure (Mermaid blocks render in Gitea).
 - Never rewrite history. Replace an old ADR by a new one that says "Supersedes ADR-003".
+
+## Steps (split points)
+
+Use with `step-protocol`. One ADR per issue. Steps: draft context and alternatives, publish with `--dry-run`, publish, update the overview page.

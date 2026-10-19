@@ -9,6 +9,7 @@ bad()  { echo "FAIL  $1"; fail=$((fail+1)); }
 warn() { echo "WARN  $1"; }
 check() { local name="$1"; shift; if "$@" >/tmp/release_gate.log 2>&1; then ok "$name"; else bad "$name"; sed -n '1,20p' /tmp/release_gate.log; fi; }
 
+RT="${AGENT_INFRA_DIR:-}/harness/base-skills/lean-shell/scripts/rt.sh"; [ -x "$RT" ] || RT=""
 command -v cargo >/dev/null || { echo "error: cargo not found" >&2; exit 127; }
 
 if git rev-parse --git-dir >/dev/null 2>&1; then
@@ -19,9 +20,9 @@ ver=$(grep -m1 -E '^version\s*=' Cargo.toml | sed -E 's/.*"([^"]+)".*/\1/')
 if [ -n "${ver:-}" ] && [[ "$ver" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then ok "version $ver"; else bad "no semantic version in Cargo.toml (workspace.package.version counts only for members)"; fi
 
 check "cargo fmt --check" cargo fmt --all -- --check
-check "cargo clippy -D warnings" cargo clippy --workspace --all-targets -- -D warnings
-check "cargo test --release" cargo test --workspace --release
-check "cargo build --release" cargo build --workspace --release
+check "cargo clippy -D warnings" $RT cargo clippy --workspace --all-targets -- -D warnings
+check "cargo test --release" $RT cargo test --workspace --release
+check "cargo build --release" $RT cargo build --workspace --release
 if cargo audit --version >/dev/null 2>&1; then check "cargo audit" cargo audit; else warn "cargo audit not installed"; fi
 
 todo=$(grep -rEn --include='*.rs' 'TODO|FIXME|todo!\(|unimplemented!\(' . 2>/dev/null | grep -v '/target/' | wc -l)

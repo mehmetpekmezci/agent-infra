@@ -1,6 +1,6 @@
 ---
 name: human-escalation
-description: Ask the Human for a decision through a Gitea issue - write a clear question with options, mark the issue blocked, and assign it to the Human. Use this skill whenever the Coordinator cannot determine what to do, meets a critical or irreversible decision, finds conflicting requirements, or a Worker returns a blocked issue that needs a Human answer.
+description: Ask the Human a decision question through a blocked issue with options and a recommendation. Use for unclear, critical, or conflicting decisions.
 ---
 
 # human-escalation

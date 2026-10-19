@@ -6,6 +6,7 @@ Uses the same environment as gitea.py (GITEA_URL, GITEA_OWNER, GITEA_REPO, GITEA
 import argparse
 import base64
 import os
+import signal
 import sys
 from pathlib import Path
 
@@ -20,6 +21,9 @@ for c in candidates:
 import gitea  # noqa: E402
 
 
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+
+
 def page_name(title):
     return title.strip().replace(" ", "-")
 
@@ -31,7 +35,21 @@ def cmd_list(a):
 
 def cmd_get(a):
     page = gitea.api("GET", f"{gitea.repo()}/wiki/page/{page_name(a.name)}")
-    print(base64.b64decode(page["content_base64"]).decode("utf-8"))
+    text = base64.b64decode(page["content_base64"]).decode("utf-8")
+    if not a.chars or len(text) <= a.chars:
+        print(text)
+        return
+    parts, cur = [], ""
+    for line in text.splitlines(keepends=True):
+        if len(cur) + len(line) > a.chars and cur:
+            parts.append(cur)
+            cur = ""
+        cur += line
+    parts.append(cur)
+    if not 1 <= a.part <= len(parts):
+        sys.exit(f"error: part must be 1..{len(parts)}")
+    print(f"[{a.name} part {a.part}/{len(parts)}; use --part N, or --chars 0 for all]")
+    print(parts[a.part - 1])
 
 
 def cmd_put(a):
@@ -63,6 +81,8 @@ def main():
     sub.add_parser("list").set_defaults(fn=cmd_list)
     s = sub.add_parser("get")
     s.add_argument("name")
+    s.add_argument("--part", type=int, default=1)
+    s.add_argument("--chars", type=int, default=6000, help="part size; 0 = whole page")
     s.set_defaults(fn=cmd_get)
     s = sub.add_parser("put")
     s.add_argument("name")

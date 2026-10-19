@@ -9,6 +9,7 @@ while [ $# -gt 0 ]; do
     *) filter="$1"; shift;;
   esac
 done
+RT="${AGENT_INFRA_DIR:-}/harness/base-skills/lean-shell/scripts/rt.sh"; [ -x "$RT" ] || RT=""
 command -v cargo >/dev/null || { echo "error: cargo not found" >&2; exit 127; }
 scope=(--workspace); [ ${#pkg[@]} -gt 0 ] && scope=("${pkg[@]}")
 
@@ -18,11 +19,11 @@ step() { # name, command...
   if "$@" >/tmp/tdd_step.log 2>&1; then echo "PASS  $name"; else echo "FAIL  $name"; sed -n '1,40p' /tmp/tdd_step.log; fail=$((fail+1)); fi
 }
 step "cargo fmt --check"  cargo fmt --all -- --check
-step "cargo clippy -D warnings" cargo clippy "${scope[@]}" --all-targets -- -D warnings
+step "cargo clippy -D warnings" $RT cargo clippy "${scope[@]}" --all-targets -- -D warnings
 if [ -n "$filter" ]; then
-  step "cargo test $filter" cargo test "${scope[@]}" "$filter"
+  step "cargo test $filter" $RT cargo test "${scope[@]}" "$filter"
 else
-  step "cargo test" cargo test "${scope[@]}"
+  step "cargo test" $RT cargo test "${scope[@]}"
 fi
 [ $fail -eq 0 ] && echo "ALL GREEN" || echo "$fail step(s) failed"
 exit $fail

@@ -19,6 +19,7 @@ REQ_LINE = re.compile(r"^\s*(?:[-*]\s*)?((?:REQ|SRS|FR|NFR)-?\d+)\s*[:.)-]\s*(.+
 
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument("file", help="text or markdown file, or - for stdin")
+p.add_argument("--max-findings", type=int, default=40, help="print at most this many findings")
 p.add_argument("--max-words", type=int, default=25, help="sentence length limit (ASD-STE100: 20 procedures, 25 descriptions)")
 a = p.parse_args()
 lines = (sys.stdin if a.file == "-" else open(a.file, encoding="utf-8")).read().splitlines()
@@ -71,8 +72,12 @@ for base, items in pos.items():
         add(items[0][2], "contradiction", "high", f"possible contradiction (shall vs shall not): {ids}")
 
 findings.sort()
-for n, cat, sev, msg in findings:
+order = {"high": 0, "medium": 1, "low": 2}
+findings.sort(key=lambda f: (order[f[2]], f[0]))
+for n, cat, sev, msg in findings[:a.max_findings]:
     print(f"line {n}: [{sev}] {cat}: {msg}")
+if len(findings) > a.max_findings:
+    print(f"(+{len(findings) - a.max_findings} lower-severity findings not shown; use --max-findings)")
 counts = defaultdict(int)
 for _, _, sev, _ in findings:
     counts[sev] += 1

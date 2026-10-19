@@ -1,6 +1,6 @@
 ---
 name: role-loader
-description: Read the role named in a Gitea issue (the `Role:` line) and load the matching role file from the harness role library. Use this skill whenever the Worker starts an issue, is told to "act as" a role, or needs to know which role, rules, and skills apply to its current task.
+description: Load the role file named by the Role line of an issue, size-capped. Use when the Worker starts an issue.
 ---
 
 # role-loader

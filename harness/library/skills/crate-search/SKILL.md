@@ -1,6 +1,6 @@
 ---
 name: crate-search
-description: Find ready-to-use Rust crates or frameworks for an architectural, code, or design need by searching crates.io, and report candidates with downloads, version, and maintenance data. Use this skill whenever the Researcher role is asked to find a library, crate, or framework in Rust, compare options for a requirement, or check whether a ready-made solution exists before code is written.
+description: Find Rust crates for a need on crates.io and drop crates under 10000 all-time downloads. Use for Researcher tasks.
 ---
 
 # crate-search
@@ -26,3 +26,7 @@ The script drops every crate with fewer than 10000 "Downloads all time". This is
 - Report only data you read. Do not fill in a license or date from memory.
 - Prefer fewer dependencies. A crate that pulls in fifty others is a cost.
 - Do not edit `Cargo.toml`. Choosing the crate is the Architect's and Developer's job.
+
+## Steps (split points)
+
+Use with `step-protocol`. One step per need or query. Check 3 candidates per step. Last step: the table and recommendation.

@@ -1,6 +1,6 @@
 ---
 name: issue-completion
-description: Finish a Worker issue correctly - write the result comment, set the status label to done or blocked, and hand the issue back to the Coordinator. Use this skill whenever the Worker completes, cannot complete, or must stop work on an issue, even if the work seems trivial, because the comment is the only record the next agent will see.
+description: Finish a Worker issue with the standard comment, status label, hand back to the Coordinator, and memory clear. Use when work is done or blocked.
 ---
 
 # issue-completion

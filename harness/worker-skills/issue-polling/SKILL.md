@@ -1,6 +1,6 @@
 ---
 name: issue-polling
-description: Continuously check the project-01 Gitea issues assigned to the Worker and pick the next one to work on. Use this skill whenever the Worker agent starts, finishes an issue and resets, or has no current task, and whenever the Worker must decide which issue to do next, even if the user only says "start working" or "check for tasks".
+description: Find the next open issue assigned to the Worker, resuming an interrupted one first. Use when the Worker starts, resets, or has no task.
 ---
 
 # issue-polling

@@ -1,6 +1,6 @@
 ---
 name: issue-triage
-description: Turn a Human's issue into small, ordered Worker issues, each with one named role, a clear goal, and acceptance criteria. Use this skill whenever the Coordinator receives a newly assigned issue, a Human answer that unblocks work, or a finished Worker issue that needs follow-up work, even if the request is just "start the project" or "plan the next steps".
+description: Split a Human goal into small, ordered Worker issues with one role each and acceptance criteria. Use when the Coordinator gets a new goal, a Human answer, or a finished Worker issue.
 ---
 
 # issue-triage
@@ -9,7 +9,7 @@ The Coordinator turns a goal into work a single Worker session can finish. A Wor
 
 ## Procedure
 
-1. Read the Human issue and its comments (`gitea-issues`, `get --comments`). Check the wiki for existing requirements and architecture pages.
+1. Read the Human issue and its comments (`gitea-issues`, `get --brief`). Check the wiki for existing requirements and architecture pages.
 2. If the goal is unclear or a critical decision is missing, use `human-escalation`. Do not guess.
 3. Split the work into items that follow this default flow. Skip steps the project does not need.
    `Analyzer` (check requirements) -> `Researcher` (crates) -> `Architect` -> `Designer` (if there is a UI) -> `Developer` + `Tester` -> `Reviewer` -> `Qa`
@@ -39,3 +39,7 @@ One issue should take one Worker session. If an item needs two roles (for exampl
 ## Order
 
 Workers read issues continuously, so a dependency must be visible. Create dependent issues only when the earlier issue is `status:done`, or write `Depends on: #N` in the body and keep the issue assigned to yourself until then.
+
+## Steps (split points)
+
+Use with `step-protocol`. 1. Read goal and wiki. 2. Draft at most 8 items. 3. `--dry-run`. 4. Create. 5. Comment on the parent. For a large goal, plan phases and triage only the next phase.

@@ -7,6 +7,7 @@ Environment:
 import argparse
 import json
 import os
+import signal
 import sys
 import urllib.error
 import urllib.parse
@@ -20,6 +21,9 @@ STATUS_LABELS = {
 }
 ROLES = ["Analyzer", "Researcher", "Architect", "Developer",
          "Designer", "Reviewer", "Tester", "Qa"]
+
+
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 
 class ApiError(Exception):
@@ -130,6 +134,20 @@ def cmd_list(a):
 
 def cmd_get(a):
     issue = api("GET", f"{repo()}/issues/{a.number}")
+    if a.brief:
+        import re
+        comments = paged(f"{repo()}/issues/{a.number}/comments")
+        print(f"#{issue['number']} [{issue['state']}] {issue['title']}")
+        print(f"assignees: {','.join(usernames(issue)) or '-'} | labels: {','.join(label_names(issue)) or '-'}")
+        body = (issue.get("body") or "").strip()
+        print("BODY:\n" + body[:a.max_chars] + (f"\n[body cut at {a.max_chars} chars]" if len(body) > a.max_chars else ""))
+        shown = comments[-a.last:] if a.last else []
+        if len(comments) > len(shown):
+            print(f"({len(comments) - len(shown)} older comment(s) not shown; use --last N)")
+        for c in shown:
+            text = re.sub(r"<!-- agent-state: .*? -->", "", c.get("body", ""), flags=re.S).strip()
+            print(f"--- {(c.get('user') or {}).get('login', '?')} {(c.get('created_at') or '')[:16]}\n{text[:700]}" + (" [cut]" if len(text) > 700 else ""))
+        return
     if a.comments:
         issue["comments_list"] = paged(f"{repo()}/issues/{a.number}/comments")
     print(json.dumps(issue, indent=2))
@@ -202,7 +220,10 @@ def build_parser():
 
     s = sub.add_parser("get")
     s.add_argument("number", type=int)
-    s.add_argument("--comments", action="store_true")
+    s.add_argument("--comments", action="store_true", help="full JSON with all comments (large)")
+    s.add_argument("--brief", action="store_true", help="compact text: body + last comments (use this by default)")
+    s.add_argument("--max-chars", type=int, default=3000, help="body limit for --brief")
+    s.add_argument("--last", type=int, default=5, help="number of recent comments for --brief")
     s.set_defaults(fn=cmd_get)
 
     s = sub.add_parser("create")

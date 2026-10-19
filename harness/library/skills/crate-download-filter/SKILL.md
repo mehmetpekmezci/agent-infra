@@ -1,6 +1,6 @@
 ---
 name: crate-download-filter
-description: Enforce the project rule that a Rust crate with fewer than 10000 "Downloads all time" on crates.io must not be used - check named crates and omit the ones that fail. Use this skill whenever any role proposes, reviews, or adds a Rust dependency, when a crate name appears in an issue or Cargo.toml, or when the Researcher must filter a candidate list.
+description: Enforce the rule that no Rust crate under 10000 all-time downloads is used. Use whenever a dependency is proposed, reviewed, or added.
 ---
 
 # crate-download-filter

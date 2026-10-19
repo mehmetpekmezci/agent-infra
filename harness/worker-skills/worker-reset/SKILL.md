@@ -1,6 +1,6 @@
 ---
 name: worker-reset
-description: Clean the Worker workspace and context after an issue is finished - run clear_worker.sh, then the /reset and /reload commands - so the next issue starts clean. Use this skill whenever the Worker has finished or blocked an issue and has posted its completion comment, and before it picks up another issue.
+description: Run clear_worker.sh, then /reset and /reload so the next issue starts clean. Use only after issue-completion.
 ---
 
 # worker-reset

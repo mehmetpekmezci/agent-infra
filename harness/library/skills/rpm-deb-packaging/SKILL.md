@@ -1,6 +1,6 @@
 ---
 name: rpm-deb-packaging
-description: Build the final .rpm and .deb packages of a Rust project with cargo-deb and cargo-generate-rpm, verify their contents, and record checksums. Use this skill whenever the Qa role gets a packaging or release issue, after release-checklist passes, or when anyone asks to create, check, or rebuild installable Linux packages for the project.
+description: Build and verify .rpm and .deb packages with cargo-deb and cargo-generate-rpm. Use for Qa packaging tasks after the release gate passes.
 ---
 
 # rpm-deb-packaging
@@ -31,3 +31,7 @@ For a single-crate project, run it without options. The script makes the release
 - Package only the version that passed the gate. The version string in the file name must match `Cargo.toml`.
 - Never sign or publish packages unless the issue says to.
 - If the build fails, report the first error with the command and do not retry blindly.
+
+## Steps (split points)
+
+Use with `step-protocol`. Steps: check metadata, build, verify deb, verify rpm, install test, report.

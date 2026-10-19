@@ -1,6 +1,6 @@
 ---
 name: principles-check
-description: Check work against the project principles in PRINCIPLES.md (Elon Musk's recommendations, SOLID, NASA's 10 rules) and COMMON_MISTAKES.md, with a scanner for Rust code. Use this skill whenever the Analyzer, Architect, Developer, or Reviewer must verify that a requirement, design, or code follows the project's principles, or when a task mentions NASA rules, SOLID, common mistakes, or coding standards.
+description: Check requirements, designs, or Rust code against PRINCIPLES.md (Musk, SOLID, NASA rules) and COMMON_MISTAKES.md, with a Rust scanner. Use for Analyzer, Architect, Developer, and Reviewer checks.
 ---
 
 # principles-check
@@ -25,3 +25,7 @@ python3 $AGENT_INFRA_DIR/harness/library/skills/principles-check/scripts/rust_ru
 - Report violations of the written principles, not personal style preferences.
 - A deviation from a principle needs a written reason in the code or ADR. Accept it only when the reason is there.
 - If PRINCIPLES.md and a requirement conflict, do not choose. Report it to the Coordinator.
+
+## Steps (split points)
+
+Use with `step-protocol`. 1. Read PRINCIPLES.md with `mem.py slice` (one part per step), `note` the rules that apply. 2. Scan one crate per step. 3. Judge hits, 10 per step. 4. Report.

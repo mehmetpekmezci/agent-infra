@@ -1,6 +1,6 @@
 ---
 name: gitea-assignment-handoff
-description: Rules for passing an issue between Human, Coordinator, and Worker - who may assign to whom, which status label goes with each handoff, and a script that does comment, status, and assignment together. Use this skill whenever an agent reassigns an issue, escalates to the Human, returns work to the Coordinator, or is unsure who should own an issue next.
+description: Rules and a script for passing an issue between Human, Coordinator, and Worker with the right status label. Use when reassigning, escalating, or returning work.
 ---
 
 # gitea-assignment-handoff

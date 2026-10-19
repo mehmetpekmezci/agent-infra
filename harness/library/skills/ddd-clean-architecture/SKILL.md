@@ -1,6 +1,6 @@
 ---
 name: ddd-clean-architecture
-description: Define bounded contexts, layers, and dependency rules for a Rust project using Domain-Driven Design and Clean Architecture, and scaffold a four-layer Cargo workspace with a layers.toml that the architecture checks can enforce. Use this skill whenever the Architect role designs the structure of a new project or module, splits a codebase into crates, decides where a type or trait belongs, or when a task mentions domain, layers, ports and adapters, or clean architecture.
+description: Define bounded contexts and layers and scaffold a four-layer Cargo workspace with layers.toml. Use when designing project or module structure.
 ---
 
 # ddd-clean-architecture
@@ -33,3 +33,7 @@ It creates four crates (`domain`, `application`, `infrastructure`, `interface`) 
 - Putting `serde` derives or database types in `domain`. Map at the border.
 - One `utils` crate that every layer uses. It hides dependencies.
 - Anemic domain: all logic in application services, entities as plain data. Move rules into entities and value objects.
+
+## Steps (split points)
+
+Use with `step-protocol`. Steps: list domain terms, choose contexts, name aggregates, list ports, scaffold, verify. One context per step.

@@ -18,6 +18,7 @@ GITEA = os.environ.get("GITEA_CLI", os.path.join(infra, "harness/base-skills/git
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument("--assignee", default=os.environ.get("WORKER_USER"))
 p.add_argument("--wait", type=int, metavar="SECONDS", help="poll interval; 0 or omitted = check once")
+p.add_argument("--max-body", type=int, default=3000, help="cut the issue body here")
 p.add_argument("--timeout", type=int, default=0, help="stop waiting after this many seconds (0 = never)")
 a = p.parse_args()
 
@@ -46,7 +47,7 @@ start = time.time()
 while True:
     issue = find()
     if issue:
-        print(json.dumps({"number": issue["number"], "title": issue["title"], "body": issue.get("body", ""),
+        print(json.dumps({"number": issue["number"], "title": issue["title"], "body": (issue.get("body") or "")[:a.max_body],
                           "labels": [l["name"] for l in issue.get("labels") or []]}, indent=2))
         sys.exit(0)
     if not a.wait:

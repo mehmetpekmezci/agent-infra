@@ -448,11 +448,39 @@ Location: `$AGENT_INFRA_DIR/harness/library/skills/`
 
 I entered the following prompts in the claude.ai web prompt to improve the md files :
 
-1. as i only have 32kb context size, i need to implement commands, agents, skills that will be enabled / disabled dynamically (loaded/unloaded from context) by using different levels of agentic memories
+1. as i only have 32kb context size, i need to implement agents.md files, skills that will use different levels of agentic memories, and try to split every step of the work into smaller parts if it can not finish in the first attempt. splitting would be like  ( think, plan, execute small pieces step by step) 
 2. also can you make use of rtk, caveman , graphify , ponytail in your md files and scripts, and reprepare the zip file?
 
+Claude.ai gave the following response with the corrected scripts zip file :
+The zip now has 35 skills, all validated. AGENTS.md is about 800–900 tokens, each skill is 350–700 tokens, and all skill descriptions together are about 1.5K tokens.
+I assumed "32kb" means a 32K-token window. If it is really 32 KB (about 8K tokens), set MEM_CONTEXT_TOKENS=8000 and link only the skills each role needs.
+1. Small context
+Layered memory. The new agent-memory skill and its mem.py script keep only the current step in context. Plan, step results and notes live in .mem/<issue>/, which survives /reset. A checkpoint comment on the Gitea issue lets a lost workspace or another agent resume. The wiki and a graphify graph hold project knowledge, and roles and principles are read in slices.
+Think, plan, execute. The new step-protocol skill plans at most 8 steps, about 4K tokens of work each. A step that fails twice, touches more than 3 files, or prints more than 150 lines is split into 2–4 smaller steps. Missing information makes the issue blocked. Both AGENTS.md files tell the agent to checkpoint every 3 steps, at 60% context after the step, and at 75% to checkpoint, /reset, then resume. The heavy role skills each have a "Steps" section with their own split points.
+Bounded output. get --brief shows the body plus the last 5 comments. The wiki is read in 6000-character parts, and role files, scanners and status reports are capped.
 
-## How to use the harness to develop a project
+2. The four tools
+All four are optional, and every script falls back to plain behaviour without them.
+Tool	Used in
+rtk	rt.sh, which cargo and git go through, including the gate and packaging scripts
+graphify	graph.sh, used before reading code
+caveman	terse-mode for notes and agent comments, with short rules inline in AGENTS.md; Human-facing text, requirements, code and commits stay normal
+ponytail	minimal-build, a ladder plus a 150-added-lines-per-step check
+I looked up each tool's documentation for the commands. The README has the install lines, and check_tools.sh shows which are installed.
+
+Testing
+mem.py, including checkpoint and restore in a fresh workspace, the Gitea scripts and the capped outputs were tested against a mock Gitea.
+rtk, graphify, caveman and ponytail were not installed here, so only the fallback paths ran.
+The rtk and graphify command forms come from their documentation.
+Cargo is not installed here, so the cargo-based scripts are still untested.
+
+For your setup
+clear_worker.sh should not delete .mem/ for an issue that is still in progress. If it does, mem.py start restores from the last checkpoint.
+Install caveman and ponytail by copying their skills into .kilo/skills/.
+Run graphify once with /graphify . before the first graph.sh build.
+
+
+## Example usage of this harness to develop a tetris game development in Rust on Linux Gnome.
 
 
 
